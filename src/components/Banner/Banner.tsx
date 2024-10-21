@@ -60,7 +60,7 @@ export default function Banner() {
         setAnimationClass('')
         setTimeout(() => {
             setIndex(number)
-            setAnimationClass('animate__fadeIn')
+            setAnimationClass(number > index ? 'animate__fadeInRight' : 'animate__fadeInLeft')
             setIsLoading(false)
         }, 300)
     }
