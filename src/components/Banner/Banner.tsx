@@ -5,9 +5,20 @@ import classNames from 'classnames'
 
 export default function Banner() {
     const [index, setIndex] = useState<number>(0)
-    const [animationClass, setAnimationClass] = useState<string>('animate__fadeOutLeft')
+    const [animationClass, setAnimationClass] = useState<string>('animate__fadeInRight')
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const intervalIdRef = useRef<NodeJS.Timeout | null>(null)
+
+    useEffect(() => {
+        startAutoSlide()
+
+        return () => {
+            if (intervalIdRef.current) {
+                clearInterval(intervalIdRef.current)
+            }
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     const goToNextSlide = () => {
         if (isLoading) return
@@ -15,9 +26,9 @@ export default function Banner() {
         setAnimationClass('')
         setTimeout(() => {
             setIndex((prevIndex) => (prevIndex === banner.length - 1 ? 0 : prevIndex + 1))
-            setIsLoading(false)
             setAnimationClass('animate__fadeInRight')
-        }, 500)
+            setIsLoading(false)
+        }, 300)
     }
 
     const gotoPrevSlide = () => {
@@ -26,9 +37,9 @@ export default function Banner() {
         setAnimationClass('')
         setTimeout(() => {
             setIndex((prevIndex) => (prevIndex === 0 ? banner.length - 1 : prevIndex - 1))
-            setIsLoading(false)
             setAnimationClass('animate__fadeInLeft')
-        }, 500)
+            setIsLoading(false)
+        }, 300)
     }
 
     const startAutoSlide = () => {
@@ -43,24 +54,23 @@ export default function Banner() {
         intervalIdRef.current = id
     }
 
-    useEffect(() => {
-        startAutoSlide()
+    const handleSlideChange = (number: number) => {
+        if (isLoading) return
+        setIsLoading(true)
+        setAnimationClass('')
+        setTimeout(() => {
+            setIndex(number)
+            setAnimationClass('animate__fadeIn')
+            setIsLoading(false)
+        }, 300)
+    }
 
-        return () => {
-            if (intervalIdRef.current) {
-                clearInterval(intervalIdRef.current)
-            }
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
-
-    console.log(index)
     return (
         <div className='relative w-full h-[552px]'>
             <img
                 src={banner[index]}
                 alt=''
-                className={`animate__animated ${animationClass} transition duration-200 `}
+                className={`animate__animated ${animationClass} transition duration-200 w-full h-full object-cover`}
             />
             <button
                 className='w-[50px] h-[50px] rounded-full bg-[#3159a64d] text-center absolute top-[50%] left-[50px] hover:bg-[#ff3237] hover:shadow-[0_0_20px_10px_rgba(255,50,55,0.3)] transition duration-200 ease-in'
@@ -118,6 +128,7 @@ export default function Banner() {
                                     }
                                 )}
                                 key={number}
+                                onClick={() => handleSlideChange(number)}
                             >
                                 <div
                                     className={classNames(
