@@ -1,9 +1,9 @@
 export default function Product() {
     return (
         <div className='grid grid-cols-12 gap-[32px] mt-[49px]'>
-            {[0, 0, 0, 0, 0, 0, 0, 0].map(() => {
+            {[0, 0, 0, 0, 0, 0, 0, 0].map((_,index) => {
                 return (
-                    <div className='col-span-3'>
+                    <div className='col-span-3' key={index}>
                         <div className='pb-[32px] border-2 border-[#f0efef] rounded-[12px]'>
                             <img
                                 src='https://product.hstatic.net/200000281285/product/exciter_150_gioi_han_-_xam_den_xanh_ef1043aafd9f4ad4a89a2c43d7192de0_large.png'
