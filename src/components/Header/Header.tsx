@@ -11,7 +11,7 @@ const cx = classNames.bind(styles)
 
 export default function Header() {
     return (
-        <header className='bg-[#ff3237] fixed top-0 left-0 w-full z-50'>
+        <header className='bg-[#ff3237]'>
             <div className='max-w-[1268px] mx-auto'>
                 <div className='grid grid-cols-12 pt-[13px] pb-[17px]'>
                     <Link to={path.home} className='col-span-5'>

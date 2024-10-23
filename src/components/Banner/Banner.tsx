@@ -66,7 +66,7 @@ export default function Banner() {
     }
 
     return (
-        <div className='relative w-full h-[552px] mt-[90px]'>
+        <div className='relative w-full h-[552px]'>
             <img
                 src={banner[index]}
                 alt=''
