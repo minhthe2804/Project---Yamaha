@@ -11,9 +11,9 @@ const cx = classNames.bind(styles)
 
 export default function Header() {
     return (
-        <header className='bg-[#ff3237]'>
+        <header className='bg-[#ff3237] fixed top-0 left-0 w-full z-50'>
             <div className='max-w-[1268px] mx-auto'>
-                <div className='grid grid-cols-12 pt-[13px] pb-[17px] '>
+                <div className='grid grid-cols-12 pt-[13px] pb-[17px]'>
                     <Link to={path.home} className='col-span-5'>
                         <img
                             src='https://theme.hstatic.net/200000281285/1000677821/14/logo.png?v=848'
@@ -49,7 +49,7 @@ export default function Header() {
                     <div className='col-span-2'>
                         <div className='mt-[17px] ml-[95px] flex text-white '>
                             <Popover
-                                className='relative cursor-pointer hover:text-[#b80319] transition duration-300 ease-in-out pb-5 px-3 '
+                                className='relative cursor-pointer hover:text-[#b80319] transition duration-300 ease-in-out pb-5 px-3'
                                 renderPopover={
                                     <div className='rounded-md w-[500px] h-[40px] bg-[#b80319]'>
                                         <form className='flex flex-shrink-0 w-full h-full items-center'>
@@ -89,6 +89,7 @@ export default function Header() {
                                 arrowRight={15}
                                 arrowTop={0}
                                 transformOrigin='410'
+                                initialOpen
                             >
                                 <FontAwesomeIcon className='text-[17px] ' icon={faMagnifyingGlass} />
                             </Popover>

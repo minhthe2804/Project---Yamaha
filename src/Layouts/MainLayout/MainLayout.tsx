@@ -7,7 +7,7 @@ interface Props {
 
 export default function MainLayout({ children }: Props) {
     return (
-        <div className='h-[10000px]'>
+        <div className=''>
             <Header />
             {children}
             <Footer />
