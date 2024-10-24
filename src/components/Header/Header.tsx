@@ -89,7 +89,6 @@ export default function Header() {
                                 arrowRight={15}
                                 arrowTop={0}
                                 transformOrigin='410'
-                                initialOpen
                             >
                                 <FontAwesomeIcon className='text-[17px] ' icon={faMagnifyingGlass} />
                             </Popover>
