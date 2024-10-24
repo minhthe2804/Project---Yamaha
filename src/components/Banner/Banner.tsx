@@ -5,7 +5,7 @@ import classNames from 'classnames'
 
 export default function Banner() {
     const [index, setIndex] = useState<number>(0)
-    const [animationClass, setAnimationClass] = useState<string>('animate__fadeInRight')
+    const [animationClass, setAnimationClass] = useState<string>('')
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const intervalIdRef = useRef<NodeJS.Timeout | null>(null)
 
