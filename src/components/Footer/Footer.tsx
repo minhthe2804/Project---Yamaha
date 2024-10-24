@@ -1,12 +1,15 @@
+import { Link } from "react-router-dom"
+import { path } from '~/constants/path'
+
 export default function Footer() {
     return <footer id="footer" className="text-white bg-[#3159a6] bg-cover bg-center bg-no-repeat pt-[100px] pb-0 px-0 border-t-2 border-[#ff3237] bg-[url('https://theme.hstatic.net/200000281285/1000677821/14/ft_bg_img.jpg?v=848')]">
-    <div className="container mx-auto flex justify-between px-40 text-xs">
+    <div className="container mx-auto flex justify-between px-40 text-base">
         
             <div className="w-1/3">
                 <div className="mb-4">
-                    <a href="/">
-                        <img src="//theme.hstatic.net/200000281285/1000677821/14/ft_logo.png?v=848" alt="Hệ Thống Xe máy Hoàng Cầu" className="h-12" />
-                    </a>
+                    <Link to={path.home}>
+                        <img src="//theme.hstatic.net/200000281285/1000677821/14/ft_logo.png?v=848" alt="Hệ Thống Xe máy Hoàng Cầu" className="h-[130px] mb-10" />
+                    </Link>
                 </div>
                 <div className="mb-4">
                     HỆ THỐNG XE MÁY HOÀNG CẦU chuyên cung cấp các dòng xe Honda, Yamaha, SYM, Suzuki, xe nhập khẩu,.... chính hãng, cam kết mang đến những sản phẩm, phụ tùng chất lượng nhất đến tay người tiêu dùng.
@@ -34,32 +37,32 @@ export default function Footer() {
         
             <div className="w-1/2 flex flex-col">
                 <h3 className="text-lg font-semibold mb-2 text-center pb-4">HỆ THỐNG SHOWROOM</h3>
-                <div className="flex justify-between">
+                <div className="flex justify-between text-base">
 
                     <div className="w-1/2 pr-2">
                         <ul className="space-y-2">
-                            <li className="hover:translate-x-[10px] hover:text-[#ff3237] transition duration-300 ease-in">
+                            <li className="hover:translate-x-[10px] hover:text-[#ff3237] transition duration-300 ease-in pb-4">
                                 <a href="tel:+0978274039" className="no-underline">
                                     <b>YAMAHA TOWN HOÀNG CẦU - 08</b>
                                     <p>☎: 0274 6568 777 📞: 0978 274 039</p>
                                     <p className="pt-4">ĐC: Số 189, Đường Nguyễn Trãi, P. Dĩ An, TP. Dĩ An, Tỉnh Bình Dương.</p>
                                 </a>
                             </li>
-                            <li className="hover:translate-x-[10px] hover:text-[#ff3237] transition duration-300 ease-in">
+                            <li className="hover:translate-x-[10px] hover:text-[#ff3237] transition duration-300 ease-in pb-4">
                                 <a href="tel:+0981547039" className="no-underline">
                                     <b>YAMAHA TOWN HOÀNG CẦU - 09</b>
                                     <p>☎: 02746 566 605 📞: 0981 547 039</p>
                                     <p className="pt-4">ĐC: Số 6, Đường ĐT746, P. Khánh Bình, Thị Xã Tân Uyên, Tỉnh Bình Dương.</p>
                                 </a>
                             </li>
-                            <li className="hover:translate-x-[10px] hover:text-[#ff3237] transition duration-300 ease-in">
+                            <li className="hover:translate-x-[10px] hover:text-[#ff3237] transition duration-300 ease-in pb-4">
                                 <a href="tel:+0971467039" className="no-underline">
                                     <b>HOÀNG CẦU CHI NHÁNH 2</b>
                                     <p>☎: 02854 432 212 📞: 0971 467 039</p>
                                     <p className="pt-4">ĐC: Số 7-9, QL 1K, P. Linh Xuân, Thủ Đức, Tp. HCM</p>
                                 </a>
                             </li>
-                            <li className="hover:translate-x-[10px] hover:text-[#ff3237] transition duration-300 ease-in">
+                            <li className="hover:translate-x-[10px] hover:text-[#ff3237] transition duration-300 ease-in pb-4">
                                 <a href="tel:+0973524039" className="no-underline">
                                     <b>HOÀNG CẦU CHI NHÁNH 3</b>
                                     <p>☎: 02854 034 142 📞: 0973 524 039</p>
@@ -72,28 +75,28 @@ export default function Footer() {
 
                     <div className="w-1/2 pl-2">
                         <ul className="space-y-2">
-                            <li className="hover:translate-x-[10px] hover:text-[#ff3237] transition duration-300 ease-in">
+                            <li className="hover:translate-x-[10px] hover:text-[#ff3237] transition duration-300 ease-in pb-4">
                                 <a href="tel:+0978274039" className="no-underline">
                                     <b>YAMAHA TOWN HOÀNG CẦU - 08</b>
                                     <p>☎: 0274 6568 777 📞: 0978 274 039</p>
                                     <p className="pt-4">ĐC: Số 189, Đường Nguyễn Trãi, P. Dĩ An, TP. Dĩ An, Tỉnh Bình Dương.</p>
                                 </a>
                             </li>
-                            <li className="hover:translate-x-[10px] hover:text-[#ff3237] transition duration-300 ease-in">
+                            <li className="hover:translate-x-[10px] hover:text-[#ff3237] transition duration-300 ease-in pb-4">
                                 <a href="tel:+0981547039" className="no-underline">
                                     <b>YAMAHA TOWN HOÀNG CẦU - 09</b>
                                     <p>☎: 02746 566 605 📞: 0981 547 039</p>
                                     <p className="pt-4">ĐC: Số 6, Đường ĐT746, P. Khánh Bình, Thị Xã Tân Uyên, Tỉnh Bình Dương.</p>
                                 </a>
                             </li>
-                            <li className="hover:translate-x-[10px] hover:text-[#ff3237] transition duration-300 ease-in">
+                            <li className="hover:translate-x-[10px] hover:text-[#ff3237] transition duration-300 ease-in pb-4">
                                 <a href="tel:+0971467039" className="no-underline">
                                     <b>HOÀNG CẦU CHI NHÁNH 2</b>
                                     <p>☎: 02854 432 212 📞: 0971 467 039</p>
                                     <p className="pt-4">ĐC: Số 7-9, QL 1K, P. Linh Xuân, Thủ Đức, Tp. HCM</p>
                                 </a>
                             </li>
-                            <li className="hover:translate-x-[10px] hover:text-[#ff3237] transition duration-300 ease-in">
+                            <li className="hover:translate-x-[10px] hover:text-[#ff3237] transition duration-300 ease-in pb-4">
                                 <a href="tel:+0973524039" className="no-underline">
                                     <b>HOÀNG CẦU CHI NHÁNH 3</b>
                                     <p>☎: 02854 034 142 📞: 0973 524 039</p>
@@ -106,13 +109,17 @@ export default function Footer() {
         </div>
 
 
-        <div className="w-1/6 pl-4">
+        <div className="w-1/6 pl-4 text-base">
             <h3 className="text-lg font-semibold pb-4">Liên kết nhanh</h3>
             <ul className="space-y-2">
+                <li className="hover:translate-x-[10px] hover:text-[#ff3237] transition duration-300 ease-in"><a href="/" className="no-underline">Tìm kiếm</a></li>
                 <li className="hover:translate-x-[10px] hover:text-[#ff3237] transition duration-300 ease-in"><a href="/" className="no-underline">Giới thiệu</a></li>
-                <li className="hover:translate-x-[10px] hover:text-[#ff3237] transition duration-300 ease-in"><a href="/" className="no-underline">Chính sách đổi trả</a></li>
-                <li className="hover:translate-x-[10px] hover:text-[#ff3237] transition duration-300 ease-in"><a href="/" className="no-underline">Hướng dẫn thanh toán</a></li>
-                <li className="hover:translate-x-[10px] hover:text-[#ff3237] transition duration-300 ease-in"><a href="/" className="no-underline">Liên hệ</a></li>
+                <li className="hover:translate-x-[10px] hover:text-[#ff3237] transition duration-300 ease-in"><a href="/" className="no-underline">Chính sách bảo hành - bảo dưỡng</a></li>
+                <li className="hover:translate-x-[10px] hover:text-[#ff3237] transition duration-300 ease-in"><a href="/" className="no-underline">Chính sách bảo mật</a></li>
+                <li className="hover:translate-x-[10px] hover:text-[#ff3237] transition duration-300 ease-in"><a href="/" className="no-underline">Điều khoản dịch vụ</a></li>
+                <li className="hover:translate-x-[10px] hover:text-[#ff3237] transition duration-300 ease-in"><a href="/" className="no-underline">Hướng dẫn mua hàng</a></li>
+                <li className="hover:translate-x-[10px] hover:text-[#ff3237] transition duration-300 ease-in"><a href="/" className="no-underline">Chính sách vận chuyển - đổi trả</a></li>
+                <li className="hover:translate-x-[10px] hover:text-[#ff3237] transition duration-300 ease-in"><a href="/" className="no-underline">Chính sách thanh toán</a></li>
             </ul>
         </div>
 
@@ -122,7 +129,7 @@ export default function Footer() {
     <div className="px-40 mt-5 text-xs">
         <ul>
             <li className="flex items-center">
-                <img src="//theme.hstatic.net/200000281285/1000677821/14/icon_user.png?v=848" className="mr-[10px] pb-4 "/> Người đại diện: TRƯƠNG VĂN CẦU
+                <img src="//theme.hstatic.net/200000281285/1000677821/14/icon_user.png?v=848" className="mr-[10px] pb-4"/> Người đại diện: TRƯƠNG VĂN CẦU
             </li>
             <li className="flex items-center">
                 <img src="//theme.hstatic.net/200000281285/1000677821/14/icon_gpkd.png?v=848" className="mr-[10px]  "/> GPKD Số: 0312907562; cấp ngày 21/09/2020 tại Sở Kế Hoạch và Đầu Tư Tỉnh Bình Dương
