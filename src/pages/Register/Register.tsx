@@ -1,6 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
+import { useState } from 'react'
 
 import BreadCrumb from '~/components/BreadCrumb'
 import { path } from '~/constants/path'
@@ -9,7 +10,7 @@ import Input from '~/components/Input'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { authApi } from '~/apis/auth.api'
 import { toast } from 'react-toastify'
-import { useState } from 'react'
+import { breadCrumb } from '~/constants/BreadCrumb'
 
 type FormData = Schema
 export default function Register() {
@@ -77,7 +78,7 @@ export default function Register() {
 
     return (
         <div>
-            <BreadCrumb />
+            <BreadCrumb heading={breadCrumb.register.heading} title={breadCrumb.register.title} />
             <div className='flex justify-center pb-[78px]'>
                 <div className='w-[382px] flex flex-col'>
                     <div className='w-full border-[2px] border-[#817f7f] pt-[20px] pb-[20px] text-center'>
@@ -126,7 +127,7 @@ export default function Register() {
                             className='mt-1'
                             placeholder='Password'
                         />
-                        <button className='w-full bg-[#ff3237] rounded-[4px] flex items-center justify-center text-[15px] font-[550] py-[7px] hover:bg-[#fe0006] transition duration-300 ease-in'>
+                        <button className='mt-2 w-full bg-[#ff3237] rounded-[4px] flex items-center justify-center text-[15px] font-[550] py-[7px] hover:bg-[#fe0006] transition duration-300 ease-in'>
                             Đăng ký
                         </button>
                         <Link
