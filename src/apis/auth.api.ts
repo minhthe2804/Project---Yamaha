@@ -9,8 +9,17 @@ export const authApi = {
         email: string
         password: string
     }) => {
-        return httpAuth.post(URL, body)
+        return httpAuth.post<Auth>(URL, body)
     },
     registerAcount: () => httpAuth.get<Auth[]>(URL),
-    login: () => httpAuth.get<Auth[]>(URL)
+    login: () => httpAuth.get<Auth[]>(URL),
+    forgotPassword: (
+        id: string,
+        body: {
+            name: { firstname: string; lastname: string }
+            username: string
+            email: string
+            password: string
+        }
+    ) => httpAuth.put<Auth>(`${URL}/${id}`, body)
 }

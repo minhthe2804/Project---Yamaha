@@ -1,3 +1,4 @@
+
 export const breadCrumb = {
     register: {
         heading: 'TẠO TÀI KHOẢN',
@@ -6,5 +7,9 @@ export const breadCrumb = {
     login: {
         heading: 'TÀI KHOẢN',
         title: 'Trang chủ / Tài khoản'
+    },
+    forgotPassword: {
+        heading: 'QUÊN MẬT KHẨU',
+        title: 'Trang chủ / Quên mật khẩu'
     }
 }

@@ -1,5 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
@@ -13,8 +13,10 @@ import { path } from '~/constants/path'
 import { Schema, schema } from '~/utils/rules'
 
 type FormData = Pick<Schema, 'email' | 'password'>
-const loginSchema = schema.pick(['email', 'password'])
-export default function Login() {
+const forgotPasswordSchema = schema.pick(['email', 'password'])
+
+export default function ForgotPassword() {
+    const [errorEmail, setErrorEmail] = useState<string>('')
     const [errorPassword, setErrorPassword] = useState<string>('')
     const {
         register,
@@ -26,7 +28,7 @@ export default function Login() {
             email: '',
             password: ''
         },
-        resolver: yupResolver(loginSchema)
+        resolver: yupResolver(forgotPasswordSchema)
     })
 
     const navigate = useNavigate()
@@ -35,26 +37,56 @@ export default function Login() {
         queryFn: () => authApi.login()
     })
 
+    const forgotPasswordMutation = useMutation({
+        mutationFn: (bodyData: {
+            id: string
+            body: {
+                name: { firstname: string; lastname: string }
+                username: string
+                email: string
+                password: string
+            }
+        }) => authApi.forgotPassword(bodyData.id, bodyData.body)
+    })
+
     const onSubmit = handleSubmit((data) => {
         const { email, password } = data
         const findUser = dataUser?.data.find((user) => user.email === email)
         const comparePassword = findUser?.password === password
-        if (!comparePassword) {
-            setErrorPassword('Password không đúng')
+        if (!findUser) {
+            setErrorEmail('Email không tồn tại')
             return
         }
-        reset()
-        navigate(path.home)
-        toast.success('Bạn đã đăng nhập thành công', { autoClose: 3000 })
+        if (comparePassword) {
+            setErrorPassword('Bạn cần phải nhập mẩu khẩu khác so với mật khẩu trước')
+            return
+        }
+        const bodyData = {
+            id: findUser.id,
+            body: {
+                ...findUser,
+                password
+            }
+        }
+
+        forgotPasswordMutation.mutate(bodyData, {
+            onSuccess: () => {
+                reset()
+                navigate(path.login)
+                toast.success('Bạn đã đổi mật khẩu thành công', {
+                    autoClose: 3000
+                })
+            }
+        })
     })
 
     return (
         <div>
-            <BreadCrumb heading={breadCrumb.login.heading} title={breadCrumb.login.title} />
+            <BreadCrumb heading={breadCrumb.forgotPassword.heading} title={breadCrumb.forgotPassword.title} />
             <div className='flex justify-center pb-[78px]'>
                 <div className='w-[382px] flex flex-col'>
                     <div className='w-full border-[2px] border-[#817f7f] pt-[20px] pb-[20px] text-center'>
-                        <p className='text-[18px] font-semibold text-[#000bff]'>ĐĂNG NHẬP</p>
+                        <p className='text-[18px] font-semibold text-[#000bff]'>CÀI ĐẶT LẠI MẬT KHẨU</p>
                     </div>
                     <form className='w-full' onSubmit={onSubmit}>
                         <Input
@@ -65,6 +97,9 @@ export default function Login() {
                             name='email'
                             type='text'
                             placeholder='Email'
+                            errorEmail={errorEmail}
+                            setErrorEmail={setErrorEmail}
+                            inputEmail
                         />
                         <Input
                             classNameError='text-red-500 text-[14px] mt-[2px] min-h-[20px]'
@@ -80,25 +115,13 @@ export default function Login() {
                             setErrorPassword={setErrorPassword}
                         />
                         <button className='mt-2 w-full bg-[#ff3237] rounded-[4px] flex items-center justify-center text-[15px] font-[550] py-[7px] hover:bg-[#fe0006] transition duration-300 ease-in'>
-                            Đăng nhập
+                            Xác nhận
                         </button>
                         <Link
-                            to={path.home}
+                            to={path.login}
                             className='block mt-[13px] w-full text-center text-[#ff3237] text-[15px] hover:opacity-[0.8] transition duration-200 ease-in '
                         >
-                            Trở về
-                        </Link>
-                        <Link
-                            to={path.register}
-                            className='block mt-[13px] w-full text-center text-[#ff3237] text-[15px] hover:opacity-[0.8] transition duration-200 ease-in '
-                        >
-                            Đăng kí
-                        </Link>
-                        <Link
-                            to={path.forgotPassword}
-                            className='block mt-[13px] w-full text-center text-[#ff3237] text-[15px] hover:opacity-[0.8] transition duration-200 ease-in '
-                        >
-                            Quên mật khẩu?
+                            Bỏ qua
                         </Link>
                     </form>
                 </div>

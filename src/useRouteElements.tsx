@@ -7,6 +7,7 @@ import ProductList from './pages/ProductList'
 import Register from './pages/Register'
 import Login from './pages/Login'
 import ProductDetail from './pages/ProductDetail'
+import ForgotPassword from './pages/ForgotPassword'
 
 export default function useRouteElements() {
     const routeElements = useRoutes([
@@ -40,6 +41,14 @@ export default function useRouteElements() {
             element: (
                 <MainLayout>
                     <Login />
+                </MainLayout>
+            )
+        },
+        {
+            path: path.forgotPassword,
+            element: (
+                <MainLayout>
+                    <ForgotPassword />
                 </MainLayout>
             )
         },
