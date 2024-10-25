@@ -1,10 +1,10 @@
 import axios, { AxiosError, AxiosInstance } from 'axios'
 
-export class HttpProduct {
+export class HttpAuth {
     instance: AxiosInstance
     constructor() {
         this.instance = axios.create({
-            baseURL: 'http://localhost:4000/',
+            baseURL: 'http://localhost:4001/',
             timeout: 10000,
             headers: {
                 'Content-Type': 'application/json'
@@ -29,5 +29,5 @@ export class HttpProduct {
         )
     }
 }
-const httpProduct = new HttpProduct().instance
-export default httpProduct
+const httpAuth = new HttpAuth().instance
+export default httpAuth
