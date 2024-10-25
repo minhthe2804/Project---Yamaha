@@ -1,6 +1,10 @@
 import { yupResolver } from '@hookform/resolvers/yup'
+import { useQuery } from '@tanstack/react-query'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
+import { authApi } from '~/apis/auth.api'
 
 import BreadCrumb from '~/components/BreadCrumb'
 import Input from '~/components/Input'
@@ -11,6 +15,7 @@ import { Schema, schema } from '~/utils/rules'
 type FormData = Pick<Schema, 'email' | 'password'>
 const loginSchema = schema.pick(['email', 'password'])
 export default function Login() {
+    const [errorPassword, setErrorPassword] = useState<string>('')
     const {
         register,
         reset,
@@ -24,8 +29,23 @@ export default function Login() {
         resolver: yupResolver(loginSchema)
     })
 
+    const navigate = useNavigate()
+    const { data: dataUser } = useQuery({
+        queryKey: ['user'],
+        queryFn: () => authApi.login()
+    })
+
     const onSubmit = handleSubmit((data) => {
-        console.log(data)
+        const { email, password } = data
+        const findUser = dataUser?.data.find((user) => user.email === email)
+        const comparePassword = findUser?.password === password
+        if (!comparePassword) {
+            setErrorPassword('Password không đúng')
+            return
+        }
+        reset()
+        navigate(path.home)
+        toast.success('Bạn đã đăng nhập thành công', { autoClose: 3000 })
     })
 
     return (
@@ -55,6 +75,9 @@ export default function Login() {
                             type='text'
                             className='mt-1'
                             placeholder='Password'
+                            errorPassword={errorPassword}
+                            inputPassword
+                            setErrorPassword={setErrorPassword}
                         />
                         <button className='mt-2 w-full bg-[#ff3237] rounded-[4px] flex items-center justify-center text-[15px] font-[550] py-[7px] hover:bg-[#fe0006] transition duration-300 ease-in'>
                             Đăng nhập

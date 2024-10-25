@@ -11,6 +11,9 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
     errorEmail?: string
     inputEmail?: boolean
     setErrorEmail?: React.Dispatch<React.SetStateAction<string>>
+    errorPassword?: string
+    inputPassword?: boolean
+    setErrorPassword?: React.Dispatch<React.SetStateAction<string>>
 }
 
 export default function Input({
@@ -21,7 +24,10 @@ export default function Input({
     errorMessage,
     register,
     errorEmail,
+    errorPassword,
     inputEmail,
+    inputPassword,
+    setErrorPassword,
     setErrorEmail,
     ...rest
 }: InputProps) {
@@ -32,12 +38,18 @@ export default function Input({
             // eslint-disable-next-line @typescript-eslint/no-unused-expressions
             setErrorEmail && setErrorEmail('')
         }
+        if (inputPassword) {
+            // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+            setErrorPassword && setErrorPassword('')
+        }
     }
 
     return (
         <div className={className}>
             <input type='text' className={classNameInput} {...registerResult} {...rest} onInput={resetErrorEmail} />
-            <p className={classNameError}>{errorEmail || errorMessage}</p>
+            <p className={classNameError}>
+                {(errorEmail && errorEmail) || (errorPassword && errorPassword) || errorMessage}
+            </p>
         </div>
     )
 }
