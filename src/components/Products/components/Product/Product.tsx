@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Product as ProductType } from '~/types/Products.type'
 import { formatCurrency } from '~/utils/utils'
 import 'animate.css'
+import Button from '~/components/Button'
 interface Props {
     product: ProductType
 }
@@ -35,17 +36,17 @@ export default function Product({ product }: Props) {
             <img
                 src={featureImage || product.featured_image}
                 alt=''
-                className={`w-[300px] object-cover cursor-pointer animate__animated ${animationClass}`}
+                className={`w-[260px] absolute object-cover cursor-pointer animate__animated ${animationClass}`}
             />
-            <div className='w-full px-[14px] pt-[21px]'>
-                <p className='text-[12.5px] text-[#181b23] font-[600] opacity-[0.9] hover:text-[#ff3237] transition duration-300 ease-in cursor-pointer'>
+            <div className='w-full px-[14px] pt-[21px] mt-[200px]'>
+                <p className='text-[14px] text-[#181b23] font-[600] opacity-[0.9] hover:text-[#ff3237] transition duration-300 ease-in cursor-pointer'>
                     {product.title}
                 </p>
                 <div className='w-full h-[1px] bg-[#ededed] mt-[22px]'></div>
                 <p className='text-lg font-[600] text-[#ff3237] mt-[28px]'>{formatCurrency(Number(product.price))}</p>
-                <button className='w-full p-[12px] bg-[#ff3237] rounded-[30px] mt-[24px] text-white flex items-center justify-center gap-1 hover:shadow-[0_0_20px_5px_rgba(255,50,55,0.3)] transition duration-200 ease-in'>
+                <Button className='w-full p-[12px] bg-[#ff3237] rounded-[30px] mt-[24px] text-white flex items-center justify-center gap-1 hover:shadow-[0_0_20px_5px_rgba(255,50,55,0.3)] transition duration-200 ease-in'>
                     <svg
-                        className='svg-inline--fa fa-cart-plus fa-w-18 text-[13px]'
+                        className='svg-inline--fa fa-cart-plus fa-w-18 text-[13px] '
                         aria-hidden='true'
                         data-prefix='fa'
                         data-icon='cart-plus'
@@ -60,7 +61,7 @@ export default function Product({ product }: Props) {
                         ></path>
                     </svg>
                     <p className='text-xs font-[600]'>THÊM VÀO GIỎ</p>
-                </button>
+                </Button>
             </div>
         </div>
     )

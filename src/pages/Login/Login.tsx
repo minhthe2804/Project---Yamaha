@@ -7,6 +7,7 @@ import { toast } from 'react-toastify'
 import { authApi } from '~/apis/auth.api'
 
 import BreadCrumb from '~/components/BreadCrumb'
+import Button from '~/components/Button'
 import Input from '~/components/Input'
 import { breadCrumb } from '~/constants/breadCrumb'
 import { path } from '~/constants/path'
@@ -91,9 +92,9 @@ export default function Login() {
                             inputPassword
                             setErrorPassword={setErrorPassword}
                         />
-                        <button className='mt-2 w-full bg-[#ff3237] rounded-[4px] flex items-center justify-center text-[15px] font-[550] py-[7px] hover:bg-[#fe0006] transition duration-300 ease-in'>
+                        <Button className='mt-2 w-full bg-[#ff3237] rounded-[4px] flex items-center justify-center text-[15px] font-[550] py-[8px] hover:bg-[#fe0006] transition duration-300 ease-in'>
                             Đăng nhập
-                        </button>
+                        </Button>
                         <Link
                             to={path.home}
                             className='block mt-[13px] w-full text-center text-[#ff3237] text-[15px] hover:opacity-[0.8] transition duration-200 ease-in '

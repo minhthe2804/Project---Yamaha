@@ -12,6 +12,7 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import { authApi } from '~/apis/auth.api'
 import { toast } from 'react-toastify'
 import { toastNotify } from '~/constants/toastNotify'
+import Button from '~/components/Button'
 
 type FormData = Schema
 export default function Register() {
@@ -128,9 +129,13 @@ export default function Register() {
                             className='mt-1'
                             placeholder='Password'
                         />
-                        <button className='mt-2 w-full bg-[#ff3237] rounded-[4px] flex items-center justify-center text-[15px] font-[550] py-[7px] hover:bg-[#fe0006] transition duration-300 ease-in'>
+                        <Button
+                            className='mt-2 w-full bg-[#ff3237] rounded-[4px] flex items-center justify-center text-[15px] font-[550] py-[8px] hover:bg-[#fe0006] transition duration-300 ease-in'
+                            isLoading={regiterMutation.isPending}
+                            disabled={regiterMutation.isPending}
+                        >
                             Đăng ký
-                        </button>
+                        </Button>
                         <Link
                             to={path.home}
                             className='block mt-[13px] w-full text-center text-[#ff3237] text-[15px] hover:opacity-[0.8] transition duration-200 ease-in '

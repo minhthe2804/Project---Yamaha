@@ -12,7 +12,7 @@ export default function Button(props: ButtonProps) {
             {isLoading && (
                 <svg
                     aria-hidden='true'
-                    className='mr-2 h-4 w-4 animate-spin fill-white text-gray-200'
+                    className='mr-2 h-4 w-4 animate-spin fill-white text-gray-200 mt-[-3px]'
                     viewBox='0 0 100 101'
                     fill='none'
                     xmlns='http://www.w3.org/2000/svg'
@@ -27,7 +27,8 @@ export default function Button(props: ButtonProps) {
                     />
                 </svg>
             )}
-            <span>{children}</span>
+
+            <div className='flex justify-center gap-1'>{children}</div>
         </button>
     )
 }
