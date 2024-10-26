@@ -1,4 +1,5 @@
-import { useRoutes } from 'react-router-dom'
+import { Navigate, Outlet, useRoutes } from 'react-router-dom'
+import { useContext } from 'react'
 
 import MainLayout from './Layouts/MainLayout'
 import Home from './pages/Home'
@@ -8,6 +9,21 @@ import Register from './pages/Register'
 import Login from './pages/Login'
 import ProductDetail from './pages/ProductDetail'
 import ForgotPassword from './pages/ForgotPassword'
+import Cart from './pages/Cart'
+import Account from './pages/Account'
+import { AppContext } from './contexts/app.context'
+
+// eslint-disable-next-line react-refresh/only-export-components
+function ProtectedRoute() {
+    const { isAuthenticated } = useContext(AppContext)
+    return isAuthenticated ? <Outlet /> : <Navigate to={path.login} />
+}
+
+// eslint-disable-next-line react-refresh/only-export-components
+function RejectedRoute() {
+    const { isAuthenticated } = useContext(AppContext)
+    return !isAuthenticated ? <Outlet /> : <Navigate to={path.home} />
+}
 
 export default function useRouteElements() {
     const routeElements = useRoutes([
@@ -29,28 +45,34 @@ export default function useRouteElements() {
             )
         },
         {
-            path: path.register,
-            element: (
-                <MainLayout>
-                    <Register />
-                </MainLayout>
-            )
-        },
-        {
-            path: path.login,
-            element: (
-                <MainLayout>
-                    <Login />
-                </MainLayout>
-            )
-        },
-        {
-            path: path.forgotPassword,
-            element: (
-                <MainLayout>
-                    <ForgotPassword />
-                </MainLayout>
-            )
+            path: '',
+            element: <RejectedRoute />,
+            children: [
+                {
+                    path: path.register,
+                    element: (
+                        <MainLayout>
+                            <Register />
+                        </MainLayout>
+                    )
+                },
+                {
+                    path: path.login,
+                    element: (
+                        <MainLayout>
+                            <Login />
+                        </MainLayout>
+                    )
+                },
+                {
+                    path: path.forgotPassword,
+                    element: (
+                        <MainLayout>
+                            <ForgotPassword />
+                        </MainLayout>
+                    )
+                }
+            ]
         },
         {
             path: path.productDetail,
@@ -59,6 +81,28 @@ export default function useRouteElements() {
                     <ProductDetail />
                 </MainLayout>
             )
+        },
+        {
+            path: '',
+            element: <ProtectedRoute />,
+            children: [
+                {
+                    path: path.cart,
+                    element: (
+                        <MainLayout>
+                            <Cart />
+                        </MainLayout>
+                    )
+                },
+                {
+                    path: path.account,
+                    element: (
+                        <MainLayout>
+                            <Account />
+                        </MainLayout>
+                    )
+                }
+            ]
         }
     ])
     return routeElements

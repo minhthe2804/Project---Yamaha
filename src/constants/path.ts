@@ -1,4 +1,3 @@
-
 export const path = {
     home: '/',
     register: '/register',
@@ -9,5 +8,6 @@ export const path = {
     introduce: '/introduce',
     contact: '/contact',
     cart: '/cart',
-    productDetail: '/productDetail'
+    productDetail: ':nameId',
+    account: '/account'
 }

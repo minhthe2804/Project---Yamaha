@@ -8,6 +8,9 @@ export const toastNotify = {
         emailError: 'Email này chưa được đăng kí',
         passwordError: 'Password không đúng'
     },
+    logOut: {
+        logOutSuccess: 'Bạn đã đăng xuất thành công'
+    },
     forgotPassword: {
         changePasswordSuccess: 'Bạn đã đổi mật khẩu thành công',
         emailError: 'Email không tồn tại',
