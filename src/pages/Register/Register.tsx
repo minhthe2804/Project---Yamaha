@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useState } from 'react'
 
+import { breadCrumb } from '~/constants/breadCrumb'
 import BreadCrumb from '~/components/BreadCrumb'
 import { path } from '~/constants/path'
 import { Schema, schema as registerSchema } from '~/utils/rules'
@@ -10,7 +11,7 @@ import Input from '~/components/Input'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { authApi } from '~/apis/auth.api'
 import { toast } from 'react-toastify'
-import { breadCrumb } from '~/constants/BreadCrumb'
+import { toastNotify } from '~/constants/toastNotify'
 
 type FormData = Schema
 export default function Register() {
@@ -48,7 +49,7 @@ export default function Register() {
     const isEmail = (email: string) => {
         const isEmail = dataUser?.data.some((user) => user.email === email)
         if (isEmail) {
-            setErrorEmail('Email đã tồn tại')
+            setErrorEmail(toastNotify.register.emailError)
             return true
         }
         return false
@@ -70,7 +71,7 @@ export default function Register() {
             onSuccess: (data) => {
                 console.log(data)
                 reset()
-                toast.success('Bạn đã đăng kí thành công', { autoClose: 3000 })
+                toast.success(toastNotify.register.registerSuccess, { autoClose: 3000 })
                 navigate(path.home)
             }
         })

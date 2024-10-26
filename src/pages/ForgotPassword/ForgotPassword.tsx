@@ -8,8 +8,9 @@ import { authApi } from '~/apis/auth.api'
 
 import BreadCrumb from '~/components/BreadCrumb'
 import Input from '~/components/Input'
-import { breadCrumb } from '~/constants/BreadCrumb'
+import { breadCrumb } from '~/constants/breadCrumb'
 import { path } from '~/constants/path'
+import { toastNotify } from '~/constants/toastNotify'
 import { Schema, schema } from '~/utils/rules'
 
 type FormData = Pick<Schema, 'email' | 'password'>
@@ -54,11 +55,14 @@ export default function ForgotPassword() {
         const findUser = dataUser?.data.find((user) => user.email === email)
         const comparePassword = findUser?.password === password
         if (!findUser) {
-            setErrorEmail('Email không tồn tại')
+            if (errorPassword) {
+                setErrorPassword('')
+            }
+            setErrorEmail(toastNotify.forgotPassword.emailError)
             return
         }
         if (comparePassword) {
-            setErrorPassword('Bạn cần phải nhập mẩu khẩu khác so với mật khẩu trước')
+            setErrorPassword(toastNotify.forgotPassword.passwordError)
             return
         }
         const bodyData = {
@@ -73,7 +77,7 @@ export default function ForgotPassword() {
             onSuccess: () => {
                 reset()
                 navigate(path.login)
-                toast.success('Bạn đã đổi mật khẩu thành công', {
+                toast.success(toastNotify.forgotPassword.changePasswordSuccess, {
                     autoClose: 3000
                 })
             }

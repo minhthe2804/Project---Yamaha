@@ -1,4 +1,4 @@
-import { categories } from '~/constants/Categories'
+import { categories } from '~/constants/categories'
 import { createSearchParams, useNavigate } from 'react-router-dom'
 import { path } from '~/constants/path'
 import useQueryConfig from '~/hooks/useQueryConfig'
