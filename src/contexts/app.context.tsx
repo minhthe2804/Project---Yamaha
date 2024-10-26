@@ -1,22 +1,40 @@
-// import { createContext, useState } from 'react'
+import { createContext, useState } from 'react'
+import { User } from '~/types/user.type'
+import { getLoginSuccess, getProfileFromLS } from '~/utils/auth'
 
-// interface AppContextInterface {
-//     blogTop: number
-//     setBlogTop: () => void
-// }
+interface AppContextInterface {
+    isAuthenticated: boolean
+    setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>
+    profile: User | null
+    setProfile: React.Dispatch<React.SetStateAction<User | null>>
+    reset: () => void
+}
 
-// const initialAppContext: AppContextInterface = {
-//     blogTop: 75,
-//     setBlogTop: () => null
-// }
+const initialAppContext: AppContextInterface = {
+    isAuthenticated: Boolean(getLoginSuccess()),
+    setIsAuthenticated: () => null,
+    profile: getProfileFromLS(),
+    setProfile: () => null,
+    reset: () => null
+}
 
-// export const AppContext = createContext<AppContextInterface>(initialAppContext)
+export const AppContext = createContext<AppContextInterface>(initialAppContext)
 
-// export const AppProvider = ({ children }: { children: React.ReactNode }) => {
-//     const [blogTop, setBlogTop] = useState<number>(initialAppContext.blogTop)
-//     const value = {
-//         blogTop,
-//         setBlogTop
-//     }
-//     return <AppContext.Provider value={value}>{children}</AppContext.Provider>
-// }
+export const AppProvider = ({ children }: { children: React.ReactNode }) => {
+    const [isAuthenticated, setIsAuthenticated] = useState<boolean>(initialAppContext.isAuthenticated)
+    const [profile, setProfile] = useState<User | null>(initialAppContext.profile)
+
+    const reset = () => {
+        setIsAuthenticated(false)
+        setProfile(null)
+    }
+
+    const value = {
+        isAuthenticated,
+        setIsAuthenticated,
+        profile,
+        setProfile,
+        reset
+    }
+    return <AppContext.Provider value={value}>{children}</AppContext.Provider>
+}

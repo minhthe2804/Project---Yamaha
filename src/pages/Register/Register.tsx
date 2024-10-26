@@ -73,7 +73,7 @@ export default function Register() {
                 console.log(data)
                 reset()
                 toast.success(toastNotify.register.registerSuccess, { autoClose: 3000 })
-                navigate(path.home)
+                navigate(path.login)
             }
         })
     })

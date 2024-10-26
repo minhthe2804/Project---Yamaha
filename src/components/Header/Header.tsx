@@ -6,10 +6,22 @@ import Popover from '../Popover'
 import { navHeader } from '~/constants/navHeader'
 import styles from './Header.module.css'
 import classNames from 'classnames/bind'
+import { useContext } from 'react'
+import { AppContext } from '~/contexts/app.context'
+import { clearLS, getProfileFromLS } from '~/utils/auth'
+import { toast } from 'react-toastify'
+import { toastNotify } from '~/constants/toastNotify'
 
 const cx = classNames.bind(styles)
 
 export default function Header() {
+    const { isAuthenticated, profile } = useContext(AppContext)
+
+    const handleLogout = () => {
+        clearLS()
+        toast.success(toastNotify.logOut.logOutSuccess, { autoClose: 3000 })
+    }
+
     return (
         <header className='bg-[#ff3237]'>
             <div className='max-w-[1268px] mx-auto'>
@@ -97,18 +109,39 @@ export default function Header() {
                                 renderPopover={
                                     <div className='relative rounded-md w-[200px] h-[140px] bg-[#b80319]'>
                                         <div className='flex flex-col text-[13.5px] font-[500] text-white pl-[18px] gap-5 h-full justify-center'>
-                                            <Link
-                                                to={path.login}
-                                                className='hover:translate-x-[10px] hover:text-[#ff7f82] transition duration-300 ease-in '
-                                            >
-                                                ĐĂNG NHẬP
-                                            </Link>
-                                            <Link
-                                                to={path.register}
-                                                className='hover:translate-x-[10px] hover:text-[#ff7f82] transition duration-300 ease-in '
-                                            >
-                                                ĐĂNG KÍ
-                                            </Link>
+                                            {isAuthenticated && (
+                                                <>
+                                                    <Link
+                                                        to={path.account}
+                                                        className='uppercase hover:translate-x-[10px] hover:text-[#ff7f82] transition duration-300 ease-in '
+                                                    >
+                                                        {`Chào, ${profile?.username}`}
+                                                    </Link>
+                                                    <button
+                                                        className='text-left uppercase hover:translate-x-[10px] hover:text-[#ff7f82] transition duration-300 ease-in '
+                                                        onClick={handleLogout}
+                                                    >
+                                                        Thoát
+                                                    </button>
+                                                </>
+                                            )}
+
+                                            {!isAuthenticated && (
+                                                <>
+                                                    <Link
+                                                        to={path.login}
+                                                        className='hover:translate-x-[10px] hover:text-[#ff7f82] transition duration-300 ease-in '
+                                                    >
+                                                        ĐĂNG NHẬP
+                                                    </Link>
+                                                    <Link
+                                                        to={path.register}
+                                                        className='hover:translate-x-[10px] hover:text-[#ff7f82] transition duration-300 ease-in '
+                                                    >
+                                                        ĐĂNG KÍ
+                                                    </Link>
+                                                </>
+                                            )}
                                         </div>
                                     </div>
                                 }

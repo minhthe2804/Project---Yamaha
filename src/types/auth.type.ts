@@ -9,12 +9,3 @@ export interface Auth {
     password: string
 }
 
-export type RegisterAccount = {
-    name: {
-        firstname: string
-        lastname: string
-    }
-    username: string
-    email: string
-    password: string
-}

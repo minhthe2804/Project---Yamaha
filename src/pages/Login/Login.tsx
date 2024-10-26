@@ -1,6 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useQuery } from '@tanstack/react-query'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
@@ -12,11 +12,14 @@ import Input from '~/components/Input'
 import { breadCrumb } from '~/constants/breadCrumb'
 import { path } from '~/constants/path'
 import { toastNotify } from '~/constants/toastNotify'
+import { AppContext } from '~/contexts/app.context'
+import { setLoginSuccess, setProfileFromLS } from '~/utils/auth'
 import { Schema, schema } from '~/utils/rules'
 
 type FormData = Pick<Schema, 'email' | 'password'>
 const loginSchema = schema.pick(['email', 'password'])
 export default function Login() {
+    const { setIsAuthenticated, setProfile } = useContext(AppContext)
     const [errorEmail, setErrorEmail] = useState<string>('')
     const [errorPassword, setErrorPassword] = useState<string>('')
     const {
@@ -53,6 +56,10 @@ export default function Login() {
             setErrorPassword(toastNotify.login.passwordError)
             return
         }
+        setLoginSuccess(findUser.username)
+        setProfileFromLS(findUser)
+        setIsAuthenticated(true)
+        setProfile(findUser)
         reset()
         navigate(path.home)
         toast.success(toastNotify.login.loginSuccess, { autoClose: 3000 })
