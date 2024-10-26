@@ -15,6 +15,7 @@ import { Schema, schema } from '~/utils/rules'
 type FormData = Pick<Schema, 'email' | 'password'>
 const loginSchema = schema.pick(['email', 'password'])
 export default function Login() {
+    const [errorEmail, setErrorEmail] = useState<string>('')
     const [errorPassword, setErrorPassword] = useState<string>('')
     const {
         register,
@@ -39,6 +40,10 @@ export default function Login() {
         const { email, password } = data
         const findUser = dataUser?.data.find((user) => user.email === email)
         const comparePassword = findUser?.password === password
+        if (!findUser) {
+            setErrorEmail('Email không đúng')
+            return
+        }
         if (!comparePassword) {
             setErrorPassword('Password không đúng')
             return
@@ -65,6 +70,9 @@ export default function Login() {
                             name='email'
                             type='text'
                             placeholder='Email'
+                            inputEmail
+                            errorEmail={errorEmail}
+                            setErrorEmail={setErrorEmail}
                         />
                         <Input
                             classNameError='text-red-500 text-[14px] mt-[2px] min-h-[20px]'
