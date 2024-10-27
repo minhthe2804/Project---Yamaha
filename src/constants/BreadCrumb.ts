@@ -1,4 +1,3 @@
-
 export const breadCrumb = {
     register: {
         heading: 'TẠO TÀI KHOẢN',
@@ -11,5 +10,9 @@ export const breadCrumb = {
     forgotPassword: {
         heading: 'QUÊN MẬT KHẨU',
         title: 'Trang chủ / Quên mật khẩu'
+    },
+    productDetail: {
+        heading: 'EXCITER 150',
+        title: 'Trang chủ / YAMAHA / EXCITER 150'
     }
 }

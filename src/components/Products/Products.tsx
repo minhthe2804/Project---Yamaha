@@ -6,6 +6,7 @@ import ProductTitle from './components/ProductTitle'
 import useQueryConfig from '~/hooks/useQueryConfig'
 import productApi from '~/apis/product.api'
 import { ProductsConfig } from '~/types/Products.type'
+import { productTitle } from '~/constants/productTitle'
 
 export default function Products() {
     const queryConfig = useQueryConfig()
@@ -19,7 +20,7 @@ export default function Products() {
 
     return (
         <div className='mt-[180px] max-w-[1198px] mx-auto'>
-            <ProductTitle />
+            <ProductTitle heading={productTitle.products.heading} />
             <p className='text-sm text-[#34373e] text-center mt-[19px] font-normal'>
                 Cùng tham quan các sản phẩm nổi bật mới nhất của chúng tôi
             </p>
