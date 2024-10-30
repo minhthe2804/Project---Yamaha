@@ -1,11 +1,11 @@
-import { keepPreviousData, useQuery } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 
 import Categories from './components/Categories'
 import Product from './components/Product'
-import ProductTitle from './components/ProductTitle'
+import ProductTitle from '../ProductTitle'
 import useQueryConfig from '~/hooks/useQueryConfig'
 import productApi from '~/apis/product.api'
-import { ProductsConfig } from '~/types/Products.type'
+import { ProductsConfig } from '~/types/products.type'
 import { productTitle } from '~/constants/productTitle'
 
 export default function Products() {

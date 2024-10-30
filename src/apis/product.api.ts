@@ -1,5 +1,5 @@
-import { Product, ProductsConfig } from '~/types/Products.type'
-import httpProduct from '~/utils/HttpProduct'
+import { Product, ProductsConfig } from '~/types/products.type'
+import httpProduct from '~/utils/httpProduct'
 
 const URL = '/products'
 const productApi = {

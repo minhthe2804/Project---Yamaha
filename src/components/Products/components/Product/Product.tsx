@@ -1,8 +1,10 @@
 import { useState } from 'react'
-import { Product as ProductType } from '~/types/Products.type'
-import { formatCurrency } from '~/utils/utils'
+import { Product as ProductType } from '~/types/products.type'
+import { formatCurrency, generateNameId } from '~/utils/utils'
 import 'animate.css'
 import Button from '~/components/Button'
+import { Link } from 'react-router-dom'
+import { path } from '~/constants/path'
 interface Props {
     product: ProductType
 }
@@ -33,11 +35,13 @@ export default function Product({ product }: Props) {
             onMouseEnter={handleFeature}
             onMouseLeave={handleFeatureReset}
         >
-            <img
-                src={featureImage || product.featured_image}
-                alt=''
-                className={`w-[260px] absolute object-cover cursor-pointer animate__animated ${animationClass}`}
-            />
+            <Link to={`${path.home}${generateNameId({ name: product.title, id: product.id })}`}>
+                <img
+                    src={featureImage || product.featured_image}
+                    alt=''
+                    className={`w-[260px] absolute object-cover cursor-pointer animate__animated ${animationClass}`}
+                />
+            </Link>
             <div className='w-full px-[14px] pt-[21px] mt-[200px]'>
                 <p className='text-[14px] text-[#181b23] font-[600] opacity-[0.9] hover:text-[#ff3237] transition duration-300 ease-in cursor-pointer'>
                     {product.title}

@@ -12,6 +12,7 @@ import ForgotPassword from './pages/ForgotPassword'
 import Cart from './pages/Cart'
 import Account from './pages/Account'
 import { AppContext } from './contexts/app.context'
+import Checkout from './pages/Checkout'
 
 // eslint-disable-next-line react-refresh/only-export-components
 function ProtectedRoute() {
@@ -101,6 +102,10 @@ export default function useRouteElements() {
                             <Account />
                         </MainLayout>
                     )
+                },
+                {
+                    path: path.checkout,
+                    element: <Checkout />
                 }
             ]
         }
