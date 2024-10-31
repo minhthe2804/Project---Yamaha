@@ -15,5 +15,8 @@ export const toastNotify = {
         changePasswordSuccess: 'Bạn đã đổi mật khẩu thành công',
         emailError: 'Email không tồn tại',
         passwordError: 'Bạn cần phải nhập mẩu khẩu khác so với mật khẩu trước'
+    },
+    productDetail: {
+        addtoCartSuccess: 'Bạn đã thêm sản phẩm vào giỏ hàng'
     }
 }

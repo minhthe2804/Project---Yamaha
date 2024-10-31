@@ -19,6 +19,7 @@ import QuantityController from '~/components/QuantityController'
 import { cartApi } from '~/apis/cart.api'
 import { CartType } from '~/types/cart.type'
 import { path } from '~/constants/path'
+import { toastNotify } from '~/constants/toastNotify'
 
 const cx = classNames.bind(styles)
 
@@ -152,7 +153,7 @@ export default function ProductDetail() {
                 },
                 {
                     onSuccess: () => {
-                        toast.success('Bạn đã thêm sản phẩm vào giỏ hàng', { autoClose: 3000 })
+                        toast.success(toastNotify.productDetail.addtoCartSuccess, { autoClose: 3000 })
                     }
                 }
             )

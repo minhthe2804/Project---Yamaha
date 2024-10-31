@@ -14,5 +14,9 @@ export const breadCrumb = {
     productDetail: {
         heading: 'EXCITER 150',
         title: 'Trang chủ / YAMAHA / EXCITER 150'
+    },
+    cart: {
+        heading: 'GIỎ HÀNG CỦA BẠN - HỆ THỐNG XE MÁY HOÀNG CẦU',
+        title: 'Trang chủ / Giỏ hàng của bạn - Hệ Thống Xe máy Hoàng Cầu'
     }
 }

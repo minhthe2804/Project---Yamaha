@@ -1,5 +1,5 @@
 import { CartType } from '~/types/cart.type'
-import httpCart from '~/utils/HttpCart'
+import httpCart from '~/utils/httpCart'
 
 const URL = '/cart'
 export const cartApi = {
