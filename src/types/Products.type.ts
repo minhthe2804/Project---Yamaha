@@ -26,7 +26,7 @@ export interface Product {
         name: string
         position: number
         values: string[]
-    }[]
+    }
     price: number
     price_max: number
     price_min: number
@@ -65,12 +65,12 @@ export interface Product {
             alt: null
             variant_ids: number[]
         }
-        vendor: string
-        published_at: string
-        created_at: string
-        not_allow_promotion: boolean
-        sole_quantity: number
     }
+    vendor: string
+    published_at: string
+    created_at: string
+    not_allow_promotion: boolean
+    quantity: number
 }
 
 export interface ProductsConfig {
@@ -80,4 +80,5 @@ export interface ProductsConfig {
     price_min?: string | number
     category?: string
     vendor?: string
+    type?: string
 }

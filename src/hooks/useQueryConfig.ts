@@ -2,7 +2,7 @@ import isUndefined from 'lodash/isUndefined'
 import omitBy from 'lodash/omitBy'
 
 import useQueryParams from './useQueryParams'
-import { ProductsConfig } from '~/types/Products.type'
+import { ProductsConfig } from '~/types/products.type'
 
 export type QueryConfig = {
     [key in keyof ProductsConfig]: string

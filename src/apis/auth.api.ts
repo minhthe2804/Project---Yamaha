@@ -1,5 +1,5 @@
 import { Auth } from '~/types/auth.type'
-import httpAuth from '~/utils/HttpUser'
+import httpAuth from '~/utils/httpUser'
 
 const URL = '/user'
 export const authApi = {

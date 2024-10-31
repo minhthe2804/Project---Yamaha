@@ -9,5 +9,6 @@ export const path = {
     contact: '/contact',
     cart: '/cart',
     productDetail: ':nameId',
-    account: '/account'
+    account: '/account',
+    checkout: '/checkout'
 }
