@@ -7,6 +7,12 @@ export const productTitle = {
     },
     similarProducts: {
         heading: 'SẢN PHẨM TƯƠNG TỰ'
+    },
+    articles: {
+        heading: 'TIN TỨC'
+    },
+    service: {
+        heading: 'DỊCH VỤ'
     }
 }
 

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { banner } from '~/constants/banner'
+import { banner } from '~/constants/Banner'
 import 'animate.css'
 import classNames from 'classnames'
 
