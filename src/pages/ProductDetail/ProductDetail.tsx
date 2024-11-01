@@ -148,8 +148,10 @@ export default function ProductDetail() {
                     previewImage: activeImage,
                     count: buyCount,
                     price: productData.price,
+                    totalPrice: productData.price * buyCount,
                     vendor: productData.vendor,
-                    version: color
+                    version: color,
+                    quantity: productData.quantity
                 },
                 {
                     onSuccess: () => {
@@ -168,8 +170,10 @@ export default function ProductDetail() {
                 previewImage: activeImage,
                 count: buyCount,
                 price: productData.price,
+                totalPrice: productData.price * buyCount,
                 vendor: productData.vendor,
-                version: color
+                version: color,
+                quantity: productData.quantity
             })
             navigate(path.checkout)
         }

@@ -30,9 +30,9 @@ export default function QuantityController({ max, onIncrease, onDecrease, onFocu
         // eslint-disable-next-line prefer-const
         let _value = Number(value || localValue) + 1
 
-        // if (max !== undefined && _value > max) {
-        //     _value = max
-        // }
+        if (max !== undefined && _value > max) {
+            _value = max
+        }
 
         // eslint-disable-next-line @typescript-eslint/no-unused-expressions
         onIncrease && onIncrease(_value)
@@ -43,9 +43,9 @@ export default function QuantityController({ max, onIncrease, onDecrease, onFocu
         // eslint-disable-next-line prefer-const
         let _value = Number(value || localValue) - 1
 
-        // if (_value < 1) {
-        //     _value = 1
-        // }
+        if (_value < 1) {
+            _value = 1
+        }
 
         // eslint-disable-next-line @typescript-eslint/no-unused-expressions
         onDecrease && onDecrease(_value)

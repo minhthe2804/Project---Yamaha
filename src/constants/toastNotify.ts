@@ -18,5 +18,9 @@ export const toastNotify = {
     },
     productDetail: {
         addtoCartSuccess: 'Bạn đã thêm sản phẩm vào giỏ hàng'
+    },
+    cart: {
+        updateCart: 'Bạn đã cập nhật sản phẩm trong giỏ hàng',
+        deleteCart: 'Bạn đã xóa sản phẩm khỏi giỏ hàng'
     }
 }
