@@ -8,7 +8,7 @@ export default function Footer() {
             className="text-white  bg-[#3159a6] bg-cover bg-center bg-no-repeat pt-[100px] pb-0 px-0 border-t-2 border-[#ff3237] bg-[url('https://theme.hstatic.net/200000281285/1000677821/14/ft_bg_img.jpg?v=848')]"
         >
             <div className='container mx-auto flex justify-between text-base w-[1198px]'>
-                <div className='w-1/3 pr-2'>
+                <div className='w-1/3 pr-2 text-sm'>
                     <div className='mb-4'>
                         <Link to={path.home}>
                             <img
@@ -18,7 +18,7 @@ export default function Footer() {
                             />
                         </Link>
                     </div>
-                    <div className='mb-4'>
+                    <div className='mb- text-justify py-6'>
                         HỆ THỐNG XE MÁY HOÀNG CẦU chuyên cung cấp các dòng xe Honda, Yamaha, SYM, Suzuki, xe nhập
                         khẩu,.... chính hãng, cam kết mang đến những sản phẩm, phụ tùng chất lượng nhất đến tay người
                         tiêu dùng.
