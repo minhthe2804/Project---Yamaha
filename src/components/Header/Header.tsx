@@ -2,23 +2,52 @@ import { path } from '~/constants/path'
 import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMagnifyingGlass, faUser, faCartShopping } from '@fortawesome/free-solid-svg-icons'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import classNames from 'classnames/bind'
+import { useContext } from 'react'
+
 import Popover from '../Popover'
 import { navHeader } from '~/constants/navHeader'
 import styles from './Header.module.css'
-import classNames from 'classnames/bind'
-import { useContext } from 'react'
 import { AppContext } from '~/contexts/app.context'
-import { clearLS, getProfileFromLS } from '~/utils/auth'
+import { clearLS } from '~/utils/auth'
 import { toast } from 'react-toastify'
 import { toastNotify } from '~/constants/toastNotify'
+import { cartApi } from '~/apis/cart.api'
+import { formatCurrency } from '~/utils/utils'
 
 const cx = classNames.bind(styles)
 
 export default function Header() {
-    const { isAuthenticated, profile } = useContext(AppContext)
+    const { isAuthenticated, profile, setIsAuthenticated, setProfile } = useContext(AppContext)
+    const queryClient = useQueryClient()
+
+    const { data: productInCartData, refetch } = useQuery({
+        queryKey: ['cart'],
+        queryFn: () => cartApi.getCart()
+    })
+
+    const deleteCartMutation = useMutation({
+        mutationFn: (id: string) => cartApi.deleteCart(id),
+        onSuccess: () => {
+            refetch()
+        }
+    })
+
+    const productToCart = productInCartData?.data
+
+    const productDataCount = productToCart?.length
+
+    const handleDelete = (id: string) => {
+        deleteCartMutation.mutate(id)
+        toast.success(toastNotify.cart.deleteCart, { autoClose: 2000 })
+    }
 
     const handleLogout = () => {
         clearLS()
+        setIsAuthenticated(false)
+        setProfile(null)
+        productToCart?.map((cart) => deleteCartMutation.mutate(cart.id))
         toast.success(toastNotify.logOut.logOutSuccess, { autoClose: 3000 })
     }
 
@@ -158,130 +187,117 @@ export default function Header() {
                             <Popover
                                 className='cursor-pointer hover:text-[#b80319] transition duration-300 ease-in-out pb-5 px-3'
                                 renderPopover={
-                                    <div className='relative rounded-md w-[284px] bg-[#b80319]'>
-                                        {/* Products in cart */}
-                                        {/* <div className='px-1'>
-                                                    <div className='flex w-full items-center pt-2 pb-4'>
-                                                        <p className='text-sm text-white font-semibold'>
-                                                            Giỏ hàng của tôi (1 sản phẩm)
-                                                        </p>
-                                                        <svg
-                                                            className='svg-inline--fa fa-times fa-w-12 text-white ml-auto'
-                                                            aria-hidden='true'
-                                                            data-prefix='fa'
-                                                            data-icon='times'
-                                                            role='img'
-                                                            xmlns='http://www.w3.org/2000/svg'
-                                                            viewBox='0 0 384 512'
-                                                            data-fa-i2svg
-                                                        >
-                                                            <path
-                                                                fill='currentColor'
-                                                                d='M323.1 441l53.9-53.9c9.4-9.4 9.4-24.5 0-33.9L279.8 256l97.2-97.2c9.4-9.4 9.4-24.5 0-33.9L323.1 71c-9.4-9.4-24.5-9.4-33.9 0L192 168.2 94.8 71c-9.4-9.4-24.5-9.4-33.9 0L7 124.9c-9.4 9.4-9.4 24.5 0 33.9l97.2 97.2L7 353.2c-9.4 9.4-9.4 24.5 0 33.9L60.9 441c9.4 9.4 24.5 9.4 33.9 0l97.2-97.2 97.2 97.2c9.3 9.3 24.5 9.3 33.9 0z'
-                                                            />
-                                                        </svg>
-                                                    </div>
-        
-                                                    <div className='flex w-full items-start'>
-                                                        <Link className='' to={path.productDetail}>
-                                                            <img
-                                                                src='https://product.hstatic.net/200000281285/product/exciter_150_rc_-_do_den_884a96c87c6a4735abfae1ad2ece623e_small.png'
-                                                                alt=''
-                                                                className='w-[80px]'
-                                                            />
-                                                        </Link>
-        
-                                                        <div className='flex flex-col text-xs text-white font-[200] pl-4 pb-4'>
-                                                            <Link
-                                                                to={path.productDetail}
-                                                                className='text-sm font-semibold pb-1 hover:text-[#fd515c] transition duration-300 ease-in'
-                                                            >
-                                                                EXCITER 150
-                                                            </Link>
-                                                            <p>Bản RC / Đỏ Nhám</p>
-                                                            <p>Số lượng: 1</p>
-                                                            <p>Giá/sp: 44,000,000₫</p>
-                                                        </div>
-                                                        <svg
-                                                            className='svg-inline--fa fa-times fa-w-12 text-[#fd515c] ml-auto mt-[22px] cursor-pointer'
-                                                            aria-hidden='true'
-                                                            data-prefix='fa'
-                                                            data-icon='times'
-                                                            role='img'
-                                                            xmlns='http://www.w3.org/2000/svg'
-                                                            viewBox='0 0 384 512'
-                                                            data-fa-i2svg
-                                                        >
-                                                            <path
-                                                                fill='currentColor'
-                                                                d='M323.1 441l53.9-53.9c9.4-9.4 9.4-24.5 0-33.9L279.8 256l97.2-97.2c9.4-9.4 9.4-24.5 0-33.9L323.1 71c-9.4-9.4-24.5-9.4-33.9 0L192 168.2 94.8 71c-9.4-9.4-24.5-9.4-33.9 0L7 124.9c-9.4 9.4-9.4 24.5 0 33.9l97.2 97.2L7 353.2c-9.4 9.4-9.4 24.5 0 33.9L60.9 441c9.4 9.4 24.5 9.4 33.9 0l97.2-97.2 97.2 97.2c9.3 9.3 24.5 9.3 33.9 0z'
-                                                            />
-                                                        </svg>
-                                                    </div>
-        
-                                                    <div className='flex w-full items-start pb-4'>
-                                                        <Link className='' to={path.productDetail}>
-                                                            <img
-                                                                src='https://product.hstatic.net/200000281285/product/exciter_150_rc_-_do_den_884a96c87c6a4735abfae1ad2ece623e_small.png'
-                                                                alt=''
-                                                                className='w-[80px]'
-                                                            />
-                                                        </Link>
-        
-                                                        <div className='flex flex-col text-xs text-white font-[200] pl-4'>
-                                                            <Link
-                                                                to={path.productDetail}
-                                                                className='text-sm font-semibold pb-1 hover:text-[#fd515c] transition duration-300 ease-in'
-                                                            >
-                                                                EXCITER 150
-                                                            </Link>
-                                                            <p>Bản RC / Đỏ Nhám</p>
-                                                            <p>Số lượng: 1</p>
-                                                            <p>Giá/sp: 44,000,000₫</p>
-                                                        </div>
-                                                        <svg
-                                                            className='svg-inline--fa fa-times fa-w-12 text-[#fd515c] ml-auto mt-[22px] cursor-pointer'
-                                                            aria-hidden='true'
-                                                            data-prefix='fa'
-                                                            data-icon='times'
-                                                            role='img'
-                                                            xmlns='http://www.w3.org/2000/svg'
-                                                            viewBox='0 0 384 512'
-                                                            data-fa-i2svg
-                                                        >
-                                                            <path
-                                                                fill='currentColor'
-                                                                d='M323.1 441l53.9-53.9c9.4-9.4 9.4-24.5 0-33.9L279.8 256l97.2-97.2c9.4-9.4 9.4-24.5 0-33.9L323.1 71c-9.4-9.4-24.5-9.4-33.9 0L192 168.2 94.8 71c-9.4-9.4-24.5-9.4-33.9 0L7 124.9c-9.4 9.4-9.4 24.5 0 33.9l97.2 97.2L7 353.2c-9.4 9.4-9.4 24.5 0 33.9L60.9 441c9.4 9.4 24.5 9.4 33.9 0l97.2-97.2 97.2 97.2c9.3 9.3 24.5 9.3 33.9 0z'
-                                                            />
-                                                        </svg>
-                                                    </div>
-                                                </div> */}
+                                    <div className='relative rounded-md w-[284px] bg-[#b80319] pb-4'>
+                                        {productToCart && productToCart.length > 0 ? (
+                                            <div className='px-1'>
+                                                <div className='flex w-full items-center pt-2'>
+                                                    <p className='text-sm text-white font-semibold'>
+                                                        Giỏ hàng của tôi ({productDataCount})
+                                                    </p>
+                                                    <svg
+                                                        className='svg-inline--fa fa-times fa-w-12 text-white ml-auto'
+                                                        aria-hidden='true'
+                                                        data-prefix='fa'
+                                                        data-icon='times'
+                                                        role='img'
+                                                        xmlns='http://www.w3.org/2000/svg'
+                                                        viewBox='0 0 384 512'
+                                                        data-fa-i2svg
+                                                    >
+                                                        <path
+                                                            fill='currentColor'
+                                                            d='M323.1 441l53.9-53.9c9.4-9.4 9.4-24.5 0-33.9L279.8 256l97.2-97.2c9.4-9.4 9.4-24.5 0-33.9L323.1 71c-9.4-9.4-24.5-9.4-33.9 0L192 168.2 94.8 71c-9.4-9.4-24.5-9.4-33.9 0L7 124.9c-9.4 9.4-9.4 24.5 0 33.9l97.2 97.2L7 353.2c-9.4 9.4-9.4 24.5 0 33.9L60.9 441c9.4 9.4 24.5 9.4 33.9 0l97.2-97.2 97.2 97.2c9.3 9.3 24.5 9.3 33.9 0z'
+                                                        />
+                                                    </svg>
+                                                </div>
 
-                                        <div className='px-1 pb-2'>
-                                            <div className='flex w-full pt-2'>
-                                                <p className='text-sm text-white font-semibold'>Giỏ hàng trống</p>
-                                                <svg
-                                                    className='svg-inline--fa fa-times fa-w-12 text-white ml-auto'
-                                                    aria-hidden='true'
-                                                    data-prefix='fa'
-                                                    data-icon='times'
-                                                    role='img'
-                                                    xmlns='http://www.w3.org/2000/svg'
-                                                    viewBox='0 0 384 512'
-                                                    data-fa-i2svg
-                                                >
-                                                    <path
-                                                        fill='currentColor'
-                                                        d='M323.1 441l53.9-53.9c9.4-9.4 9.4-24.5 0-33.9L279.8 256l97.2-97.2c9.4-9.4 9.4-24.5 0-33.9L323.1 71c-9.4-9.4-24.5-9.4-33.9 0L192 168.2 94.8 71c-9.4-9.4-24.5-9.4-33.9 0L7 124.9c-9.4 9.4-9.4 24.5 0 33.9l97.2 97.2L7 353.2c-9.4 9.4-9.4 24.5 0 33.9L60.9 441c9.4 9.4 24.5 9.4 33.9 0l97.2-97.2 97.2 97.2c9.3 9.3 24.5 9.3 33.9 0z'
-                                                    />
-                                                </svg>
+                                                {productToCart &&
+                                                    productToCart.map((cart) => (
+                                                        <div key={cart.id}>
+                                                            <div className='flex w-full items-start pt-4'>
+                                                                <Link className='' to={path.productDetail}>
+                                                                    <img
+                                                                        src={cart.previewImage}
+                                                                        alt=''
+                                                                        className='w-[80px]'
+                                                                    />
+                                                                </Link>
+
+                                                                <div className='flex flex-col text-xs text-white font-[200] pl-4 pb-4'>
+                                                                    <Link
+                                                                        to={path.productDetail}
+                                                                        className='text-sm font-semibold pb-1 hover:text-[#fd515c] transition duration-300 ease-in'
+                                                                    >
+                                                                        {cart.title}
+                                                                    </Link>
+                                                                    <p>Phiên bản: {cart.version}</p>
+                                                                    <p>Số lượng: {cart.count}</p>
+                                                                    <p>Giá/sp: {formatCurrency(cart.price)}</p>
+                                                                </div>
+                                                                <svg
+                                                                    className='svg-inline--fa fa-times fa-w-12 text-[#fd515c] ml-auto mt-[22px] cursor-pointer'
+                                                                    aria-hidden='true'
+                                                                    data-prefix='fa'
+                                                                    data-icon='times'
+                                                                    role='img'
+                                                                    xmlns='http://www.w3.org/2000/svg'
+                                                                    viewBox='0 0 384 512'
+                                                                    data-fa-i2svg
+                                                                    onClick={() => handleDelete(cart.id)}
+                                                                >
+                                                                    <path
+                                                                        fill='currentColor'
+                                                                        d='M323.1 441l53.9-53.9c9.4-9.4 9.4-24.5 0-33.9L279.8 256l97.2-97.2c9.4-9.4 9.4-24.5 0-33.9L323.1 71c-9.4-9.4-24.5-9.4-33.9 0L192 168.2 94.8 71c-9.4-9.4-24.5-9.4-33.9 0L7 124.9c-9.4 9.4-9.4 24.5 0 33.9l97.2 97.2L7 353.2c-9.4 9.4-9.4 24.5 0 33.9L60.9 441c9.4 9.4 24.5 9.4 33.9 0l97.2-97.2 97.2 97.2c9.3 9.3 24.5 9.3 33.9 0z'
+                                                                    />
+                                                                </svg>
+                                                            </div>
+                                                            <div className='w-full border-t-[1px] border-[#817f7f] border-dashed'></div>
+                                                        </div>
+                                                    ))}
+
+                                                <div className='flex gap-2 justify-center mt-[15px]'>
+                                                    <Link
+                                                        to={path.cart}
+                                                        className='w-[131px] py-[9px] bg-[#ff3237] rounded-[4px] text-[14px] font-[600] text-white  flex items-center justify-center'
+                                                    >
+                                                        XEM GIỎ HÀNG
+                                                    </Link>
+
+                                                    <Link
+                                                        to={path.checkout}
+                                                        className='w-[131px] py-[9px] bg-[#ff3237] rounded-[4px] text-[14px] font-[600] text-white  flex items-center justify-center'
+                                                    >
+                                                        THANH TOÁN
+                                                    </Link>
+                                                </div>
                                             </div>
-                                            <img
-                                                className='py-2'
-                                                src='https://simbaeshop.com/images/cart-empty.png'
-                                                alt=''
-                                            />
-                                        </div>
+                                        ) : (
+                                            <div className='px-1 pb-2'>
+                                                <div className='flex w-full pt-2'>
+                                                    <p className='text-sm text-white font-semibold'>Giỏ hàng trống</p>
+                                                    <svg
+                                                        className='svg-inline--fa fa-times fa-w-12 text-white ml-auto'
+                                                        aria-hidden='true'
+                                                        data-prefix='fa'
+                                                        data-icon='times'
+                                                        role='img'
+                                                        xmlns='http://www.w3.org/2000/svg'
+                                                        viewBox='0 0 384 512'
+                                                        data-fa-i2svg
+                                                    >
+                                                        <path
+                                                            fill='currentColor'
+                                                            d='M323.1 441l53.9-53.9c9.4-9.4 9.4-24.5 0-33.9L279.8 256l97.2-97.2c9.4-9.4 9.4-24.5 0-33.9L323.1 71c-9.4-9.4-24.5-9.4-33.9 0L192 168.2 94.8 71c-9.4-9.4-24.5-9.4-33.9 0L7 124.9c-9.4 9.4-9.4 24.5 0 33.9l97.2 97.2L7 353.2c-9.4 9.4-9.4 24.5 0 33.9L60.9 441c9.4 9.4 24.5 9.4 33.9 0l97.2-97.2 97.2 97.2c9.3 9.3 24.5 9.3 33.9 0z'
+                                                        />
+                                                    </svg>
+                                                </div>
+                                                <img
+                                                    className='py-2'
+                                                    src='https://simbaeshop.com/images/cart-empty.png'
+                                                    alt=''
+                                                />
+                                            </div>
+                                        )}
                                     </div>
                                 }
                                 placement='bottom-end'

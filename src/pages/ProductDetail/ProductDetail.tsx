@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useNavigate, useParams } from 'react-router-dom'
 import classNames from 'classnames/bind'
 import DOMPurify from 'dompurify'
@@ -34,6 +34,7 @@ export default function ProductDetail() {
     const id = getIdFromNameId(nameId as string) // thực hiện loại bỏ những thành phần không cần thiết chỉ lấy mỗi id
     let count = 0 // khởi tạo biến đếm để fix lỗi spam nhiều vào button sẽ bị đơ thanh trượt
     const [activeImage, setActiveImage] = useState<string>('')
+    const queryClient = useQueryClient()
 
     const navigate = useNavigate()
     // gọi api xem chi tiết sản phẩm
@@ -156,6 +157,7 @@ export default function ProductDetail() {
                 {
                     onSuccess: () => {
                         toast.success(toastNotify.productDetail.addtoCartSuccess, { autoClose: 3000 })
+                        queryClient.invalidateQueries({ queryKey: ['cart'] })
                     }
                 }
             )
