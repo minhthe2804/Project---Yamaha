@@ -5,7 +5,7 @@ export default function Aboutus() {
 	return (
         <div id='aboutus' className="w-[1198px] flex justify-center mx-auto">
             <div className='pb-8'>
-                <div className='aboutus-head text-center relative my-20 uppercase'>
+                <div className='aboutus-head text-center relative my-14 uppercase'>
                     <h2 className='relative text-[120px] opacity-10  tracking-wider font-[700]'>Lịch sử</h2>
                     <h3 className='absolute inset-x-0 bottom-0 text-2xl font-[300] leading-10 z-10'>
                         Chào mừng đến với

@@ -1,6 +1,6 @@
 function Newsletters() {
     return (
-        <div id='newletter' className='text-white bg-[#c7c7c7] py-[100px] text-center'>
+        <div id='newletter' className='text-white bg-[#c7c7c7] py-[100px] text-center pt-[350px]'>
             <div className='wrapper '>
                 <div className='inner max-w-[800px] mx-auto'>
                     <div className='newsletters-text mb-[50px]'>

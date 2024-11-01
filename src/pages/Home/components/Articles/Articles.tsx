@@ -69,12 +69,15 @@ function Articles() {
                                 {articlesinfo.map((item, index) => (
                                     <div key={index} className='flex min-w-[599px] text-sm'>
                                         <div className='w-10/12'>
-                                            <a href=''>
-                                                <img
-                                                    src={item.image}
-                                                    alt='Yamaha giới thiệu LEXi 155 VVA-ABS hoàn toàn mới'
-                                                />
-                                            </a>
+                                            <div className='overflow-hidden rounded-md'>
+                                                <a href={item.linkStatus}>
+                                                    <img
+                                                        src={item.image}
+                                                        alt={item.title}
+                                                        className='transition-transform duration-300 hover:scale-110 w-full'
+                                                    />
+                                                </a>
+                                            </div>
                                         </div>
 
                                         <div className='w-10/12 pt-5 px-[20px]'>
@@ -83,10 +86,8 @@ function Articles() {
                                                     <span className='text-4xl'>{item.day}</span>/
                                                     <span>{item.month}</span>/<span>{item.year}</span>
                                                 </div>
-                                                <div className='font-bold mb-2 uppercase'>
-                                                    <a href='/blogs/news/yamaha-gioi-thieu-lexi-155-vva-abs-hoan-toan-moi'>
-                                                        Yamaha giới thiệu LEXi 155 VVA-ABS hoàn toàn mới
-                                                    </a>
+                                                <div className='font-bold mb-2 uppercase overflow-ellipsis overflow-hidden line-clamp-2'>
+                                                    <a href={item.linkStatus}>{item.title}</a>
                                                 </div>
                                                 <div className='font-light mb-2'>
                                                     <svg
@@ -115,7 +116,7 @@ function Articles() {
                                             <div className='my-10'>
                                                 <a
                                                     href=''
-                                                    className='bg-[#3159a64d] rounded-[30px] text-center hover:bg-[#ff3237] hover:shadow-[0_0_20px_10px_rgba(255,50,55,0.3)] text-white font-bold py-[10px] px-[50px] transition duration-200 ease-in'
+                                                    className='bg-[#315aa6] rounded-[30px] text-center hover:bg-[#ff3237] hover:shadow-[0_0_20px_10px_rgba(255,50,55,0.3)] text-white font-bold py-[10px] px-[50px] transition duration-200 ease-in'
                                                 >
                                                     Xem thêm
                                                 </a>

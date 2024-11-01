@@ -1,6 +1,7 @@
 export const articlesinfo = [
     {
         image: 'https://file.hstatic.net/200000281285/article/7661717686366-lexi-155-vva-abs-anh-dai-dien_5db3a05a0e1f4617a9929965e1fcca99_large.png',
+        linkStatus: '',
         day: '07',
         month: '06',
         year: '2024',
@@ -11,6 +12,7 @@ export const articlesinfo = [
     },
     {
         image: 'https://file.hstatic.net/200000281285/article/tet_2ccb3901b7a14745968f07b153c50238_large.png',
+        linkStatus: '',
         day: '01',
         month: '02',
         year: '2024',
@@ -21,6 +23,7 @@ export const articlesinfo = [
     },
     {
         image: 'https://file.hstatic.net/200000281285/article/405417183_681736424101464_7577826218266775516_n_4f5cb860e14549b492dc556430dcb436_large.png',
+        linkStatus: '',
         day: '11',
         month: '12',
         year: '2023',
@@ -31,6 +34,7 @@ export const articlesinfo = [
     },
     {
         image: 'https://file.hstatic.net/200000281285/article/bvj0sxb37ykljvdplfj0_f9ad7bbe4a064f8aa2ba058a75af158a_large.png',
+        linkStatus: '',
         day: '18',
         month: '11',
         year: '2023',
@@ -41,6 +45,7 @@ export const articlesinfo = [
     },
     {
         image: 'https://file.hstatic.net/200000281285/article/di-phuot-bang-xe-dien-1.jpg_fd0aae221f534230826406b7e28e7a4a_large.jpg',
+        linkStatus: '',
         day: '08',
         month: '11',
         year: '2023',
@@ -51,6 +56,7 @@ export const articlesinfo = [
     },
     {
         image: 'https://file.hstatic.net/200000281285/article/399424070_902973521187483_1907090962408094944_n_f5039da7f3f5401196d6c83b62017d5c_large.jpg',
+        linkStatus: '',
         day: '07',
         month: '11',
         year: '2023',
@@ -61,6 +67,7 @@ export const articlesinfo = [
     },
     {
         image: 'https://file.hstatic.net/200000281285/article/xe-may-cop-rong-cho-nu-va-nam-1_de0a48652b2844b68f9e971fce9068ba_large.jpg',
+        linkStatus: '',
         day: '06',
         month: '11',
         year: '2023',
@@ -71,6 +78,7 @@ export const articlesinfo = [
     },
     {
         image: 'https://file.hstatic.net/200000281285/article/janus-coc_kv_60x84-media.jpeg_a06a48dc78524388af0e2613d14db013_large.jpg',
+        linkStatus: '',
         day: '22',
         month: '09',
         year: '2023',

@@ -218,7 +218,7 @@ export default function Footer() {
                 </div>
             </div>
 
-            <div className='container mx-auto px-40 mt-5 text-sm'>
+            <div className='container mx-auto px-40 mt-5 text-sm min-w-[1198px]'>
                 <ul className='space-y-2'>
                     <li className='flex items-center'>
                         
