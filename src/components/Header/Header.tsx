@@ -2,7 +2,7 @@ import { path } from '~/constants/path'
 import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMagnifyingGlass, faUser, faCartShopping } from '@fortawesome/free-solid-svg-icons'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import classNames from 'classnames/bind'
 import { useContext } from 'react'
 
@@ -17,10 +17,9 @@ import { cartApi } from '~/apis/cart.api'
 import { formatCurrency } from '~/utils/utils'
 
 const cx = classNames.bind(styles)
-
+const MAX_CART = 3
 export default function Header() {
     const { isAuthenticated, profile, setIsAuthenticated, setProfile } = useContext(AppContext)
-    const queryClient = useQueryClient()
 
     const { data: productInCartData, refetch } = useQuery({
         queryKey: ['cart'],
@@ -194,25 +193,10 @@ export default function Header() {
                                                     <p className='text-sm text-white font-semibold'>
                                                         Giỏ hàng của tôi ({productDataCount})
                                                     </p>
-                                                    <svg
-                                                        className='svg-inline--fa fa-times fa-w-12 text-white ml-auto'
-                                                        aria-hidden='true'
-                                                        data-prefix='fa'
-                                                        data-icon='times'
-                                                        role='img'
-                                                        xmlns='http://www.w3.org/2000/svg'
-                                                        viewBox='0 0 384 512'
-                                                        data-fa-i2svg
-                                                    >
-                                                        <path
-                                                            fill='currentColor'
-                                                            d='M323.1 441l53.9-53.9c9.4-9.4 9.4-24.5 0-33.9L279.8 256l97.2-97.2c9.4-9.4 9.4-24.5 0-33.9L323.1 71c-9.4-9.4-24.5-9.4-33.9 0L192 168.2 94.8 71c-9.4-9.4-24.5-9.4-33.9 0L7 124.9c-9.4 9.4-9.4 24.5 0 33.9l97.2 97.2L7 353.2c-9.4 9.4-9.4 24.5 0 33.9L60.9 441c9.4 9.4 24.5 9.4 33.9 0l97.2-97.2 97.2 97.2c9.3 9.3 24.5 9.3 33.9 0z'
-                                                        />
-                                                    </svg>
                                                 </div>
 
                                                 {productToCart &&
-                                                    productToCart.map((cart) => (
+                                                    productToCart.slice(0, MAX_CART).map((cart) => (
                                                         <div key={cart.id}>
                                                             <div className='flex w-full items-start pt-4'>
                                                                 <Link className='' to={path.productDetail}>
@@ -275,21 +259,6 @@ export default function Header() {
                                             <div className='px-1 pb-2'>
                                                 <div className='flex w-full pt-2'>
                                                     <p className='text-sm text-white font-semibold'>Giỏ hàng trống</p>
-                                                    <svg
-                                                        className='svg-inline--fa fa-times fa-w-12 text-white ml-auto'
-                                                        aria-hidden='true'
-                                                        data-prefix='fa'
-                                                        data-icon='times'
-                                                        role='img'
-                                                        xmlns='http://www.w3.org/2000/svg'
-                                                        viewBox='0 0 384 512'
-                                                        data-fa-i2svg
-                                                    >
-                                                        <path
-                                                            fill='currentColor'
-                                                            d='M323.1 441l53.9-53.9c9.4-9.4 9.4-24.5 0-33.9L279.8 256l97.2-97.2c9.4-9.4 9.4-24.5 0-33.9L323.1 71c-9.4-9.4-24.5-9.4-33.9 0L192 168.2 94.8 71c-9.4-9.4-24.5-9.4-33.9 0L7 124.9c-9.4 9.4-9.4 24.5 0 33.9l97.2 97.2L7 353.2c-9.4 9.4-9.4 24.5 0 33.9L60.9 441c9.4 9.4 24.5 9.4 33.9 0l97.2-97.2 97.2 97.2c9.3 9.3 24.5 9.3 33.9 0z'
-                                                        />
-                                                    </svg>
                                                 </div>
                                                 <img
                                                     className='py-2'
@@ -308,7 +277,14 @@ export default function Header() {
                                 arrowTop={0}
                                 transformOrigin='200'
                             >
-                                <FontAwesomeIcon className='text-[17px]' icon={faCartShopping} />
+                                <Link to={path.cart} className='relative'>
+                                    <FontAwesomeIcon className=' text-[17px]' icon={faCartShopping} />
+                                    {productToCart && productToCart.length > 0 && (
+                                        <span className='absolute left-[12px] top-[-12px] rounded-full bg-white w-[16px] h-[16px] text-[12px] text-[#ff3237] text-center'>
+                                            {productDataCount}
+                                        </span>
+                                    )}
+                                </Link>
                             </Popover>
                         </div>
                     </div>
