@@ -5,7 +5,7 @@ import { faMagnifyingGlass, faUser, faCartShopping } from '@fortawesome/free-sol
 import { useMutation, useQuery } from '@tanstack/react-query'
 import classNames from 'classnames/bind'
 import { useContext } from 'react'
-
+import { generateNameId } from '~/utils/utils'
 import Popover from '../Popover'
 import { navHeader } from '~/constants/navHeader'
 import styles from './Header.module.css'
@@ -199,7 +199,10 @@ export default function Header() {
                                                     productToCart.slice(0, MAX_CART).map((cart) => (
                                                         <div key={cart.id}>
                                                             <div className='flex w-full items-start pt-4'>
-                                                                <Link className='' to={path.productDetail}>
+                                                                <Link
+                                                                    className=''
+                                                                    to={`${path.home}${generateNameId({ name: cart.title, id: cart.id })}`}
+                                                                >
                                                                     <img
                                                                         src={cart.previewImage}
                                                                         alt=''
@@ -209,7 +212,7 @@ export default function Header() {
 
                                                                 <div className='flex flex-col text-xs text-white font-[200] pl-4 pb-4'>
                                                                     <Link
-                                                                        to={path.productDetail}
+                                                                        to={`${path.home}${generateNameId({ name: cart.title, id: cart.id })}`}
                                                                         className='text-sm font-semibold pb-1 hover:text-[#fd515c] transition duration-300 ease-in'
                                                                     >
                                                                         {cart.title}

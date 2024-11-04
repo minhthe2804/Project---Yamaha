@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import ProductTitle from '~/components/ProductTitle/ProductTitle';
 import { productTitle } from '~/constants/productTitle';
 import { serviceinfo } from '~/constants/Serviceinfo';
@@ -22,15 +22,15 @@ function Service() {
             <div className='home-section-body'>
                 <div className='service-video'>
                     <div className='video-wrapper h-[100px]'>
-                        <iframe
+                        {/* <iframe
                             width='100%'
                             height='100%'
                             className='absolute w-full'
                             src='https://www.youtube.com/embed/bXB5VSlV00k?&autoplay=1&controls=0&showinfo=0&rel=0&loop=1&mute=1&playlist=bXB5VSlV00k'
                             allow='autoplay; encrypted-media'
                             allowFullScreen
-                        ></iframe>
-                        <div className='absolute inset-0 bg-black opacity-80 top-[250px] h-[505px]'></div>
+                        ></iframe> */}
+                        <div className='absolute inset-0 bg-black opacity-100 top-[250px] h-[505px]'></div>
                     </div>
                 </div>
 

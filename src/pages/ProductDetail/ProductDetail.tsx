@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useNavigate, useParams } from 'react-router-dom'
 import classNames from 'classnames/bind'
@@ -20,6 +20,7 @@ import { cartApi } from '~/apis/cart.api'
 import { CartType } from '~/types/cart.type'
 import { path } from '~/constants/path'
 import { toastNotify } from '~/constants/toastNotify'
+import { AppContext } from '~/contexts/app.context'
 
 const cx = classNames.bind(styles)
 
@@ -35,6 +36,7 @@ export default function ProductDetail() {
     let count = 0 // khởi tạo biến đếm để fix lỗi spam nhiều vào button sẽ bị đơ thanh trượt
     const [activeImage, setActiveImage] = useState<string>('')
     const queryClient = useQueryClient()
+    const { isAuthenticated} = useContext(AppContext)
 
     const navigate = useNavigate()
     // gọi api xem chi tiết sản phẩm
@@ -141,9 +143,37 @@ export default function ProductDetail() {
     }
 
     const addToCart = () => {
-        if (productData) {
-            addToCartMutation.mutate(
-                {
+        if (isAuthenticated) {
+            if (productData) {
+                addToCartMutation.mutate(
+                    {
+                        id: productData.id,
+                        title: productData.title,
+                        previewImage: activeImage,
+                        count: buyCount,
+                        price: productData.price,
+                        totalPrice: productData.price * buyCount,
+                        vendor: productData.vendor,
+                        version: color,
+                        quantity: productData.quantity
+                    },
+                    {
+                        onSuccess: () => {
+                            toast.success(toastNotify.productDetail.addtoCartSuccess, { autoClose: 3000 })
+                            queryClient.invalidateQueries({ queryKey: ['cart'] })
+                        }
+                    }
+                )
+            }
+            return
+        }
+        navigate(path.login)
+    }
+
+    const buyNow = () => {
+        if (isAuthenticated) {
+            if (productData) {
+                addToCartMutation.mutate({
                     id: productData.id,
                     title: productData.title,
                     previewImage: activeImage,
@@ -153,32 +183,11 @@ export default function ProductDetail() {
                     vendor: productData.vendor,
                     version: color,
                     quantity: productData.quantity
-                },
-                {
-                    onSuccess: () => {
-                        toast.success(toastNotify.productDetail.addtoCartSuccess, { autoClose: 3000 })
-                        queryClient.invalidateQueries({ queryKey: ['cart'] })
-                    }
-                }
-            )
+                })
+                navigate(path.checkout)
+            }
         }
-    }
-
-    const buyNow = () => {
-        if (productData) {
-            addToCartMutation.mutate({
-                id: productData.id,
-                title: productData.title,
-                previewImage: activeImage,
-                count: buyCount,
-                price: productData.price,
-                totalPrice: productData.price * buyCount,
-                vendor: productData.vendor,
-                version: color,
-                quantity: productData.quantity
-            })
-            navigate(path.checkout)
-        }
+        navigate(path.login)
     }
 
     return (

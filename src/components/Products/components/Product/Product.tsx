@@ -1,25 +1,31 @@
 import { useState } from 'react'
+import { useContext } from 'react'
 import { Product as ProductType } from '~/types/products.type'
 import { formatCurrency, generateNameId } from '~/utils/utils'
 import 'animate.css'
 import Button from '~/components/Button'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { path } from '~/constants/path'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { CartType } from '~/types/cart.type'
 import { cartApi } from '~/apis/cart.api'
 import { toast } from 'react-toastify'
 import { toastNotify } from '~/constants/toastNotify'
+import { AppContext } from '~/contexts/app.context'
+
 interface Props {
     product: ProductType
     border?: string
 }
 
 export default function Product({ product, border = '[#f0efef]' }: Props) {
+
+    const { isAuthenticated} = useContext(AppContext)
     const [featureImage, setFeatureImage] = useState<string>()
     const [animationClass, setAnimationClass] = useState<string>('')
     const queryClient = useQueryClient()
 
+    const navigate = useNavigate()
     const handleFeature = () => {
         setFeatureImage(product.media[1].preview_image.src as string)
         setAnimationClass('animate__fadeIn')
@@ -42,27 +48,31 @@ export default function Product({ product, border = '[#f0efef]' }: Props) {
     })
 
     const addToCart = () => {
-        if (product) {
-            addToCartMutation.mutate(
-                {
-                    id: product.id,
-                    title: product.title,
-                    previewImage: product.images[0],
-                    count: 1,
-                    price: product.price,
-                    totalPrice: product.price * 1,
-                    vendor: product.vendor,
-                    version: product.options.values[0],
-                    quantity: product.quantity
-                },
-                {
-                    onSuccess: () => {
-                        toast.success(toastNotify.productDetail.addtoCartSuccess, { autoClose: 3000 })
-                        queryClient.invalidateQueries({ queryKey: ['cart'] })
+        if (isAuthenticated) {
+            if (product) {
+                addToCartMutation.mutate(
+                    {
+                        id: product.id,
+                        title: product.title,
+                        previewImage: product.images[0],
+                        count: 1,
+                        price: product.price,
+                        totalPrice: product.price * 1,
+                        vendor: product.vendor,
+                        version: product.options.values[0],
+                        quantity: product.quantity
+                    },
+                    {
+                        onSuccess: () => {
+                            toast.success(toastNotify.productDetail.addtoCartSuccess, { autoClose: 3000 })
+                            queryClient.invalidateQueries({ queryKey: ['cart'] })
+                        }
                     }
-                }
-            )
+                )
+            }
+            return 
         }
+        navigate(path.login)
     }
 
     return (
