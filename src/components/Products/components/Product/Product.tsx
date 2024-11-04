@@ -5,13 +5,20 @@ import 'animate.css'
 import Button from '~/components/Button'
 import { Link } from 'react-router-dom'
 import { path } from '~/constants/path'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { CartType } from '~/types/cart.type'
+import { cartApi } from '~/apis/cart.api'
+import { toast } from 'react-toastify'
+import { toastNotify } from '~/constants/toastNotify'
 interface Props {
     product: ProductType
+    border?: string
 }
 
-export default function Product({ product }: Props) {
+export default function Product({ product, border = '[#f0efef]' }: Props) {
     const [featureImage, setFeatureImage] = useState<string>()
     const [animationClass, setAnimationClass] = useState<string>('')
+    const queryClient = useQueryClient()
 
     const handleFeature = () => {
         setFeatureImage(product.media[1].preview_image.src as string)
@@ -29,9 +36,38 @@ export default function Product({ product }: Props) {
         }, 500)
     }
 
+    // goi api Cart de them san pham vao gio hang
+    const addToCartMutation = useMutation({
+        mutationFn: (body: CartType) => cartApi.addToCart(body)
+    })
+
+    const addToCart = () => {
+        if (product) {
+            addToCartMutation.mutate(
+                {
+                    id: product.id,
+                    title: product.title,
+                    previewImage: product.images[0],
+                    count: 1,
+                    price: product.price,
+                    totalPrice: product.price * 1,
+                    vendor: product.vendor,
+                    version: product.options.values[0],
+                    quantity: product.quantity
+                },
+                {
+                    onSuccess: () => {
+                        toast.success(toastNotify.productDetail.addtoCartSuccess, { autoClose: 3000 })
+                        queryClient.invalidateQueries({ queryKey: ['cart'] })
+                    }
+                }
+            )
+        }
+    }
+
     return (
         <div
-            className='pb-[32px] border-2 border-[#f0efef] rounded-[12px] truncate'
+            className={`pb-[32px] border-2 ${border} rounded-[12px] truncate pt-1 pl-1`}
             onMouseEnter={handleFeature}
             onMouseLeave={handleFeatureReset}
         >
@@ -48,7 +84,10 @@ export default function Product({ product }: Props) {
                 </p>
                 <div className='w-full h-[1px] bg-[#ededed] mt-[22px]'></div>
                 <p className='text-lg font-[600] text-[#ff3237] mt-[28px]'>{formatCurrency(Number(product.price))}</p>
-                <Button className='w-full p-[12px] bg-[#ff3237] rounded-[30px] mt-[24px] text-white flex items-center justify-center gap-1 hover:shadow-[0_0_20px_5px_rgba(255,50,55,0.3)] transition duration-200 ease-in'>
+                <Button
+                    className='w-full p-[12px] bg-[#ff3237] rounded-[30px] mt-[24px] text-white flex items-center justify-center gap-1 hover:shadow-[0_0_20px_5px_rgba(255,50,55,0.3)] transition duration-200 ease-in'
+                    onClick={addToCart}
+                >
                     <svg
                         className='svg-inline--fa fa-cart-plus fa-w-18 text-[13px] '
                         aria-hidden='true'

@@ -8,6 +8,7 @@ const productApi = {
             params
         })
     },
+    getProductList: () => httpProduct.get<Product[]>(URL),
     getProductDetail: (id: string) => {
         return httpProduct.get<Product>(`${URL}/${id}`)
     }

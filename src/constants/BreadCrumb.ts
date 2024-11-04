@@ -18,5 +18,9 @@ export const breadCrumb = {
     cart: {
         heading: 'GIỎ HÀNG CỦA BẠN - HỆ THỐNG XE MÁY HOÀNG CẦU',
         title: 'Trang chủ / Giỏ hàng của bạn - Hệ Thống Xe máy Hoàng Cầu'
+    },
+    productList: {
+        heading: 'TẤT CẢ SẢN PHẨM',
+        title: 'Trang chủ / Tất cả sản phẩm'
     }
 }
