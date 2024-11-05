@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import productApi from '~/apis/product.api'
 import BreadCrumb from '~/components/BreadCrumb'
 import Product from '~/components/Products/components/Product'
-import { priceRanges, types } from '~/constants/asideFilter'
+import { priceRanges, ranges, types } from '~/constants/asideFilter'
 import { breadCrumb } from '~/constants/breadCrumb'
 import { Product as ProductType } from '~/types/products.type'
 
@@ -16,6 +16,7 @@ export default function ProductList() {
     const [typeProduct, setTypeProduct] = useState<string>('')
     const [checkType, setCheckType] = useState<number | null>()
     const [checkPriceRange, setCheckPriceRange] = useState<number | null>()
+    const [priceRange, setPriceRange] = useState<string>('')
     const [minPrice, setMinPrice] = useState<number | null>(null)
     const [maxPrice, setMaxPrice] = useState<number | null>(null)
     const [implement, setImplement] = useState<boolean>(false)
@@ -31,12 +32,20 @@ export default function ProductList() {
         }
     }, [productListData])
 
-    const handleCheckPriceRange = (index: number, priceMin: number, priceMax: number, enabled: boolean) => {
+    const handleCheckPriceRange = (
+        index: number,
+        priceMin: number,
+        priceMax: number,
+        enabled: boolean,
+        priceRange: string
+    ) => {
         setCheckPriceRange(index)
         if (productListData) {
             setMinPrice(priceMin)
             setMaxPrice(priceMax)
             setImplement(enabled)
+            setPages([0, 24])
+            setPriceRange(priceRange)
             if (typeProduct) {
                 const filterTypeProducts = productListData.data.filter((product) => product.type === typeProduct) // van de loi o day
                 const filteredProducts = filterTypeProducts.filter((product) =>
@@ -79,6 +88,7 @@ export default function ProductList() {
     const handleReset = () => {
         if (productListData) {
             setTypeProduct('')
+            setPriceRange('')
             setCheckType(null)
             setCheckPriceRange(null)
             setMinPrice(null)
@@ -154,7 +164,8 @@ export default function ProductList() {
                                                             index,
                                                             priceRange.priceMin,
                                                             priceRange.priceMax,
-                                                            priceRange.enabled
+                                                            priceRange.enabled,
+                                                            priceRange.title
                                                         )
                                                     }
                                                 />
@@ -167,7 +178,7 @@ export default function ProductList() {
                         </div>
                     </div>
 
-                    <div className='col-span-9 '>
+                    <div className='col-span-9'>
                         <div className='w-full flex items-center border-[2px] border-[#817f7f] rounded-[4px] py-[15px] px-[11px]'>
                             <p className='uppercase text-[15px] font-[550] text-[#000bff]'>Tất cả sản phẩm</p>
                             <div className='flex items-center gap-3 ml-auto'>
@@ -193,27 +204,29 @@ export default function ProductList() {
                                 </div>
                             ))}
                         </div>
-                        {productData.slice(...(pages || initialPage)).length > 0 && !types.includes(typeProduct) && (
-                            <div className='w-full flex items-center justify-center border-[2px] border-[#817f7f] rounded-[4px] py-[10px] px-[11px] mt-[30px]'>
-                                <div className='w-full flex items-center justify-center gap-3'>
-                                    {[1, 2].map((page, index) => (
-                                        <div
-                                            className={classNames(
-                                                'w-[30px] h-[30px] rounded-full flex items-center justify-center hover:bg-[#ff3237] hover:text-white transition duration-200 ease-in cursor-pointer',
-                                                {
-                                                    'bg-[#ff3237] text-white': active === index,
-                                                    'bg-slate-200 text-black': active !== index
-                                                }
-                                            )}
-                                            key={index}
-                                            onClick={() => handlePage(page, index)}
-                                        >
-                                            {page}
-                                        </div>
-                                    ))}
+                        {productData.slice(...(pages || initialPage)).length >= 6 &&
+                            !types.includes(typeProduct) &&
+                            !ranges.includes(priceRange) && (
+                                <div className='w-full flex items-center justify-center border-[2px] border-[#817f7f] rounded-[4px] py-[10px] px-[11px] mt-[30px]'>
+                                    <div className='w-full flex items-center justify-center gap-3'>
+                                        {[1, 2].map((page, index) => (
+                                            <div
+                                                className={classNames(
+                                                    'w-[30px] h-[30px] rounded-full flex items-center justify-center hover:bg-[#ff3237] hover:text-white transition duration-200 ease-in cursor-pointer',
+                                                    {
+                                                        'bg-[#ff3237] text-white': active === index,
+                                                        'bg-slate-200 text-black': active !== index
+                                                    }
+                                                )}
+                                                key={index}
+                                                onClick={() => handlePage(page, index)}
+                                            >
+                                                {page}
+                                            </div>
+                                        ))}
+                                    </div>
                                 </div>
-                            </div>
-                        )}
+                            )}
                     </div>
                 </div>
             </div>
