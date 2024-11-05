@@ -15,3 +15,5 @@ export const ranges = [
     'Từ 70,000,000₫ - 100,000,000₫',
     'Lớn hơn 100,000,000₫'
 ]
+
+export const arrange = ['asc', 'desc']

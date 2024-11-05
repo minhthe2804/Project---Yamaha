@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import productApi from '~/apis/product.api'
 import BreadCrumb from '~/components/BreadCrumb'
 import Product from '~/components/Products/components/Product'
-import { priceRanges, ranges, types } from '~/constants/asideFilter'
+import { arrange, priceRanges, ranges, types } from '~/constants/asideFilter'
 import { breadCrumb } from '~/constants/breadCrumb'
 import { Product as ProductType } from '~/types/products.type'
 
@@ -19,7 +19,9 @@ export default function ProductList() {
     const [priceRange, setPriceRange] = useState<string>('')
     const [minPrice, setMinPrice] = useState<number | null>(null)
     const [maxPrice, setMaxPrice] = useState<number | null>(null)
-    const [implement, setImplement] = useState<boolean>(false)
+    const [implement, setImplement] = useState<number>(99000000)
+    const [arrangePrice, setArrangePrice] = useState<string>(arrange[0])
+    const [selectDefaultValue, setSelectDefaultValue] = useState<string>('')
 
     const { data: productListData } = useQuery({
         queryKey: ['product'],
@@ -39,11 +41,11 @@ export default function ProductList() {
         enabled: boolean,
         priceRange: string
     ) => {
-        setCheckPriceRange(index)
         if (productListData) {
+            setCheckPriceRange(index)
             setMinPrice(priceMin)
             setMaxPrice(priceMax)
-            setImplement(enabled)
+            setImplement(priceMax)
             setPages([0, 24])
             setPriceRange(priceRange)
             if (typeProduct) {
@@ -51,18 +53,18 @@ export default function ProductList() {
                 const filteredProducts = filterTypeProducts.filter((product) =>
                     enabled ? product.price >= priceMin && product.price <= priceMax : product.price >= priceMax
                 )
-                const sortedProducts = filteredProducts.sort((a, b) => {
-                    return a.price - b.price
-                })
+                const sortedProducts = filteredProducts.sort((a, b) =>
+                    arrangePrice === arrange[0] ? a.price - b.price : b.price - a.price
+                )
                 setProductData(sortedProducts)
                 return
             }
             const filteredProducts = productListData.data.filter((product) =>
                 enabled ? product.price >= priceMin && product.price <= priceMax : product.price >= priceMax
             )
-            const sortedProducts = filteredProducts.sort((a, b) => {
-                return a.price - b.price
-            })
+            const sortedProducts = filteredProducts.sort((a, b) =>
+                arrangePrice === arrange[0] ? a.price - b.price : b.price - a.price
+            )
             setProductData(sortedProducts)
         }
     }
@@ -73,13 +75,13 @@ export default function ProductList() {
         if (productListData) {
             const filterTypeProducts = productListData.data.filter((product) => product.type === type)
             const filteredProducts = filterTypeProducts.filter((product) =>
-                implement
-                    ? product.price >= Number(minPrice) && product.price <= Number(maxPrice)
-                    : product.price >= Number(maxPrice)
+                implement < 100000000
+                    ? product.price >= Number(minPrice || 0) && product.price <= Number(maxPrice || 100000000)
+                    : product.price >= Number(maxPrice || 100000000)
             )
-            const sortedProducts = filteredProducts.sort((a, b) => {
-                return a.price - b.price
-            })
+            const sortedProducts = filteredProducts.sort((a, b) =>
+                arrangePrice === arrange[0] ? a.price - b.price : b.price - a.price
+            )
             setProductData(sortedProducts)
             setTypeProduct(type)
         }
@@ -89,11 +91,13 @@ export default function ProductList() {
         if (productListData) {
             setTypeProduct('')
             setPriceRange('')
+            setArrangePrice(arrange[0])
+            setSelectDefaultValue('')
             setCheckType(null)
             setCheckPriceRange(null)
             setMinPrice(null)
             setMaxPrice(null)
-            setImplement(false)
+            setImplement(99000000)
             setPages([0, 12])
             setActive(0)
             setProductData(productListData?.data.slice(0, 12))
@@ -103,11 +107,71 @@ export default function ProductList() {
     const handlePage = (page: number, index: number) => {
         if (productListData) {
             setActive(index)
-            setProductData(productListData?.data)
-            setPages(page === 1 ? [0, 12] : [13, 19])
+            if (selectDefaultValue) {
+                const filteredProducts = productListData?.data.filter(
+                    (product) =>
+                        product.price >= Number(minPrice || 0) && product.price <= Number(maxPrice || 128000000)
+                )
+                const sortedProducts = filteredProducts.sort((a, b) =>
+                    arrangePrice === arrange[0] ? a.price - b.price : b.price - a.price
+                )
+                setProductData(sortedProducts)
+                setPages(page === 1 ? [0, 12] : [12, 26])
+                return
+            }
+            setProductData(productListData.data)
+            setPages(page === 1 ? [0, 12] : [12, 26])
         }
     }
 
+    const handleArrangePrice = (value: string) => {
+        setArrangePrice(value === arrange[0] ? arrange[0] : arrange[1])
+        setSelectDefaultValue(value === arrange[0] ? arrange[0] : arrange[1])
+        if (productListData) {
+            if (value === arrange[0]) {
+                if (typeProduct) {
+                    const filterTypeProducts = productListData.data.filter((product) => product.type === typeProduct)
+                    const filteredProducts = filterTypeProducts.filter((product) =>
+                        implement < 100000000
+                            ? product.price >= Number(minPrice || 0) && product.price <= Number(maxPrice || 100000000)
+                            : product.price >= Number(maxPrice || 100000000)
+                    )
+                    const sortedProducts = filteredProducts.sort((a, b) => {
+                        return a.price - b.price
+                    })
+                    setProductData(sortedProducts)
+                    return
+                }
+                const filteredProducts = productListData.data.filter(
+                    (product) =>
+                        product.price >= Number(minPrice || 0) && product.price <= Number(maxPrice || 128000000)
+                )
+                const sortedProducts = filteredProducts.sort((a, b) => {
+                    return a.price - b.price
+                })
+                setProductData(sortedProducts)
+                return
+            }
+            if (typeProduct) {
+                const filterTypeProducts = productListData.data.filter((product) => product.type === typeProduct)
+                const filteredProducts = filterTypeProducts.filter((product) =>
+                    implement < 100000000
+                        ? product.price >= Number(minPrice || 0) && product.price <= Number(maxPrice || 100000000)
+                        : product.price >= Number(maxPrice || 100000000)
+                )
+                const sortedProducts = filteredProducts.sort((a, b) => b.price - a.price)
+                setProductData(sortedProducts)
+                return
+            }
+            const filteredProducts = productListData.data.filter(
+                (product) => product.price >= Number(minPrice || 0) && product.price <= Number(maxPrice || 128000000)
+            )
+            const sortedProducts = filteredProducts.sort((a, b) => b.price - a.price)
+            setProductData(sortedProducts)
+        }
+    }
+
+    console.log(implement)
     console.log(productData)
     return (
         <div>
@@ -183,17 +247,16 @@ export default function ProductList() {
                             <p className='uppercase text-[15px] font-[550] text-[#000bff]'>Tất cả sản phẩm</p>
                             <div className='flex items-center gap-3 ml-auto'>
                                 <p className='text-[14px] text-[#333333]'>Sắp xếp</p>
-                                <select className='w-[205px] py-[6px] outline-none border-[1px] border-[#817f7f] rounded-[30px] text-[14.5px] px-2 text-[#333333]'>
-                                    <option value='T'>Tùy chọn</option>
-                                    <option value='s'>Sản phẩm bán chạy</option>
-                                    <option value='s'>Theo bảng chữ cái từ A-Z</option>
-                                    <option value='s'>Theo bảng chữ cái từ Z-A</option>
-                                    <option value='s'>Giá từ thấp đến cao</option>
-                                    <option value='s'>Giá từ cao đến thấp</option>
-                                    <option value='s' selected>
-                                        Mới nhất
+                                <select
+                                    className='w-[205px] py-[6px] outline-none border-[1px] border-[#817f7f] rounded-[30px] text-[14.5px] px-2 text-[#333333]'
+                                    value={selectDefaultValue || ''}
+                                    onChange={(event) => handleArrangePrice(event.target.value)}
+                                >
+                                    <option value='' disabled>
+                                        Giá
                                     </option>
-                                    <option value='s'>Cũ nhất</option>
+                                    <option value={arrange[0]}>Giá từ thấp đến cao</option>
+                                    <option value={arrange[1]}>Giá từ cao đến thấp</option>
                                 </select>
                             </div>
                         </div>
