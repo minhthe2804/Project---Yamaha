@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useContext } from 'react'
 import { Product as ProductType } from '~/types/products.type'
 import { formatCurrency, generateNameId } from '~/utils/utils'
@@ -6,7 +6,7 @@ import 'animate.css'
 import Button from '~/components/Button'
 import { Link, useNavigate } from 'react-router-dom'
 import { path } from '~/constants/path'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { CartType } from '~/types/cart.type'
 import { cartApi } from '~/apis/cart.api'
 import { toast } from 'react-toastify'
@@ -19,13 +19,29 @@ interface Props {
 }
 
 export default function Product({ product, border = '[#f0efef]' }: Props) {
-
-    const { isAuthenticated} = useContext(AppContext)
+    const { isAuthenticated } = useContext(AppContext)
     const [featureImage, setFeatureImage] = useState<string>()
     const [animationClass, setAnimationClass] = useState<string>('')
     const queryClient = useQueryClient()
 
     const navigate = useNavigate()
+
+    const { data: productInCartData, refetch } = useQuery({
+        queryKey: ['cart'],
+        queryFn: () => cartApi.getCart()
+    })
+
+    const updateCartMutation = useMutation({
+        mutationFn: (bodyData: { id: string; body: CartType }) => cartApi.updateCart(bodyData.id, bodyData.body)
+    })
+
+    const productToCart = productInCartData?.data
+
+    const checkIdToCart = useMemo(
+        () => productToCart?.find((cart) => cart.id === product.id),
+        [product.id, productToCart]
+    )
+
     const handleFeature = () => {
         setFeatureImage(product.media[1].preview_image.src as string)
         setAnimationClass('animate__fadeIn')
@@ -47,34 +63,64 @@ export default function Product({ product, border = '[#f0efef]' }: Props) {
         mutationFn: (body: CartType) => cartApi.addToCart(body)
     })
 
+    const checkProductToCart = () => {
+        if (productToCart) {
+            const checkProduct = productToCart.some((cart) => cart.version === product.options.values[0])
+            return checkProduct
+        }
+    }
+
     const addToCart = () => {
         if (isAuthenticated) {
             if (product) {
-                addToCartMutation.mutate(
+                if (!checkProductToCart()) {
+                    addToCartMutation.mutate(
+                        {
+                            id: product.id,
+                            title: product.title,
+                            previewImage: product.images[0],
+                            count: 1,
+                            price: product.price,
+                            totalPrice: product.price * 1,
+                            vendor: product.vendor,
+                            version: product.options.values[0],
+                            quantity: product.quantity
+                        },
+                        {
+                            onSuccess: () => {
+                                toast.success(toastNotify.productDetail.addtoCartSuccess, { autoClose: 3000 })
+                                queryClient.invalidateQueries({ queryKey: ['cart'] })
+                            }
+                        }
+                    )
+                    return
+                }
+                updateCartMutation.mutate(
                     {
-                        id: product.id,
-                        title: product.title,
-                        previewImage: product.images[0],
-                        count: 1,
-                        price: product.price,
-                        totalPrice: product.price * 1,
-                        vendor: product.vendor,
-                        version: product.options.values[0],
-                        quantity: product.quantity
+                        id: checkIdToCart?.id as string,
+                        body: {
+                            ...checkIdToCart,
+                            count:
+                                (checkIdToCart?.count as number) + 1 > product.quantity
+                                    ? product.quantity
+                                    : (checkIdToCart?.count as number) + 1,
+                            totalPrice: ((checkIdToCart?.count as number) + 1) * (checkIdToCart?.price as number)
+                        } as CartType
                     },
                     {
                         onSuccess: () => {
                             toast.success(toastNotify.productDetail.addtoCartSuccess, { autoClose: 3000 })
-                            queryClient.invalidateQueries({ queryKey: ['cart'] })
+                            refetch()
                         }
                     }
                 )
             }
-            return 
+            return
         }
         navigate(path.login)
     }
 
+    console.log(checkIdToCart)
     return (
         <div
             className={`pb-[32px] border-2 ${border} rounded-[12px] truncate pt-1 pl-1`}

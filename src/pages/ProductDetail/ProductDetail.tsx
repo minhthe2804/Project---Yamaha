@@ -36,7 +36,7 @@ export default function ProductDetail() {
     let count = 0 // khởi tạo biến đếm để fix lỗi spam nhiều vào button sẽ bị đơ thanh trượt
     const [activeImage, setActiveImage] = useState<string>('')
     const queryClient = useQueryClient()
-    const { isAuthenticated} = useContext(AppContext)
+    const { isAuthenticated } = useContext(AppContext)
 
     const navigate = useNavigate()
     // gọi api xem chi tiết sản phẩm
@@ -65,6 +65,22 @@ export default function ProductDetail() {
     const removeProductDetail = useMemo(() => {
         return productType?.filter((product) => product.id !== productData?.id)
     }, [productData?.id, productType])
+
+    const { data: productInCartData } = useQuery({
+        queryKey: ['cart'],
+        queryFn: () => cartApi.getCart()
+    })
+
+    const updateCartMutation = useMutation({
+        mutationFn: (bodyData: { id: string; body: CartType }) => cartApi.updateCart(bodyData.id, bodyData.body)
+    })
+
+    const productToCart = productInCartData?.data
+
+    const checkIdToCart = useMemo(
+        () => productToCart?.find((cart) => cart.id === productData?.id),
+        [productData?.id, productToCart]
+    )
 
     useEffect(() => {
         if (slideRef.current) {
@@ -142,20 +158,48 @@ export default function ProductDetail() {
         setByCount(value)
     }
 
+    const checkProductToCart = () => {
+        if (productToCart) {
+            const checkProduct = productToCart.some((cart) => cart.version === productData?.options.values[0])
+            return checkProduct
+        }
+    }
+
     const addToCart = () => {
         if (isAuthenticated) {
             if (productData) {
-                addToCartMutation.mutate(
+                if (!checkProductToCart()) {
+                    addToCartMutation.mutate(
+                        {
+                            id: productData.id,
+                            title: productData.title,
+                            previewImage: activeImage,
+                            count: buyCount,
+                            price: productData.price,
+                            totalPrice: productData.price * buyCount,
+                            vendor: productData.vendor,
+                            version: color,
+                            quantity: productData.quantity
+                        },
+                        {
+                            onSuccess: () => {
+                                toast.success(toastNotify.productDetail.addtoCartSuccess, { autoClose: 3000 })
+                                queryClient.invalidateQueries({ queryKey: ['cart'] })
+                            }
+                        }
+                    )
+                }
+                updateCartMutation.mutate(
                     {
-                        id: productData.id,
-                        title: productData.title,
-                        previewImage: activeImage,
-                        count: buyCount,
-                        price: productData.price,
-                        totalPrice: productData.price * buyCount,
-                        vendor: productData.vendor,
-                        version: color,
-                        quantity: productData.quantity
+                        id: checkIdToCart?.id as string,
+                        body: {
+                            ...checkIdToCart,
+                            count:
+                                (checkIdToCart?.count as number) + buyCount > productData.quantity
+                                    ? productData.quantity
+                                    : (checkIdToCart?.count as number) + buyCount > productData.quantity,
+                            totalPrice: ((checkIdToCart?.count as number) + buyCount) * (checkIdToCart?.price as number)
+                        } as CartType
                     },
                     {
                         onSuccess: () => {

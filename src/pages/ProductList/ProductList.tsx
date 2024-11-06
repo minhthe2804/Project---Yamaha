@@ -49,7 +49,7 @@ export default function ProductList() {
             setPages([0, 24])
             setPriceRange(priceRange)
             if (typeProduct) {
-                const filterTypeProducts = productListData.data.filter((product) => product.type === typeProduct) // van de loi o day
+                const filterTypeProducts = productListData.data.filter((product) => product.type === typeProduct)
                 const filteredProducts = filterTypeProducts.filter((product) =>
                     enabled ? product.price >= priceMin && product.price <= priceMax : product.price >= priceMax
                 )
@@ -171,8 +171,6 @@ export default function ProductList() {
         }
     }
 
-    console.log(implement)
-    console.log(productData)
     return (
         <div>
             <BreadCrumb heading={breadCrumb.productList.heading} title={breadCrumb.productList.title} />
