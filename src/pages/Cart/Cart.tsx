@@ -129,14 +129,16 @@ export default function Cart() {
     }
 
     const handleManyCart = () => {
-        checkedCart.map((cart) =>
-            deleteCartMutation.mutate(cart.id, {
-                onSuccess: () => {
-                    refetch()
-                }
-            })
-        )
-        toast.success(toastNotify.cart.deleteCart, { autoClose: 2000 })
+        if (checkedCart.length > 0) {
+            checkedCart.map((cart) =>
+                deleteCartMutation.mutate(cart.id, {
+                    onSuccess: () => {
+                        refetch()
+                    }
+                })
+            )
+            toast.success(toastNotify.cart.deleteCart, { autoClose: 2000 })
+        }
     }
 
     const handleCheckOut = () => {

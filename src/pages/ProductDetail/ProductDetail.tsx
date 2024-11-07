@@ -197,7 +197,7 @@ export default function ProductDetail() {
                             count:
                                 (checkIdToCart?.count as number) + buyCount > productData.quantity
                                     ? productData.quantity
-                                    : (checkIdToCart?.count as number) + buyCount > productData.quantity,
+                                    : (checkIdToCart?.count as number) + buyCount,
                             totalPrice: ((checkIdToCart?.count as number) + buyCount) * (checkIdToCart?.price as number)
                         } as CartType
                     },
