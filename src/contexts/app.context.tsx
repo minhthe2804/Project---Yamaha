@@ -10,6 +10,8 @@ interface AppContextInterface {
     setProfile: React.Dispatch<React.SetStateAction<User | null>>
     extendedCart: ExtendedCart[]
     setExtendedCart: React.Dispatch<React.SetStateAction<ExtendedCart[]>>
+    checkoutRoute: ExtendedCart[]
+    setCheckoutRoute: React.Dispatch<React.SetStateAction<ExtendedCart[]>>
     reset: () => void
 }
 
@@ -20,6 +22,8 @@ const initialAppContext: AppContextInterface = {
     setProfile: () => null,
     extendedCart: [],
     setExtendedCart: () => null,
+    checkoutRoute: [],
+    setCheckoutRoute: () => null,
     reset: () => null
 }
 
@@ -29,6 +33,7 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     const [isAuthenticated, setIsAuthenticated] = useState<boolean>(initialAppContext.isAuthenticated)
     const [profile, setProfile] = useState<User | null>(initialAppContext.profile)
     const [extendedCart, setExtendedCart] = useState<ExtendedCart[]>(initialAppContext.extendedCart)
+    const [checkoutRoute, setCheckoutRoute] = useState<ExtendedCart[]>(initialAppContext.checkoutRoute)
     const reset = () => {
         setIsAuthenticated(false)
         setProfile(null)
@@ -41,6 +46,8 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
         setProfile,
         extendedCart,
         setExtendedCart,
+        checkoutRoute,
+        setCheckoutRoute,
         reset
     }
     return <AppContext.Provider value={value}>{children}</AppContext.Provider>

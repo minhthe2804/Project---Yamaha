@@ -1,29 +1,31 @@
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import classNames from 'classnames'
 import keyBy from 'lodash/keyBy'
 import { useContext, useEffect, useMemo, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import { toastNotify } from '~/constants/toastNotify'
 
 import { cartApi } from '~/apis/cart.api'
+import { checkoutApi } from '~/apis/checkout.api'
 import BreadCrumb from '~/components/BreadCrumb'
 import Button from '~/components/Button'
 import QuantityController from '~/components/QuantityController'
 import { breadCrumb } from '~/constants/breadCrumb'
 import { path } from '~/constants/path'
-import { toastNotify } from '~/constants/toastNotify'
 import { AppContext } from '~/contexts/app.context'
 import { CartType } from '~/types/cart.type'
 import { formatCurrency, generateNameId } from '~/utils/utils'
 
 export default function Cart() {
-    const { extendedCart, setExtendedCart } = useContext(AppContext)
+    const { extendedCart, setExtendedCart, setCheckoutRoute } = useContext(AppContext)
     const [update, setUpdate] = useState<string[]>([])
     const { data: productInCartData, refetch } = useQuery({
         queryKey: ['cart'],
         queryFn: () => cartApi.getCart()
     })
 
+    const queryClient = useQueryClient()
     const navigate = useNavigate()
     const productToCart = productInCartData?.data
 
@@ -36,6 +38,10 @@ export default function Cart() {
         onSuccess: () => {
             refetch()
         }
+    })
+
+    const checkoutMutation = useMutation({
+        mutationFn: (body: CartType) => checkoutApi.addCheckout(body)
     })
 
     useEffect(() => {
@@ -142,11 +148,19 @@ export default function Cart() {
     }
 
     const handleCheckOut = () => {
-        navigate(path.checkout, {
-            state: {
-                checkedCart: checkedCart
-            }
+        checkedCart.map((checkout) =>
+            checkoutMutation.mutate(checkout, {
+                onSuccess: () => {
+                    queryClient.invalidateQueries({ queryKey: ['checkout'] })
+                }
+            })
+        )
+        setCheckoutRoute((prev) => {
+            const newCheckoutProduct = checkedCart.map((checkout) => checkout)
+            return [...prev, ...newCheckoutProduct]
         })
+        checkedCart.map((cart) => deleteCartMutation.mutate(cart.id))
+        navigate(path.checkout)
     }
 
     return (

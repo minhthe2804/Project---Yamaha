@@ -26,6 +26,13 @@ function RejectedRoute() {
     return !isAuthenticated ? <Outlet /> : <Navigate to={path.home} />
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
+function CheckoutRoute() {
+    const { checkoutRoute } = useContext(AppContext)
+
+    return checkoutRoute && checkoutRoute.length > 0 ? <Outlet /> : <Navigate to={path.cart} />
+}
+
 export default function useRouteElements() {
     const routeElements = useRoutes([
         {
@@ -102,7 +109,13 @@ export default function useRouteElements() {
                             <Account />
                         </MainLayout>
                     )
-                },
+                }
+            ]
+        },
+        {
+            path: '',
+            element: <CheckoutRoute />,
+            children: [
                 {
                     path: path.checkout,
                     element: <Checkout />

@@ -120,7 +120,6 @@ export default function Product({ product, border = '[#f0efef]' }: Props) {
         navigate(path.login)
     }
 
-    console.log(checkIdToCart)
     return (
         <div
             className={`pb-[32px] border-2 ${border} rounded-[12px] truncate pt-1 pl-1`}
