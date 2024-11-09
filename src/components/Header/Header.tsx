@@ -15,11 +15,12 @@ import { toast } from 'react-toastify'
 import { toastNotify } from '~/constants/toastNotify'
 import { cartApi } from '~/apis/cart.api'
 import { formatCurrency } from '~/utils/utils'
+import { checkoutApi } from '~/apis/checkout.api'
 
 const cx = classNames.bind(styles)
 const MAX_CART = 3
 export default function Header() {
-    const { isAuthenticated, profile, setIsAuthenticated, setProfile } = useContext(AppContext)
+    const { isAuthenticated, profile, setIsAuthenticated, setProfile, setIsCheckout } = useContext(AppContext)
 
     const { data: productInCartData, refetch } = useQuery({
         queryKey: ['cart'],
@@ -33,8 +34,20 @@ export default function Header() {
         }
     })
 
-    const productToCart = productInCartData?.data
+    const { data: checkoutProductData, refetch: refresh } = useQuery({
+        queryKey: ['checkout'],
+        queryFn: () => checkoutApi.getCheckout()
+    })
 
+    const deleteProductToCheckoutMutation = useMutation({
+        mutationFn: (id: string) => checkoutApi.deleteCheckout(id),
+        onSuccess: () => {
+            refresh()
+        }
+    })
+
+    const productToCart = productInCartData?.data
+    const checkoutProduct = checkoutProductData?.data
     const productDataCount = productToCart?.length
 
     const handleDelete = (id: string) => {
@@ -46,7 +59,9 @@ export default function Header() {
         clearLS()
         setIsAuthenticated(false)
         setProfile(null)
+        setIsCheckout(false)
         productToCart?.map((cart) => deleteCartMutation.mutate(cart.id))
+        checkoutProduct?.map((checkout) => deleteProductToCheckoutMutation.mutate(checkout.id))
         toast.success(toastNotify.logOut.logOutSuccess, { autoClose: 3000 })
     }
 

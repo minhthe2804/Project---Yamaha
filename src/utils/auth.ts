@@ -17,9 +17,16 @@ export const setProfileFromLS = (profile: User) => {
     localStorage.setItem('profile', JSON.stringify(profile))
 }
 
+export const setCheckoutFromLS = (checkout: string) => {
+    localStorage.setItem('checkout', checkout)
+}
+
+export const getCheckoutFromLS = () => localStorage.getItem('checkout') || ''
+
 export const clearLS = () => {
     localStorage.removeItem('login_success')
     localStorage.removeItem('profile')
+    localStorage.removeItem('checkout')
     const clearLSEvent = new Event('clearLS')
     localStorageEventTarget.dispatchEvent(clearLSEvent)
 }

@@ -16,9 +16,10 @@ import { path } from '~/constants/path'
 import { AppContext } from '~/contexts/app.context'
 import { CartType } from '~/types/cart.type'
 import { formatCurrency, generateNameId } from '~/utils/utils'
+import { setCheckoutFromLS } from '~/utils/auth'
 
 export default function Cart() {
-    const { extendedCart, setExtendedCart, setCheckoutRoute } = useContext(AppContext)
+    const { extendedCart, setExtendedCart, setIsCheckout } = useContext(AppContext)
     const [update, setUpdate] = useState<string[]>([])
     const { data: productInCartData, refetch } = useQuery({
         queryKey: ['cart'],
@@ -148,19 +149,19 @@ export default function Cart() {
     }
 
     const handleCheckOut = () => {
-        checkedCart.map((checkout) =>
-            checkoutMutation.mutate(checkout, {
-                onSuccess: () => {
-                    queryClient.invalidateQueries({ queryKey: ['checkout'] })
-                }
-            })
-        )
-        setCheckoutRoute((prev) => {
-            const newCheckoutProduct = checkedCart.map((checkout) => checkout)
-            return [...prev, ...newCheckoutProduct]
-        })
-        checkedCart.map((cart) => deleteCartMutation.mutate(cart.id))
-        navigate(path.checkout)
+        if (checkedCart.length > 0) {
+            checkedCart.map((checkout) =>
+                checkoutMutation.mutate(checkout, {
+                    onSuccess: () => {
+                        queryClient.invalidateQueries({ queryKey: ['checkout'] })
+                    }
+                })
+            )
+            setCheckoutFromLS('ok')
+            setIsCheckout(true)
+            checkedCart.map((cart) => deleteCartMutation.mutate(cart.id))
+            navigate(path.checkout)
+        }
     }
 
     return (

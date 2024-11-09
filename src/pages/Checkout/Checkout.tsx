@@ -7,18 +7,24 @@ import Input from '~/components/Input'
 import Button from '~/components/Button'
 import classNames from 'classnames'
 
-import { useContext, useMemo } from 'react'
+import { useMemo } from 'react'
 import { formatCurrency } from '~/utils/utils'
-import { AppContext } from '~/contexts/app.context'
+import { useQuery } from '@tanstack/react-query'
+import { checkoutApi } from '~/apis/checkout.api'
 
 export default function Checkout() {
-    const { checkoutRoute } = useContext(AppContext)
+    const { data: checkoutProductData } = useQuery({
+        queryKey: ['checkout'],
+        queryFn: () => checkoutApi.getCheckout()
+    })
+
+    const checkoutProduct = checkoutProductData?.data
     const totalPayment = useMemo(
         () =>
-            checkoutRoute?.reduce((total, checkout) => {
+            checkoutProduct?.reduce((total, checkout) => {
                 return total + checkout.totalPrice
             }, 0),
-        [checkoutRoute]
+        [checkoutProduct]
     )
 
     return (
@@ -130,8 +136,8 @@ export default function Checkout() {
 
                     <div className='col-span-6'>
                         <div className='pl-[45px] border-l-[1px] border-[#e1e1e1] pt-[49px] bg-[#fafafa] pr-[132px] flex flex-col gap-[16px] h-[100vh]'>
-                            {checkoutRoute &&
-                                checkoutRoute.map((checkout) => (
+                            {checkoutProduct &&
+                                checkoutProduct.map((checkout) => (
                                     <div className='flex items-center justify-between' key={checkout.id}>
                                         <div className='flex items-center gap-[16px]'>
                                             <div className='w-[64px] h-[64px] rounded-[8px] border-[1px] border-[#e6e6e6] bg-white flex justify-center items-center relative z-[1]'>

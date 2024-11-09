@@ -28,9 +28,8 @@ function RejectedRoute() {
 
 // eslint-disable-next-line react-refresh/only-export-components
 function CheckoutRoute() {
-    const { checkoutRoute } = useContext(AppContext)
-
-    return checkoutRoute && checkoutRoute.length > 0 ? <Outlet /> : <Navigate to={path.cart} />
+    const { isCheckout } = useContext(AppContext)
+    return isCheckout ? <Outlet /> : <Navigate to={path.cart} />
 }
 
 export default function useRouteElements() {
@@ -109,16 +108,16 @@ export default function useRouteElements() {
                             <Account />
                         </MainLayout>
                     )
-                }
-            ]
-        },
-        {
-            path: '',
-            element: <CheckoutRoute />,
-            children: [
+                },
                 {
-                    path: path.checkout,
-                    element: <Checkout />
+                    path: '',
+                    element: <CheckoutRoute />,
+                    children: [
+                        {
+                            path: path.checkout,
+                            element: <Checkout />
+                        }
+                    ]
                 }
             ]
         }
