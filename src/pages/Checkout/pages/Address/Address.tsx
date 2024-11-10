@@ -6,8 +6,80 @@ import { faUser } from '@fortawesome/free-solid-svg-icons'
 import Button from '~/components/Button'
 import Input from '~/components/Input'
 import { path } from '~/constants/path'
+import { userSchema, UserSchema } from '~/utils/rules'
+import { Controller, useForm } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
+import InputNumber from '~/components/InputNumber'
+import { useContext, useEffect } from 'react'
+import { AppContext } from '~/contexts/app.context'
+import { setAddressFromLS, setProfileFromLS } from '~/utils/auth'
+import { useMutation } from '@tanstack/react-query'
+import { authApi } from '~/apis/auth.api'
 
+type FormData = UserSchema
 export default function Address() {
+    const { setIsAddress, profile, setProfile } = useContext(AppContext)
+    const {
+        control,
+        register,
+        reset,
+        setValue,
+        handleSubmit,
+        formState: { errors }
+    } = useForm<FormData>({
+        defaultValues: {
+            username: '',
+            phone: '',
+            address: ''
+        },
+        resolver: yupResolver(userSchema)
+    })
+
+    const updateProfileMutation = useMutation({
+        mutationFn: (bodyData: {
+            id: string
+            body: {
+                name: { firstname: string; lastname: string }
+                username: string
+                email: string
+                password: string
+                address: string
+                phone: string
+            }
+        }) => authApi.forgotPassword(bodyData.id, bodyData.body)
+    })
+
+    const onSubmit = handleSubmit((data) => {
+        if (profile) {
+            updateProfileMutation.mutate(
+                {
+                    id: profile.id,
+                    body: {
+                        ...profile,
+                        phone: data.phone as string,
+                        address: data.address
+                    }
+                },
+                {
+                    onSuccess: (data) => {
+                        setProfile(data.data)
+                        setProfileFromLS(data.data)
+                    }
+                }
+            )
+            setIsAddress(true)
+            setAddressFromLS('ok')
+        }
+    })
+
+    useEffect(() => {
+        if (profile) {
+            setValue('username', profile.username)
+            setValue('phone', profile.phone)
+            setValue('address', profile.address as string)
+        }
+    }, [profile, setValue])
+
     return (
         <div>
             <p className='text-[18px] mt-[9px] text-[#333333]'>Thông tin thanh toán</p>
@@ -23,18 +95,40 @@ export default function Address() {
                 </div>
             </div>
 
-            <form className='mt-[21px] flex flex-col '>
+            <form className='mt-[21px] flex flex-col ' onSubmit={onSubmit}>
                 <Input
                     classNameInput='w-full outline-none border-[1px] border-[#e6e6e6] rounded-[4px] py-[7px] px-[12px] placeholder:text-[13px] text-black focus:border-blue-400 transition duration-300 ease-in text-[15px]'
+                    classNameError='text-red-500 text-[13px] mt-[2px] min-h-[24px]'
                     placeholder='Họ và tên'
+                    name='username'
+                    register={register}
+                    type='text'
+                    errorMessage={errors.username?.message}
+                />
+                <Controller
+                    control={control}
+                    name='phone'
+                    render={({ field }) => (
+                        <InputNumber
+                            classNameInput='w-full outline-none border-[1px] border-[#e6e6e6] rounded-[4px] py-[7px] px-[12px] placeholder:text-[13px] text-black focus:border-blue-400 transition duration-300 ease-in text-[15px]'
+                            classNameError='text-red-500 text-[13px] mt-[2px] min-h-[24px]'
+                            placeholder='Điện thoại'
+                            errorMessage={errors.phone?.message}
+                            {...field}
+                            onChange={(event) => {
+                                field.onChange(event)
+                            }}
+                        />
+                    )}
                 />
                 <Input
                     classNameInput='w-full outline-none border-[1px] border-[#e6e6e6] rounded-[4px] py-[7px] px-[12px] placeholder:text-[13px] text-black focus:border-blue-400 transition duration-300 ease-in text-[15px]'
-                    placeholder='Điện thoại'
-                />
-                <Input
-                    classNameInput='w-full outline-none border-[1px] border-[#e6e6e6] rounded-[4px] py-[7px] px-[12px] placeholder:text-[13px] text-black focus:border-blue-400 transition duration-300 ease-in text-[15px]'
+                    classNameError='text-red-500 text-[13px] mt-[2px] min-h-[24px]'
+                    name='address'
+                    register={register}
+                    type='text'
                     placeholder='Địa chỉ'
+                    errorMessage={errors.address?.message}
                 />
 
                 <div className='flex items-center justify-between mt-[7px]'>

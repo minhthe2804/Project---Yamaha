@@ -23,10 +23,17 @@ export const setCheckoutFromLS = (checkout: string) => {
 
 export const getCheckoutFromLS = () => localStorage.getItem('checkout') || ''
 
+export const setAddressFromLS = (address: string) => {
+    localStorage.setItem('address', address)
+}
+
+export const getAddressFromLS = () => localStorage.getItem('address') || ''
+
 export const clearLS = () => {
     localStorage.removeItem('login_success')
     localStorage.removeItem('profile')
     localStorage.removeItem('checkout')
+    localStorage.removeItem('address')
     const clearLSEvent = new Event('clearLS')
     localStorageEventTarget.dispatchEvent(clearLSEvent)
 }

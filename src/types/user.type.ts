@@ -7,11 +7,6 @@ export interface User {
     username: string
     email: string
     password: string
-    address?: {
-        city: string
-        district: string
-        ward: string
-        street: string
-    }
+    address?: string
     phone?: string
 }

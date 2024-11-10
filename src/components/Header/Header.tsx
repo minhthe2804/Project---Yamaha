@@ -20,7 +20,8 @@ import { checkoutApi } from '~/apis/checkout.api'
 const cx = classNames.bind(styles)
 const MAX_CART = 3
 export default function Header() {
-    const { isAuthenticated, profile, setIsAuthenticated, setProfile, setIsCheckout } = useContext(AppContext)
+    const { isAuthenticated, profile, setIsAuthenticated, setProfile, setIsCheckout, setIsAddress } =
+        useContext(AppContext)
 
     const { data: productInCartData, refetch } = useQuery({
         queryKey: ['cart'],
@@ -60,6 +61,7 @@ export default function Header() {
         setIsAuthenticated(false)
         setProfile(null)
         setIsCheckout(false)
+        setIsAddress(false)
         productToCart?.map((cart) => deleteCartMutation.mutate(cart.id))
         checkoutProduct?.map((checkout) => deleteProductToCheckoutMutation.mutate(checkout.id))
         toast.success(toastNotify.logOut.logOutSuccess, { autoClose: 3000 })
