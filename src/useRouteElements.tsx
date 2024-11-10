@@ -14,6 +14,7 @@ import Account from './pages/Account'
 import { AppContext } from './contexts/app.context'
 import Checkout from './pages/Checkout'
 import Introduce from './pages/Introduce'
+import Contact from './pages/Contact'
 import Address from './pages/Checkout/pages/Address'
 import Payment from './pages/Checkout/pages/Payment'
 
@@ -145,6 +146,14 @@ export default function useRouteElements() {
             element: (
                 <MainLayout>
                     <Introduce />
+                </MainLayout>
+            )
+        },
+        {
+            path: path.contact,
+            element: (
+                <MainLayout>
+                    <Contact />
                 </MainLayout>
             )
         }
