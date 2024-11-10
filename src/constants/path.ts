@@ -10,5 +10,7 @@ export const path = {
     cart: '/cart',
     productDetail: ':nameId',
     account: '/account',
-    checkout: '/checkout'
+    checkout: '/checkout',
+    checkoutAddress: '/checkout/address',
+    checkoutPayment: '/checkout/payment'
 }

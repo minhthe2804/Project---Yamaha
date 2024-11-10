@@ -14,6 +14,8 @@ import Account from './pages/Account'
 import { AppContext } from './contexts/app.context'
 import Checkout from './pages/Checkout'
 import Introduce from './pages/Introduce'
+import Address from './pages/Checkout/pages/Address'
+import Payment from './pages/Checkout/pages/Payment'
 
 // eslint-disable-next-line react-refresh/only-export-components
 function ProtectedRoute() {
@@ -116,7 +118,23 @@ export default function useRouteElements() {
                     children: [
                         {
                             path: path.checkout,
-                            element: <Checkout />
+                            element: <Checkout />,
+                            children: [
+                                {
+                                    path: '',
+                                    element: <Outlet />,
+                                    children: [
+                                        {
+                                            path: path.checkoutAddress,
+                                            element: <Address />
+                                        },
+                                        {
+                                            path: path.checkoutPayment,
+                                            element: <Payment />
+                                        }
+                                    ]
+                                }
+                            ]
                         }
                     ]
                 }

@@ -192,7 +192,7 @@ export default function Cart() {
             setIsCheckout(true)
             checkedCart.map((cart) => deleteCartMutation.mutate(cart.id))
         }
-        navigate(path.checkout)
+        navigate(path.checkoutAddress)
     }
 
     return (

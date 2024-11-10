@@ -266,7 +266,7 @@ export default function Header() {
                                                     </Link>
 
                                                     <Link
-                                                        to={path.checkout}
+                                                        to={path.checkoutAddress}
                                                         className='w-[131px] py-[9px] bg-[#ff3237] rounded-[4px] text-[14px] font-[600] text-white  flex items-center justify-center'
                                                     >
                                                         THANH TOÁN
