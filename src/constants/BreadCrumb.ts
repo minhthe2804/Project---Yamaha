@@ -22,5 +22,9 @@ export const breadCrumb = {
     productList: {
         heading: 'TẤT CẢ SẢN PHẨM',
         title: 'Trang chủ / Tất cả sản phẩm'
+    },
+    introduce: {
+        heading: 'GIỚI THIỆU',
+        title: 'Trang chủ / Giới thiệu'
     }
 }

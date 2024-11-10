@@ -13,6 +13,7 @@ import Cart from './pages/Cart'
 import Account from './pages/Account'
 import { AppContext } from './contexts/app.context'
 import Checkout from './pages/Checkout'
+import Introduce from './pages/Introduce'
 
 // eslint-disable-next-line react-refresh/only-export-components
 function ProtectedRoute() {
@@ -120,6 +121,14 @@ export default function useRouteElements() {
                     ]
                 }
             ]
+        },
+        {
+            path: path.introduce,
+            element: (
+                <MainLayout>
+                    <Introduce />
+                </MainLayout>
+            )
         }
     ])
     return routeElements
