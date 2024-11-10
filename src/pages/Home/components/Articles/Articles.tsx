@@ -47,7 +47,7 @@ function Articles() {
     }
 
     return (
-        <div id='articles' className='py-24'>
+        <div id='news' className='py-24'>
             <div className='wrapper'>
                 <div className='articles-head'>
                     <ProductTitle heading={productTitle.articles.heading} />
