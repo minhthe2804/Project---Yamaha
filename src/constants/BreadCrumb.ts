@@ -26,5 +26,9 @@ export const breadCrumb = {
     introduce: {
         heading: 'GIỚI THIỆU',
         title: 'Trang chủ / Giới thiệu'
+    },
+    contact: {
+        heading: 'LIÊN HỆ',
+        title: 'Trang chủ / Liên hệ'
     }
 }
