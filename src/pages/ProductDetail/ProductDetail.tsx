@@ -160,7 +160,7 @@ export default function ProductDetail() {
 
     const checkProductToCart = () => {
         if (productToCart) {
-            const checkProduct = productToCart.some((cart) => cart.version === productData?.options.values[0])
+            const checkProduct = productToCart.some((cart) => cart.version === color)
             return checkProduct
         }
     }
@@ -188,6 +188,7 @@ export default function ProductDetail() {
                             }
                         }
                     )
+                    return
                 }
                 updateCartMutation.mutate(
                     {
