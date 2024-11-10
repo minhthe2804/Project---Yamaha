@@ -137,8 +137,8 @@ export default function Checkout() {
                     <div className='col-span-6'>
                         <div className='pl-[45px] border-l-[1px] border-[#e1e1e1] pt-[49px] bg-[#fafafa] pr-[132px] flex flex-col gap-[16px] h-[100vh]'>
                             {checkoutProduct &&
-                                checkoutProduct.map((checkout) => (
-                                    <div className='flex items-center justify-between' key={checkout.id}>
+                                checkoutProduct.map((checkout, index) => (
+                                    <div className='flex items-center justify-between' key={index}>
                                         <div className='flex items-center gap-[16px]'>
                                             <div className='w-[64px] h-[64px] rounded-[8px] border-[1px] border-[#e6e6e6] bg-white flex justify-center items-center relative z-[1]'>
                                                 <img

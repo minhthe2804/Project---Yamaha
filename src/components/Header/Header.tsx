@@ -211,8 +211,8 @@ export default function Header() {
                                                 </div>
 
                                                 {productToCart &&
-                                                    productToCart.slice(0, MAX_CART).map((cart) => (
-                                                        <div key={cart.id}>
+                                                    productToCart.slice(0, MAX_CART).map((cart, index) => (
+                                                        <div key={index}>
                                                             <div className='flex w-full items-start pt-4'>
                                                                 <Link
                                                                     className=''

@@ -190,8 +190,8 @@ export default function Cart() {
                                 </div>
                             </div>
                             <div className='mt-[63px]'>
-                                {extendedCart.map((cart) => (
-                                    <div className='grid grid-cols-12' key={cart.id}>
+                                {extendedCart.map((cart,index) => (
+                                    <div className='grid grid-cols-12' key={index}>
                                         <div className='col-span-6 pb-[40px]'>
                                             <div className='flex gap-3'>
                                                 <div className='flex items-center'>
