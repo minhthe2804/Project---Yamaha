@@ -41,8 +41,20 @@ export default function Cart() {
         }
     })
 
+    const { data: productInCheckoutData } = useQuery({
+        queryKey: ['checkout'],
+        queryFn: () => checkoutApi.getCheckout()
+    })
+
+    const productCheckout = productInCheckoutData?.data
+
     const checkoutMutation = useMutation({
         mutationFn: (body: CartType) => checkoutApi.addCheckout(body)
+    })
+
+    const updateCheckoutMutation = useMutation({
+        mutationFn: (bodyData: { id: string; body: CartType }) =>
+            checkoutApi.updateProducttoCheckout(bodyData.id, bodyData.body)
     })
 
     useEffect(() => {
@@ -148,20 +160,39 @@ export default function Cart() {
         }
     }
 
+    const versionCheckout = useMemo(() => productCheckout?.map((checkout) => checkout.version), [productCheckout])
+
     const handleCheckOut = () => {
         if (checkedCart.length > 0) {
-            checkedCart.map((checkout) =>
-                checkoutMutation.mutate(checkout, {
+            checkedCart.map((checked, index) => {
+                if (versionCheckout?.includes(checked.version)) {
+                    if (productCheckout) {
+                        updateCheckoutMutation.mutate({
+                            id: checked.id,
+                            body: {
+                                ...productCheckout[index],
+                                count:
+                                    checked.count + productCheckout[index].count > productCheckout[index].quantity
+                                        ? productCheckout[index].quantity
+                                        : checked.count + productCheckout[index].count,
+                                totalPrice:
+                                    (checked.count + productCheckout[index].count) * productCheckout[index].price
+                            }
+                        })
+                    }
+                    return
+                }
+                checkoutMutation.mutate(checked, {
                     onSuccess: () => {
                         queryClient.invalidateQueries({ queryKey: ['checkout'] })
                     }
                 })
-            )
+            })
             setCheckoutFromLS('ok')
             setIsCheckout(true)
             checkedCart.map((cart) => deleteCartMutation.mutate(cart.id))
-            navigate(path.checkout)
         }
+        navigate(path.checkout)
     }
 
     return (
@@ -190,7 +221,7 @@ export default function Cart() {
                                 </div>
                             </div>
                             <div className='mt-[63px]'>
-                                {extendedCart.map((cart,index) => (
+                                {extendedCart.map((cart, index) => (
                                     <div className='grid grid-cols-12' key={index}>
                                         <div className='col-span-6 pb-[40px]'>
                                             <div className='flex gap-3'>
