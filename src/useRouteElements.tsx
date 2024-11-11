@@ -17,6 +17,7 @@ import Introduce from './pages/Introduce'
 import Contact from './pages/Contact'
 import Address from './pages/Checkout/pages/Address'
 import Payment from './pages/Checkout/pages/Payment'
+import ThankYou from './pages/Checkout/pages/ThankYou'
 
 // eslint-disable-next-line react-refresh/only-export-components
 function ProtectedRoute() {
@@ -144,6 +145,10 @@ export default function useRouteElements() {
                                                     element: <Payment />
                                                 }
                                             ]
+                                        },
+                                        {
+                                            path: path.checkoutThankYou,
+                                            element: <ThankYou />
                                         }
                                     ]
                                 }

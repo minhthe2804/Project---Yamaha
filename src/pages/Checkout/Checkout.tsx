@@ -11,8 +11,10 @@ import classNames from 'classnames'
 export default function Checkout() {
     const addressMatch = useMatch(path.checkoutAddress)
     const paymentMatch = useMatch(path.checkoutPayment)
+    const thankyouMatch = useMatch(path.checkoutThankYou)
     const isAddress = Boolean(addressMatch)
     const isPayment = Boolean(paymentMatch)
+    const isThankyou = Boolean(thankyouMatch)
 
     const { data: checkoutProductData } = useQuery({
         queryKey: ['checkout'],
@@ -35,63 +37,65 @@ export default function Checkout() {
                     <div className='col-span-6'>
                         <div className='pt-[49px] h-[100vh]'>
                             <h2 className='text-[28px]'>Hệ Thống Xe máy Hoàng Cầu</h2>
-                            <div className='flex items-center gap-[7px] text-[13px] mt-[7px]'>
-                                <div className='flex items-center gap-[7px]'>
-                                    <Link to={path.cart} className='text-[#2b78a0] '>
-                                        Giỏ hàng
-                                    </Link>
-                                    <svg
-                                        xmlns='http://www.w3.org/2000/svg'
-                                        fill='none'
-                                        viewBox='0 0 24 24'
-                                        strokeWidth={1.5}
-                                        stroke='currentColor'
-                                        className='w-3 h-3'
-                                    >
-                                        <path
-                                            strokeLinecap='round'
-                                            strokeLinejoin='round'
-                                            d='m8.25 4.5 7.5 7.5-7.5 7.5'
-                                        />
-                                    </svg>
+                            {!isThankyou && (
+                                <div className='flex items-center gap-[7px] text-[13px] mt-[7px]'>
+                                    <div className='flex items-center gap-[7px]'>
+                                        <Link to={path.cart} className='text-[#2b78a0] '>
+                                            Giỏ hàng
+                                        </Link>
+                                        <svg
+                                            xmlns='http://www.w3.org/2000/svg'
+                                            fill='none'
+                                            viewBox='0 0 24 24'
+                                            strokeWidth={1.5}
+                                            stroke='currentColor'
+                                            className='w-3 h-3'
+                                        >
+                                            <path
+                                                strokeLinecap='round'
+                                                strokeLinejoin='round'
+                                                d='m8.25 4.5 7.5 7.5-7.5 7.5'
+                                            />
+                                        </svg>
+                                    </div>
+                                    <div className='flex items-center gap-[7px]'>
+                                        <Link
+                                            to={path.checkoutAddress}
+                                            className={classNames('', {
+                                                'text-[#2b78a0] ': !isAddress,
+                                                'text-[#333333]': isAddress
+                                            })}
+                                        >
+                                            Thông tin vận chuyển
+                                        </Link>
+                                        <svg
+                                            xmlns='http://www.w3.org/2000/svg'
+                                            fill='none'
+                                            viewBox='0 0 24 24'
+                                            strokeWidth={1.5}
+                                            stroke='currentColor'
+                                            className='w-3 h-3'
+                                        >
+                                            <path
+                                                strokeLinecap='round'
+                                                strokeLinejoin='round'
+                                                d='m8.25 4.5 7.5 7.5-7.5 7.5'
+                                            />
+                                        </svg>
+                                    </div>
+                                    <div className='flex items-center gap-[7px]'>
+                                        <Link
+                                            to={path.checkoutPayment}
+                                            className={classNames('', {
+                                                'text-[#2b78a0] ': !isPayment,
+                                                'text-[#333333]': isPayment
+                                            })}
+                                        >
+                                            Phương thức thanh toán
+                                        </Link>
+                                    </div>
                                 </div>
-                                <div className='flex items-center gap-[7px]'>
-                                    <Link
-                                        to={path.checkoutAddress}
-                                        className={classNames('', {
-                                            'text-[#2b78a0] ': !isAddress,
-                                            'text-[#333333]': isAddress
-                                        })}
-                                    >
-                                        Thông tin vận chuyển
-                                    </Link>
-                                    <svg
-                                        xmlns='http://www.w3.org/2000/svg'
-                                        fill='none'
-                                        viewBox='0 0 24 24'
-                                        strokeWidth={1.5}
-                                        stroke='currentColor'
-                                        className='w-3 h-3'
-                                    >
-                                        <path
-                                            strokeLinecap='round'
-                                            strokeLinejoin='round'
-                                            d='m8.25 4.5 7.5 7.5-7.5 7.5'
-                                        />
-                                    </svg>
-                                </div>
-                                <div className='flex items-center gap-[7px]'>
-                                    <Link
-                                        to={path.checkoutPayment}
-                                        className={classNames('', {
-                                            'text-[#2b78a0] ': !isPayment,
-                                            'text-[#333333]': isPayment
-                                        })}
-                                    >
-                                        Phương thức thanh toán
-                                    </Link>
-                                </div>
-                            </div>
+                            )}
 
                             <Outlet />
                         </div>

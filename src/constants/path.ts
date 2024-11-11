@@ -12,5 +12,6 @@ export const path = {
     account: '/account',
     checkout: '/checkout',
     checkoutAddress: '/checkout/address',
-    checkoutPayment: '/checkout/payment'
+    checkoutPayment: '/checkout/payment',
+    checkoutThankYou: '/checkout/thankyou'
 }
