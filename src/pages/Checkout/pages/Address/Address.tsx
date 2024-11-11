@@ -22,7 +22,6 @@ export default function Address() {
     const {
         control,
         register,
-        reset,
         setValue,
         handleSubmit,
         formState: { errors }
@@ -154,6 +153,9 @@ export default function Address() {
                     </Button>
                 </div>
             </form>
+
+            <div className='w-full h-[1px] bg-[#e6e6e6] mt-[58px]'></div>
+            <p className='text-center text-[13px] text-[#333333] mt-[11px]'>Powered by Haravan</p>
         </div>
     )
 }
