@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import classNames from 'classnames'
 import keyBy from 'lodash/keyBy'
 import { useContext, useEffect, useMemo, useState } from 'react'
@@ -26,7 +26,6 @@ export default function Cart() {
         queryFn: () => cartApi.getCart()
     })
 
-    const queryClient = useQueryClient()
     const navigate = useNavigate()
     const productToCart = productInCartData?.data
 
@@ -41,7 +40,7 @@ export default function Cart() {
         }
     })
 
-    const { data: productInCheckoutData } = useQuery({
+    const { data: productInCheckoutData, refetch: refresh } = useQuery({
         queryKey: ['checkout'],
         queryFn: () => checkoutApi.getCheckout()
     })
@@ -167,24 +166,31 @@ export default function Cart() {
             checkedCart.map((checked, index) => {
                 if (versionCheckout?.includes(checked.version)) {
                     if (productCheckout) {
-                        updateCheckoutMutation.mutate({
-                            id: checked.id,
-                            body: {
-                                ...productCheckout[index],
-                                count:
-                                    checked.count + productCheckout[index].count > productCheckout[index].quantity
-                                        ? productCheckout[index].quantity
-                                        : checked.count + productCheckout[index].count,
-                                totalPrice:
-                                    (checked.count + productCheckout[index].count) * productCheckout[index].price
+                        updateCheckoutMutation.mutate(
+                            {
+                                id: checked.id,
+                                body: {
+                                    ...productCheckout[index],
+                                    count:
+                                        checked.count + productCheckout[index].count > productCheckout[index].quantity
+                                            ? productCheckout[index].quantity
+                                            : checked.count + productCheckout[index].count,
+                                    totalPrice:
+                                        (checked.count + productCheckout[index].count) * productCheckout[index].price
+                                }
+                            },
+                            {
+                                onSuccess: () => {
+                                    refresh()
+                                }
                             }
-                        })
+                        )
                     }
                     return
                 }
                 checkoutMutation.mutate(checked, {
                     onSuccess: () => {
-                        queryClient.invalidateQueries({ queryKey: ['checkout'] })
+                        refresh()
                     }
                 })
             })

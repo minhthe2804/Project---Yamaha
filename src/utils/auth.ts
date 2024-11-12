@@ -33,7 +33,6 @@ export const clearLS = () => {
     localStorage.removeItem('login_success')
     localStorage.removeItem('profile')
     localStorage.removeItem('checkout')
-    localStorage.removeItem('address')
     const clearLSEvent = new Event('clearLS')
     localStorageEventTarget.dispatchEvent(clearLSEvent)
 }

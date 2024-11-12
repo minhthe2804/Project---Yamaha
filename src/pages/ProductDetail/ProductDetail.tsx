@@ -21,6 +21,8 @@ import { CartType } from '~/types/cart.type'
 import { path } from '~/constants/path'
 import { toastNotify } from '~/constants/toastNotify'
 import { AppContext } from '~/contexts/app.context'
+import { checkoutApi } from '~/apis/checkout.api'
+import { setCheckoutFromLS } from '~/utils/auth'
 
 const cx = classNames.bind(styles)
 
@@ -36,7 +38,7 @@ export default function ProductDetail() {
     let count = 0 // khởi tạo biến đếm để fix lỗi spam nhiều vào button sẽ bị đơ thanh trượt
     const [activeImage, setActiveImage] = useState<string>('')
     const queryClient = useQueryClient()
-    const { isAuthenticated } = useContext(AppContext)
+    const { isAuthenticated, setIsCheckout } = useContext(AppContext)
 
     const navigate = useNavigate()
     // gọi api xem chi tiết sản phẩm
@@ -80,6 +82,27 @@ export default function ProductDetail() {
     const checkIdToCart = useMemo(
         () => productToCart?.find((cart) => cart.id === productData?.id),
         [productData?.id, productToCart]
+    )
+
+    const { data: productCheckoutInData, refetch } = useQuery({
+        queryKey: ['checkout'],
+        queryFn: () => checkoutApi.getCheckout()
+    })
+
+    const productCheckout = productCheckoutInData?.data
+
+    const addProductToCheckout = useMutation({
+        mutationFn: (body: CartType) => checkoutApi.addCheckout(body)
+    })
+
+    const updateCheckoutMutation = useMutation({
+        mutationFn: (bodyData: { id: string; body: CartType }) =>
+            checkoutApi.updateProducttoCheckout(bodyData.id, bodyData.body)
+    })
+
+    const getVersionCheckout = useMemo(
+        () => productCheckout?.find((checkout) => checkout.id === productData?.id && checkout.version === color),
+        [color, productCheckout, productData?.id]
     )
 
     useEffect(() => {
@@ -165,6 +188,13 @@ export default function ProductDetail() {
         }
     }
 
+    const versionCheckout = () => {
+        if (productCheckout) {
+            const checkProduct = productCheckout.some((checkout) => checkout.version === color)
+            return checkProduct
+        }
+    }
+
     const addToCart = () => {
         if (isAuthenticated) {
             if (productData) {
@@ -218,19 +248,48 @@ export default function ProductDetail() {
     const buyNow = () => {
         if (isAuthenticated) {
             if (productData) {
-                addToCartMutation.mutate({
-                    id: productData.id,
-                    title: productData.title,
-                    previewImage: activeImage,
-                    count: buyCount,
-                    price: productData.price,
-                    totalPrice: productData.price * buyCount,
-                    vendor: productData.vendor,
-                    version: color,
-                    quantity: productData.quantity
-                })
+                if (!versionCheckout()) {
+                    addProductToCheckout.mutate({
+                        id: productData.id,
+                        title: productData.title,
+                        previewImage: activeImage,
+                        count: buyCount,
+                        price: productData.price,
+                        totalPrice: productData.price * buyCount,
+                        vendor: productData.vendor,
+                        version: color,
+                        quantity: productData.quantity
+                    })
+                    setCheckoutFromLS('ok')
+                    setIsCheckout(true)
+                    navigate(path.checkout)
+                    return
+                }
+                updateCheckoutMutation.mutate(
+                    {
+                        id: getVersionCheckout?.id as string,
+                        body: {
+                            ...getVersionCheckout,
+                            count:
+                                (getVersionCheckout?.count as number) + buyCount > productData.quantity
+                                    ? productData.quantity
+                                    : (getVersionCheckout?.count as number) + buyCount,
+                            totalPrice:
+                                ((getVersionCheckout?.count as number) + buyCount) *
+                                (getVersionCheckout?.price as number)
+                        } as CartType
+                    },
+                    {
+                        onSuccess: () => {
+                            refetch()
+                        }
+                    }
+                )
+                setCheckoutFromLS('ok')
+                setIsCheckout(true)
                 navigate(path.checkout)
             }
+            return
         }
         navigate(path.login)
     }

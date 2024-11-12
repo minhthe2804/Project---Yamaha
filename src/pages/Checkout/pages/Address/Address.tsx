@@ -1,5 +1,5 @@
 import classNames from 'classnames'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUser } from '@fortawesome/free-solid-svg-icons'
 
@@ -12,7 +12,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import InputNumber from '~/components/InputNumber'
 import { useContext, useEffect } from 'react'
 import { AppContext } from '~/contexts/app.context'
-import { setAddressFromLS, setProfileFromLS } from '~/utils/auth'
+import { setProfileFromLS } from '~/utils/auth'
 import { useMutation } from '@tanstack/react-query'
 import { authApi } from '~/apis/auth.api'
 
@@ -34,6 +34,7 @@ export default function Address() {
         resolver: yupResolver(userSchema)
     })
 
+    const navigate = useNavigate()
     const updateProfileMutation = useMutation({
         mutationFn: (bodyData: {
             id: string
@@ -67,7 +68,7 @@ export default function Address() {
                 }
             )
             setIsAddress(true)
-            setAddressFromLS('ok')
+            navigate(path.checkoutPayment)
         }
     })
 

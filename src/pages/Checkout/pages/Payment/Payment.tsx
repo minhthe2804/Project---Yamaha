@@ -1,9 +1,63 @@
+import { useMutation, useQuery } from '@tanstack/react-query'
 import classNames from 'classnames'
-import { Link } from 'react-router-dom'
+import { useContext } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
+
+import { checkoutApi } from '~/apis/checkout.api'
+import { purcharseApi } from '~/apis/purcharse.api'
 import Button from '~/components/Button'
 import { path } from '~/constants/path'
+import { toastNotify } from '~/constants/toastNotify'
+import { AppContext } from '~/contexts/app.context'
+import { PurcharseType } from '~/types/purcharse.type'
+import { generateOrderId, getDateString, getTimeString } from '~/utils/utils'
 
 export default function Payment() {
+    const { profile, setIsThankyou, setProductInThankyou } = useContext(AppContext)
+
+    const navigate = useNavigate()
+    const { data: checkoutProductData } = useQuery({
+        queryKey: ['checkout'],
+        queryFn: () => checkoutApi.getCheckout()
+    })
+
+    const checkoutProduct = checkoutProductData?.data
+    const buyProductMutation = useMutation({
+        mutationFn: (body: PurcharseType) => purcharseApi.buyProducts(body)
+    })
+
+    const handlePayment = async () => {
+        if (checkoutProduct && profile) {
+            try {
+                const date = getDateString()
+                const time = getTimeString()
+                const order = generateOrderId()
+
+                const res = await Promise.all(
+                    checkoutProduct.map((checkout) =>
+                        buyProductMutation.mutateAsync({
+                            ...checkout,
+                            username: profile.username,
+                            address: profile.address as string,
+                            phone: profile.phone as string,
+                            date,
+                            time,
+                            order
+                        })
+                    )
+                )
+                setProductInThankyou((prev) => [...prev, ...res.map((response) => response.data)])
+                setIsThankyou(true)
+                toast.success(toastNotify.purcharse.buyProduct, { autoClose: 2000 })
+                navigate(path.checkoutThankYou)
+            } catch (error) {
+                console.error('Lỗi khi mua sản phẩm:', error)
+                toast.error('Đã xảy ra lỗi khi mua sản phẩm', { autoClose: 2000 })
+            }
+        }
+    }
+
     return (
         <div className=''>
             <p className='text-[18px] mt-[8px] text-[#333333]'>Phương thức vận chuyển</p>
@@ -53,7 +107,7 @@ export default function Payment() {
                         //         true
                         // }
                     )}
-                    // onClick={handleUpdate}
+                    onClick={handlePayment}
                     // isLoading={true}
                     // disabled={true}
                 >

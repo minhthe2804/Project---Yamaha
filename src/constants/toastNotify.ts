@@ -22,5 +22,8 @@ export const toastNotify = {
     cart: {
         updateCart: 'Bạn đã cập nhật sản phẩm trong giỏ hàng',
         deleteCart: 'Bạn đã xóa sản phẩm khỏi giỏ hàng'
+    },
+    purcharse: {
+        buyProduct: 'Bạn đã đặt hàng thành công'
     }
 }

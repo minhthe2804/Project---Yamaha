@@ -43,6 +43,12 @@ function AddressRoute() {
     return isAddress ? <Outlet /> : <Navigate to={path.checkoutAddress} />
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
+function ThankyouRoute() {
+    const { isThankyou } = useContext(AppContext)
+    return isThankyou ? <Outlet /> : <Navigate to={path.checkoutPayment} />
+}
+
 export default function useRouteElements() {
     const routeElements = useRoutes([
         {
@@ -147,8 +153,14 @@ export default function useRouteElements() {
                                             ]
                                         },
                                         {
-                                            path: path.checkoutThankYou,
-                                            element: <ThankYou />
+                                            path: '',
+                                            element: <ThankyouRoute />,
+                                            children: [
+                                                {
+                                                    path: path.checkoutThankYou,
+                                                    element: <ThankYou />
+                                                }
+                                            ]
                                         }
                                     ]
                                 }

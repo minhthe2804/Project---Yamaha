@@ -28,3 +28,24 @@ export const getIdFromNameId = (nameId: string) => {
     const arr = nameId.split('-i-')
     return arr[arr.length - 1]
 }
+
+export function generateOrderId() {
+    const randomPart = Math.random().toString(36).substring(2, 10).toUpperCase()
+    return `DH${randomPart}`
+}
+
+export function getDateString() {
+    const now = new Date()
+    const year = now.getFullYear()
+    const month = String(now.getMonth() + 1).padStart(2, '0') // Tháng bắt đầu từ 0, nên cần +1
+    const day = String(now.getDate()).padStart(2, '0')
+    return `${day}/${month}/${year}` // Kết quả: YYYYMMDD
+}
+
+export function getTimeString() {
+    const now = new Date()
+    const hours = String(now.getHours()).padStart(2, '0')
+    const minutes = String(now.getMinutes()).padStart(2, '0')
+    const seconds = String(now.getSeconds()).padStart(2, '0')
+    return `${hours}:${minutes}:${seconds}` // Kết quả: HHMMSS
+}
