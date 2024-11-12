@@ -50,23 +50,28 @@ export default function Address() {
     })
 
     const onSubmit = handleSubmit((data) => {
+        const { address, username, phone } = data
         if (profile) {
-            updateProfileMutation.mutate(
-                {
-                    id: profile.id,
-                    body: {
-                        ...profile,
-                        phone: data.phone as string,
-                        address: data.address
-                    }
-                },
-                {
-                    onSuccess: (data) => {
-                        setProfile(data.data)
-                        setProfileFromLS(data.data)
-                    }
+            updateProfileMutation.mutate({
+                id: profile.id,
+                body: {
+                    ...profile,
+                    phone: data.phone as string,
+                    address: data.address
                 }
-            )
+            })
+            setProfile({
+                ...profile,
+                username: username,
+                address: address,
+                phone: phone
+            })
+            setProfileFromLS({
+                ...profile,
+                username: username,
+                address: address,
+                phone: phone
+            })
             setIsAddress(true)
             navigate(path.checkoutPayment)
         }
@@ -80,6 +85,7 @@ export default function Address() {
         }
     }, [profile, setValue])
 
+    console.log(profile)
     return (
         <div>
             <p className='text-[18px] mt-[9px] text-[#333333]'>Thông tin thanh toán</p>
