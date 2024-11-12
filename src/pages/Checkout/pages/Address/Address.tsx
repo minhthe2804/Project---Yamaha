@@ -12,13 +12,25 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import InputNumber from '~/components/InputNumber'
 import { useContext, useEffect } from 'react'
 import { AppContext } from '~/contexts/app.context'
-import { setProfileFromLS } from '~/utils/auth'
-import { useMutation } from '@tanstack/react-query'
+import { clearLS, setProfileFromLS } from '~/utils/auth'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { authApi } from '~/apis/auth.api'
+import { checkoutApi } from '~/apis/checkout.api'
+import { cartApi } from '~/apis/cart.api'
+import { toastNotify } from '~/constants/toastNotify'
+import { toast } from 'react-toastify'
 
 type FormData = UserSchema
 export default function Address() {
-    const { setIsAddress, profile, setProfile } = useContext(AppContext)
+    const {
+        setIsAddress,
+        profile,
+        setProfile,
+        setIsAuthenticated,
+        setIsCheckout,
+        setIsThankyou,
+        setProductInThankyou
+    } = useContext(AppContext)
     const {
         control,
         register,
@@ -77,6 +89,33 @@ export default function Address() {
         }
     })
 
+    const { data: productInCartData, refetch } = useQuery({
+        queryKey: ['cart'],
+        queryFn: () => cartApi.getCart()
+    })
+
+    const deleteCartMutation = useMutation({
+        mutationFn: (id: string) => cartApi.deleteCart(id),
+        onSuccess: () => {
+            refetch()
+        }
+    })
+
+    const { data: checkoutProductData, refetch: refresh } = useQuery({
+        queryKey: ['checkout'],
+        queryFn: () => checkoutApi.getCheckout()
+    })
+
+    const deleteProductToCheckoutMutation = useMutation({
+        mutationFn: (id: string) => checkoutApi.deleteCheckout(id),
+        onSuccess: () => {
+            refresh()
+        }
+    })
+
+    const productToCart = productInCartData?.data
+    const checkoutProduct = checkoutProductData?.data
+
     useEffect(() => {
         if (profile) {
             setValue('username', profile.username)
@@ -85,7 +124,19 @@ export default function Address() {
         }
     }, [profile, setValue])
 
-    console.log(profile)
+    const handleLogout = () => {
+        clearLS()
+        setIsAuthenticated(false)
+        setProfile(null)
+        setIsCheckout(false)
+        setIsAddress(false)
+        setIsThankyou(false)
+        setProductInThankyou([])
+        productToCart?.map((cart) => deleteCartMutation.mutate(cart.id))
+        checkoutProduct?.map((checkout) => deleteProductToCheckoutMutation.mutate(checkout.id))
+        toast.success(toastNotify.logOut.logOutSuccess, { autoClose: 3000 })
+    }
+
     return (
         <div>
             <p className='text-[18px] mt-[9px] text-[#333333]'>Thông tin thanh toán</p>
@@ -94,8 +145,11 @@ export default function Address() {
                     <FontAwesomeIcon icon={faUser} className='text-white text-[20px]' />
                 </div>
                 <div className='flex flex-col text-[14px]'>
-                    <p className=' text-[#737373]'>rewrwe minh (minhthe280403@gmail.com)</p>
-                    <p className='text-[#2b78a0] hover:text-[#48b9f7] transtion duration-200 ease-in cursor-pointer'>
+                    <p className=' text-[#737373]'>{`${profile?.username} (${profile?.email})`}</p>
+                    <p
+                        className='text-[#2b78a0] hover:text-[#48b9f7] transtion duration-200 ease-in cursor-pointer'
+                        onClick={handleLogout}
+                    >
                         Đăng xuất
                     </p>
                 </div>
