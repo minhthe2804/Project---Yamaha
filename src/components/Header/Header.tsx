@@ -5,7 +5,7 @@ import { faMagnifyingGlass, faUser, faCartShopping } from '@fortawesome/free-sol
 import { useMutation, useQuery } from '@tanstack/react-query'
 import classNames from 'classnames/bind'
 import { useContext } from 'react'
-import { generateNameId } from '~/utils/utils'
+import { generateNameId, getLastPart } from '~/utils/utils'
 import Popover from '../Popover'
 import { navHeader } from '~/constants/navHeader'
 import styles from './Header.module.css'
@@ -244,7 +244,7 @@ export default function Header() {
                                                                     >
                                                                         {cart.title}
                                                                     </Link>
-                                                                    <p>Phiên bản: {cart.version}</p>
+                                                                    <p>Phiên bản: {getLastPart(cart.version)}</p>
                                                                     <p>Số lượng: {cart.count}</p>
                                                                     <p>Giá/sp: {formatCurrency(cart.price)}</p>
                                                                 </div>

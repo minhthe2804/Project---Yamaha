@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import classNames from 'classnames'
 import keyBy from 'lodash/keyBy'
 import { useContext, useEffect, useMemo, useState } from 'react'
@@ -15,7 +15,7 @@ import { breadCrumb } from '~/constants/breadCrumb'
 import { path } from '~/constants/path'
 import { AppContext } from '~/contexts/app.context'
 import { CartType } from '~/types/cart.type'
-import { formatCurrency, generateNameId } from '~/utils/utils'
+import { formatCurrency, generateCartId, generateNameId, getLastPart } from '~/utils/utils'
 import { setCheckoutFromLS } from '~/utils/auth'
 
 export default function Cart() {
@@ -26,6 +26,7 @@ export default function Cart() {
         queryFn: () => cartApi.getCart()
     })
 
+    const queryClient = useQueryClient()
     const navigate = useNavigate()
     const productToCart = productInCartData?.data
 
@@ -161,41 +162,50 @@ export default function Cart() {
 
     const versionCheckout = useMemo(() => productCheckout?.map((checkout) => checkout.version), [productCheckout])
 
+    const getVersionCheckout = (checked: CartType) => {
+        return productCheckout?.find((checkout) => checkout.version === checked.version)
+    }
+
     const handleCheckOut = () => {
         if (checkedCart.length > 0) {
-            checkedCart.map((checked, index) => {
+            checkedCart.map((checked) => {
                 if (versionCheckout?.includes(checked.version)) {
-                    if (productCheckout) {
-                        updateCheckoutMutation.mutate(
-                            {
-                                id: checked.id,
-                                body: {
-                                    ...productCheckout[index],
-                                    count:
-                                        checked.count + productCheckout[index].count > productCheckout[index].quantity
-                                            ? productCheckout[index].quantity
-                                            : checked.count + productCheckout[index].count,
-                                    totalPrice:
-                                        (checked.count + productCheckout[index].count) * productCheckout[index].price
-                                }
-                            },
-                            {
-                                onSuccess: () => {
-                                    refresh()
-                                }
+                    const getVersion = getVersionCheckout(checked)
+                    updateCheckoutMutation.mutate(
+                        {
+                            id: getVersion?.id as string,
+                            body: {
+                                ...checked,
+                                count:
+                                    checked.count + (getVersion?.count as number) > (getVersion?.quantity as number)
+                                        ? (getVersion?.quantity as number)
+                                        : checked.count + (getVersion?.count as number),
+                                totalPrice:
+                                    (checked.count + (getVersion?.count as number)) * (getVersion?.price as number)
                             }
-                        )
-                    }
+                        },
+                        {
+                            onSuccess: () => {
+                                queryClient.invalidateQueries({ queryKey: ['checkout'] })
+                                refresh()
+                            }
+                        }
+                    )
                     return
                 }
-                checkoutMutation.mutate(checked, {
-                    onSuccess: () => {
-                        refresh()
+                checkoutMutation.mutate(
+                    { ...checked, id: generateCartId() },
+                    {
+                        onSuccess: () => {
+                            queryClient.invalidateQueries({ queryKey: ['checkout'] })
+                            refresh()
+                        }
                     }
-                })
+                )
             })
             setCheckoutFromLS('ok')
             setIsCheckout(true)
+            refresh()
             checkedCart.map((cart) => deleteCartMutation.mutate(cart.id))
         }
         navigate(path.checkoutAddress)
@@ -256,7 +266,7 @@ export default function Cart() {
                                                         </p>
                                                     </Link>
                                                     <p className='mt-[31px] text-[15px] text-[#333333]'>
-                                                        Phiên bản: {cart.version}
+                                                        Phiên bản: {getLastPart(cart.version)}
                                                     </p>
                                                     <p className='mt-[31px] text-[15px] text-[#333333]'>
                                                         Thương hiệu: {cart.vendor}

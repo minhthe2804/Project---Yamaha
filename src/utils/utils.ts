@@ -49,3 +49,14 @@ export function getTimeString() {
     const seconds = String(now.getSeconds()).padStart(2, '0')
     return `${hours}:${minutes}:${seconds}` // Kết quả: HHMMSS
 }
+
+export function getLastPart(str: string) {
+    if (str.includes('/')) {
+        return str.split('/').pop()
+    }
+    return str
+}
+
+export const generateCartId = () => {
+    return `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`
+}

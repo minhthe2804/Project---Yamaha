@@ -3,7 +3,7 @@ import { Link, Outlet, useMatch } from 'react-router-dom'
 import { path } from '~/constants/path'
 
 import { useMemo } from 'react'
-import { formatCurrency } from '~/utils/utils'
+import { formatCurrency, getLastPart } from '~/utils/utils'
 import { useQuery } from '@tanstack/react-query'
 import { checkoutApi } from '~/apis/checkout.api'
 import classNames from 'classnames'
@@ -120,7 +120,7 @@ export default function Checkout() {
                                             <div className='flex flex-col text-[14px]'>
                                                 <p className=' text-[#4b4b4b]'>{checkout.title}</p>
                                                 <p className='text-[12px] text-[#969696]'>
-                                                    Phiên bản: {checkout.version}
+                                                    Phiên bản: {getLastPart(checkout.version)}
                                                 </p>
                                             </div>
                                         </div>

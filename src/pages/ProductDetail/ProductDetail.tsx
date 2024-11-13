@@ -11,7 +11,7 @@ import styles from './Product.module.css'
 import Button from '~/components/Button'
 import ProductTitle from '~/components/ProductTitle'
 import { productTitle } from '~/constants/productTitle'
-import { formatCurrency, getIdFromNameId } from '~/utils/utils'
+import { formatCurrency, generateCartId, getIdFromNameId } from '~/utils/utils'
 import productApi from '~/apis/product.api'
 import Product from '~/components/Products/components/Product'
 import { ProductsConfig } from '~/types/products.type'
@@ -79,10 +79,7 @@ export default function ProductDetail() {
 
     const productToCart = productInCartData?.data
 
-    const checkIdToCart = useMemo(
-        () => productToCart?.find((cart) => cart.id === productData?.id),
-        [productData?.id, productToCart]
-    )
+    const checkIdToCart = useMemo(() => productToCart?.find((cart) => cart.version === color), [color, productToCart])
 
     const { data: productCheckoutInData, refetch } = useQuery({
         queryKey: ['checkout'],
@@ -101,8 +98,8 @@ export default function ProductDetail() {
     })
 
     const getVersionCheckout = useMemo(
-        () => productCheckout?.find((checkout) => checkout.id === productData?.id && checkout.version === color),
-        [color, productCheckout, productData?.id]
+        () => productCheckout?.find((checkout) => checkout.version === color),
+        [color, productCheckout]
     )
 
     useEffect(() => {
@@ -181,18 +178,20 @@ export default function ProductDetail() {
         setByCount(value)
     }
 
+    const checkVersionToCart = useMemo(() => {
+        return productToCart?.map((cart) => cart.version)
+    }, [productToCart])
+
+    const checkVersionToCheckout = useMemo(() => {
+        return productCheckout?.map((checkout) => checkout.version)
+    }, [productCheckout])
+
     const checkProductToCart = () => {
-        if (productToCart) {
-            const checkProduct = productToCart.some((cart) => cart.version === color)
-            return checkProduct
-        }
+        return checkVersionToCart?.includes(color)
     }
 
     const versionCheckout = () => {
-        if (productCheckout) {
-            const checkProduct = productCheckout.some((checkout) => checkout.version === color)
-            return checkProduct
-        }
+        return checkVersionToCheckout?.includes(color)
     }
 
     const addToCart = () => {
@@ -201,7 +200,7 @@ export default function ProductDetail() {
                 if (!checkProductToCart()) {
                     addToCartMutation.mutate(
                         {
-                            id: productData.id,
+                            id: generateCartId(),
                             title: productData.title,
                             previewImage: activeImage,
                             count: buyCount,
@@ -250,7 +249,7 @@ export default function ProductDetail() {
             if (productData) {
                 if (!versionCheckout()) {
                     addProductToCheckout.mutate({
-                        id: productData.id,
+                        id: generateCartId(),
                         title: productData.title,
                         previewImage: activeImage,
                         count: buyCount,
