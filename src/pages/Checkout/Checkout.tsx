@@ -2,7 +2,7 @@ import { Link, Outlet, useMatch } from 'react-router-dom'
 
 import { path } from '~/constants/path'
 
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { formatCurrency, getLastPart } from '~/utils/utils'
 import { useQuery } from '@tanstack/react-query'
 import { checkoutApi } from '~/apis/checkout.api'
@@ -16,7 +16,7 @@ export default function Checkout() {
     const isPayment = Boolean(paymentMatch)
     const isThankyou = Boolean(thankyouMatch)
 
-    const { data: checkoutProductData } = useQuery({
+    const { data: checkoutProductData, refetch } = useQuery({
         queryKey: ['checkout'],
         queryFn: () => checkoutApi.getCheckout()
     })
@@ -29,6 +29,10 @@ export default function Checkout() {
             }, 0),
         [checkoutProduct]
     )
+
+    useEffect(() => {
+        refetch()
+    }, [])
 
     return (
         <div>
