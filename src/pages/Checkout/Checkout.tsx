@@ -1,12 +1,12 @@
 import { Link, Outlet, useMatch } from 'react-router-dom'
-
-import { path } from '~/constants/path'
+import classNames from 'classnames'
 
 import { useEffect, useMemo } from 'react'
 import { formatCurrency, getLastPart } from '~/utils/utils'
 import { useQuery } from '@tanstack/react-query'
 import { checkoutApi } from '~/apis/checkout.api'
-import classNames from 'classnames'
+import { path } from '~/constants/path'
+
 
 export default function Checkout() {
     const addressMatch = useMatch(path.checkoutAddress)
@@ -32,6 +32,7 @@ export default function Checkout() {
 
     useEffect(() => {
         refetch()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     return (
