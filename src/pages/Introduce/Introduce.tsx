@@ -1,5 +1,5 @@
 import BreadCrumb from '~/components/BreadCrumb'
-import { breadCrumb } from '~/constants/breadCrumb'
+import { breadCrumb } from '~/constants/BreadCrumb'
 
 export default function Introduce() {
     return (

@@ -1,5 +1,5 @@
 import BreadCrumb from '~/components/BreadCrumb'
-import { breadCrumb } from '~/constants/breadCrumb'
+import { breadCrumb } from '~/constants/BreadCrumb'
 import { contactinfo } from '~/constants/Contactinfo'
 
 export default function Contact() {

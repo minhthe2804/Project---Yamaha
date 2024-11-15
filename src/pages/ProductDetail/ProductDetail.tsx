@@ -6,7 +6,7 @@ import DOMPurify from 'dompurify'
 import { toast } from 'react-toastify'
 
 import BreadCrumb from '~/components/BreadCrumb'
-import { breadCrumb } from '~/constants/breadCrumb'
+import { breadCrumb } from '~/constants/BreadCrumb'
 import styles from './Product.module.css'
 import Button from '~/components/Button'
 import ProductTitle from '~/components/ProductTitle'

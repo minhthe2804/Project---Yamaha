@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useState } from 'react'
 
-import { breadCrumb } from '~/constants/breadCrumb'
+import { breadCrumb } from '~/constants/BreadCrumb'
 import BreadCrumb from '~/components/BreadCrumb'
 import { path } from '~/constants/path'
 import { Schema, schema as registerSchema } from '~/utils/rules'
