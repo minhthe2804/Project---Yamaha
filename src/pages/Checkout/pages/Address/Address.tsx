@@ -19,6 +19,7 @@ import { checkoutApi } from '~/apis/checkout.api'
 import { cartApi } from '~/apis/cart.api'
 import { toastNotify } from '~/constants/toastNotify'
 import { toast } from 'react-toastify'
+import { purcharseApi } from '~/apis/purcharse.api'
 
 type FormData = UserSchema
 export default function Address() {
@@ -113,8 +114,18 @@ export default function Address() {
         }
     })
 
+    const { data: productInPurcharseData } = useQuery({
+        queryKey: ['purcharse'],
+        queryFn: () => purcharseApi.getPurcharse()
+    })
+
+    const deletePurcharseMutation = useMutation({
+        mutationFn: (id: string) => purcharseApi.deleteProductInPurcharse(id)
+    })
+
     const productToCart = productInCartData?.data
     const checkoutProduct = checkoutProductData?.data
+    const productPurcharse = productInPurcharseData?.data
 
     useEffect(() => {
         if (profile) {
@@ -134,6 +145,7 @@ export default function Address() {
         setProductInThankyou([])
         productToCart?.map((cart) => deleteCartMutation.mutate(cart.id))
         checkoutProduct?.map((checkout) => deleteProductToCheckoutMutation.mutate(checkout.id))
+        productPurcharse?.map((purcharse) => deletePurcharseMutation.mutate(purcharse.id))
         toast.success(toastNotify.logOut.logOutSuccess, { autoClose: 3000 })
     }
 

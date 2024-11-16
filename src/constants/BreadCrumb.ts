@@ -30,5 +30,13 @@ export const breadCrumb = {
     contact: {
         heading: 'LIÊN HỆ',
         title: 'Trang chủ / Liên hệ'
+    },
+    updateProfile: {
+        heading: 'CẬP NHẬT THÔNG TIN',
+        title: 'Trang chủ / Cập nhật thông tin'
+    },
+    ChangePassword: {
+        heading: 'ĐỔI MẬT KHẨU',
+        title: 'Trang chủ / Đổi mật khẩu'
     }
 }

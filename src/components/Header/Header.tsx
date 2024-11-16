@@ -16,6 +16,7 @@ import { toastNotify } from '~/constants/toastNotify'
 import { cartApi } from '~/apis/cart.api'
 import { formatCurrency } from '~/utils/utils'
 import { checkoutApi } from '~/apis/checkout.api'
+import { purcharseApi } from '~/apis/purcharse.api'
 
 const cx = classNames.bind(styles)
 const MAX_CART = 3
@@ -55,9 +56,19 @@ export default function Header() {
         }
     })
 
+    const { data: productInPurcharseData } = useQuery({
+        queryKey: ['purcharse'],
+        queryFn: () => purcharseApi.getPurcharse()
+    })
+
+    const deletePurcharseMutation = useMutation({
+        mutationFn: (id: string) => purcharseApi.deleteProductInPurcharse(id)
+    })
+
     const productToCart = productInCartData?.data
     const checkoutProduct = checkoutProductData?.data
     const productDataCount = productToCart?.length
+    const productPurcharse = productInPurcharseData?.data
 
     const handleDelete = (id: string) => {
         deleteCartMutation.mutate(id)
@@ -74,6 +85,7 @@ export default function Header() {
         setProductInThankyou([])
         productToCart?.map((cart) => deleteCartMutation.mutate(cart.id))
         checkoutProduct?.map((checkout) => deleteProductToCheckoutMutation.mutate(checkout.id))
+        productPurcharse?.map((purcharse) => deletePurcharseMutation.mutate(purcharse.id))
         toast.success(toastNotify.logOut.logOutSuccess, { autoClose: 3000 })
     }
 

@@ -11,7 +11,7 @@ import { path } from '~/constants/path'
 import { toastNotify } from '~/constants/toastNotify'
 import { AppContext } from '~/contexts/app.context'
 import { PurcharseType } from '~/types/purcharse.type'
-import { generateOrderId, getDateString, getTimeString } from '~/utils/utils'
+import { generateCartId, generateOrderId, getDateString, getTimeString } from '~/utils/utils'
 
 export default function Payment() {
     const { profile, setIsThankyou, setProductInThankyou } = useContext(AppContext)
@@ -38,6 +38,7 @@ export default function Payment() {
                     checkoutProduct.map((checkout) =>
                         buyProductMutation.mutateAsync({
                             ...checkout,
+                            id: generateCartId(),
                             username: profile.username,
                             address: profile.address as string,
                             phone: profile.phone as string,

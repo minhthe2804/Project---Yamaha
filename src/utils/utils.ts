@@ -30,8 +30,9 @@ export const getIdFromNameId = (nameId: string) => {
 }
 
 export function generateOrderId() {
-    const randomPart = Math.random().toString(36).substring(2, 10).toUpperCase()
-    return `DH${randomPart}`
+    const timestamp = Date.now().toString(36).substring(4) // Lấy một phần của timestamp
+    const randomPart = Math.random().toString(36).substring(2, 2)
+    return `DH${timestamp}${randomPart}`.toUpperCase()
 }
 
 export function getDateString() {
