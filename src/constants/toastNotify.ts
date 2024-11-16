@@ -25,5 +25,8 @@ export const toastNotify = {
     },
     purcharse: {
         buyProduct: 'Bạn đã đặt hàng thành công'
+    },
+    updateProfile: {
+        updateSuccess: 'Bạn đã cập nhật thông tin thành công'
     }
 }
