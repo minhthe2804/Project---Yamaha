@@ -1,10 +1,109 @@
+import { yupResolver } from '@hookform/resolvers/yup'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import classNames from 'classnames'
+import { useContext, useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { toast } from 'react-toastify'
+import { authApi } from '~/apis/auth.api'
 import BreadCrumb from '~/components/BreadCrumb'
 import Button from '~/components/Button'
 import Input from '~/components/Input'
 import { breadCrumb } from '~/constants/BreadCrumb'
+import { toastNotify } from '~/constants/toastNotify'
+import { AppContext } from '~/contexts/app.context'
+import { setProfileFromLS } from '~/utils/auth'
+import { ChangePasswordSchema, changePasswordSchema } from '~/utils/rules'
 
+type FormData = ChangePasswordSchema
 export default function ChangePassword() {
+    const [errorPassword, setErrorPassword] = useState<string>('')
+    const { profile, setProfile } = useContext(AppContext)
+    const {
+        register,
+        setValue,
+        handleSubmit,
+        formState: { errors }
+    } = useForm<FormData>({
+        defaultValues: {
+            password: '',
+            new_password: '',
+            confirm_password: ''
+        },
+        resolver: yupResolver(changePasswordSchema)
+    })
+
+    const { data: dataUser, refetch } = useQuery({
+        queryKey: ['user'],
+        queryFn: () => authApi.login()
+    })
+
+    const changePasswordMutation = useMutation({
+        mutationFn: (bodyData: {
+            id: string
+            body: {
+                name: { firstname: string; lastname: string }
+                username: string
+                email: string
+                password: string
+                address: string
+                phone: string
+            }
+        }) => authApi.updateProfile(bodyData.id, bodyData.body)
+    })
+
+    const onSubmit = handleSubmit((data) => {
+        const { new_password } = data
+        const findUser = dataUser?.data.find((user) => user.email === profile?.email)
+        const comparePassword = findUser?.password === new_password
+        if (comparePassword) {
+            setErrorPassword(toastNotify.forgotPassword.passwordError)
+            return
+        }
+        if (findUser && profile) {
+            const bodyData = {
+                id: findUser.id,
+                body: {
+                    ...findUser,
+                    username: profile.username,
+                    address: profile.address as string,
+                    phone: profile.phone as string,
+                    password: new_password
+                }
+            }
+            changePasswordMutation.mutate(bodyData, {
+                onSuccess: () => {
+                    refetch()
+                    setValue('password', new_password)
+                    setValue('new_password', '')
+                    setValue('confirm_password', '')
+                }
+            })
+            setProfile({
+                ...profile,
+                username: profile.username,
+                address: profile.address as string,
+                phone: profile.phone as string,
+                password: new_password
+            })
+            setProfileFromLS({
+                ...profile,
+                username: profile.username,
+                address: profile.address as string,
+                phone: profile.phone as string,
+                password: new_password
+            })
+            toast.success(toastNotify.updateProfile.updateSuccess, {
+                autoClose: 2000
+            })
+        }
+    })
+
+    useEffect(() => {
+        if (profile) {
+            setValue('password', profile.password)
+        }
+    }, [profile, setValue])
+
     return (
         <div className='bg-[#f5f5f5] pb-16'>
             <BreadCrumb heading={breadCrumb.ChangePassword.heading} title={breadCrumb.ChangePassword.title} />
@@ -20,46 +119,49 @@ export default function ChangePassword() {
                     <p className='text-[14px] text-[#374151] mt-[3px]'>Quản lý thông tin hồ sơ để bảo mật tài khoản</p>
                     <div className='w-full h-[1px] bg-gray-200 mt-[22px]'></div>
 
-                    <form className='px-[48px] flex flex-col mt-[20px]'>
+                    <form className='px-[48px] flex flex-col mt-[20px]' onSubmit={onSubmit}>
                         <div className='flex items-center gap-[28px] text-[14px] text-[#4b5563] mt-[18px]'>
-                            <label className='w-[98px] text-right'>Mật khẩu cũ</label>
+                            <label className='w-[98px] text-right mt-[-24px]'>Mật khẩu cũ</label>
                             <Input
                                 classNameInput='w-full outline-none border-[1px] border-[#e6e6e6] rounded-[2px] py-[7px] px-[12px] placeholder:text-[13px] text-[#374151] focus:border-blue-400 transition duration-300 ease-in text-[14px]'
-                                classNameError='text-red-500 text-[13px] mt-[2px] '
-                                className='w-[70%]'
+                                classNameError='text-red-500 text-[13px] mt-[2px] min-h-[26px]'
+                                className='w-[70%] relative'
+                                name='password'
                                 placeholder='Mật khẩu cũ'
                                 type='password'
-                                // register={register}
-                                // type='text'
-                                // errorMessage={errors.username?.message}
+                                register={register}
+                                errorMessage={errors.password?.message}
                             />
                         </div>
-                        <div className='flex items-center gap-[28px] text-[14px] text-[#4b5563] mt-[18px]'>
-                            <label className='w-[98px] text-right'>Mật khẩu mới</label>
+                        <div className='flex items-center gap-[28px] text-[14px] text-[#4b5563]'>
+                            <label className='w-[98px] text-right mt-[-24px]'>Mật khẩu mới</label>
                             <Input
                                 classNameInput='w-full outline-none border-[1px] border-[#e6e6e6] rounded-[2px] py-[7px] px-[12px] placeholder:text-[13px] text-[#374151] focus:border-blue-400 transition duration-300 ease-in text-[14px]'
-                                classNameError='text-red-500 text-[13px] mt-[2px] '
-                                className='w-[70%]'
+                                classNameError='text-red-500 text-[13px] mt-[2px] min-h-[26px] '
+                                className='w-[70%] relative'
+                                name='new_password'
                                 placeholder='Mật khẩu mới'
                                 type='password'
-                                // register={register}
-                                // type='text'
-                                // errorMessage={errors.username?.message}
+                                register={register}
+                                errorMessage={errors.new_password?.message}
+                                errorPassword={errorPassword}
+                                setErrorPassword={setErrorPassword}
+                                inputPassword
                             />
                         </div>
-                        <div className='flex items-center gap-[28px] text-[14px] text-[#4b5563] mt-[18px]'>
-                            <label className='w-[98px] text-right whitespace-nowrap ml-[-15px]'>
+                        <div className='flex items-center gap-[28px] text-[14px] text-[#4b5563]'>
+                            <label className='w-[98px] text-right whitespace-nowrap ml-[-15px] mt-[-24px]'>
                                 Nhập lại mật khẩu
                             </label>
                             <Input
                                 classNameInput='w-full outline-none border-[1px] border-[#e6e6e6] rounded-[2px] py-[7px] px-[12px] placeholder:text-[13px] text-[#374151] focus:border-blue-400 transition duration-300 ease-in text-[14px] ml-[15px]'
-                                classNameError='text-red-500 text-[13px] mt-[2px] '
-                                className='w-[70%]'
+                                classNameError='text-red-500 text-[13px] mt-[2px] min-h-[26px] '
+                                className='w-[70%] relative'
+                                name='confirm_password'
                                 placeholder='Nhập lại mật khẩu'
                                 type='password'
-                                // register={register}
-                                // type='text'
-                                // errorMessage={errors.username?.message}
+                                register={register}
+                                errorMessage={errors.confirm_password?.message}
                             />
                         </div>
                         <Button
