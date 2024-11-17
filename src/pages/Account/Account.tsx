@@ -6,7 +6,7 @@ import BreadCrumb from '~/components/BreadCrumb'
 import { breadCrumb } from '~/constants/BreadCrumb'
 import { path } from '~/constants/path'
 import { AppContext } from '~/contexts/app.context'
-import { formatCurrency } from '~/utils/utils'
+import { formatCurrency, generateNameId } from '~/utils/utils'
 
 export default function Account() {
     const accountMatch = useMatch(path.account)
@@ -19,6 +19,7 @@ export default function Account() {
     })
 
     const productPurcharse = productInPurcharseData?.data
+
     return (
         <div>
             {isAccount && (
@@ -60,9 +61,20 @@ export default function Account() {
                                             </thead>
                                             <tbody>
                                                 {productPurcharse.map((purcharse) => (
-                                                    <tr className='text-black text-[15px] border-[1px] border-[#817f7f] text-left'>
+                                                    <tr
+                                                        className='text-black text-[15px] border-[1px] border-[#817f7f] text-left'
+                                                        key={purcharse.id}
+                                                    >
                                                         <td className='py-4 w-[105px] pl-[15px] border-r-[1px] border-[#817f7f] text-[#ff3237] hover:text-[#ff7f82] transition duration-200 ease-in '>
-                                                            <Link to={path.accountOder}>{`#${purcharse.order}`}</Link>
+                                                            <Link
+                                                                to={path.accountOder.replace(
+                                                                    ':nameId',
+                                                                    generateNameId({
+                                                                        name: purcharse.title,
+                                                                        id: purcharse.id
+                                                                    })
+                                                                )}
+                                                            >{`#${purcharse.order}`}</Link>
                                                         </td>
                                                         <td className='py-4w-[182px] pl-[15px] border-r-[1px] border-[#817f7f]'>
                                                             {`${purcharse.date} ${purcharse.time}`}

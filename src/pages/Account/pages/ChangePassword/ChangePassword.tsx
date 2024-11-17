@@ -166,15 +166,14 @@ export default function ChangePassword() {
                         </div>
                         <Button
                             className={classNames(
-                                'w-[80px] py-[8px] bg-[#2b78a0] rounded-[2px] text-[14px] font-[600] text-white hover:bg-[#42ade7] transition duration-200 ease-in flex items-center justify-center mt-[33px] ml-[127px]'
-                                // {
-                                //     'w-[203px] py-[17px] bg-[#2b78a0] opacity-[0.6] rounded-[4px] text-[14px] font-[600] text-white flex items-center justify-center':
-                                //         true
-                                // }
+                                'w-[80px] py-[8px] bg-[#2b78a0] rounded-[2px] text-[14px] font-[600] text-white hover:bg-[#42ade7] transition duration-200 ease-in flex items-center justify-center mt-[6px] ml-[127px]',
+                                {
+                                    'w-[80px] py-[17px] bg-[#2b78a0] opacity-[0.6] rounded-[4px] text-[14px] font-[600] text-white flex items-center justify-center':
+                                        changePasswordMutation.isPending
+                                }
                             )}
-                            // onClick={handleUpdate}
-                            // isLoading={true}
-                            // disabled={true}
+                            isLoading={changePasswordMutation.isPending}
+                            disabled={changePasswordMutation.isPending}
                         >
                             Lưu
                         </Button>

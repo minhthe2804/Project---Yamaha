@@ -1,9 +1,21 @@
-import { Link } from 'react-router-dom'
+import { useQuery } from '@tanstack/react-query'
+import { Link, useParams } from 'react-router-dom'
+import { purcharseApi } from '~/apis/purcharse.api'
 import BreadCrumb from '~/components/BreadCrumb'
 import { breadCrumb } from '~/constants/BreadCrumb'
 import { path } from '~/constants/path'
+import { formatCurrency, generateNameId, getIdFromNameId } from '~/utils/utils'
 
 export default function AccountOder() {
+    const { nameId } = useParams() // lấy param để tiến hành gọi api sản phẩm
+    const id = getIdFromNameId(nameId as string) // thực hiện loại bỏ những thành phần không cần thiết chỉ lấy mỗi id
+
+    const { data: productToPurcharse } = useQuery({
+        queryKey: ['purcharse', id],
+        queryFn: () => purcharseApi.getProductToPurcharse(id)
+    })
+
+    const productPurcharse = productToPurcharse?.data
     return (
         <div>
             <BreadCrumb heading={breadCrumb.login.heading} title={breadCrumb.login.title} />
@@ -24,10 +36,14 @@ export default function AccountOder() {
                 <div className='grid grid-cols-12 gap-[33px] pb-[74px]'>
                     <div className='col-span-8'>
                         <div className='w-full border-[2px] border-[#817f7f] pt-[18px] pb-[20px] pl-[9px] mt-[16px]'>
-                            <p className='uppercase font-[550] text-[#000bff] text-[16px]'>Đơn hàng #100431</p>
+                            <p className='uppercase font-[550] text-[#000bff] text-[16px]'>
+                                Đơn hàng #{productPurcharse?.order}
+                            </p>
                         </div>
 
-                        <p className='mt-[31px] text-[15px] text-[#333333]'>Ngày 11/11/2024 09:27:24</p>
+                        <p className='mt-[31px] text-[15px] text-[#333333]'>
+                            Ngày {`${productPurcharse?.date} ${productPurcharse?.time}`}
+                        </p>
                         <div className='w-full mt-[10px]'>
                             <table className='min-w-full'>
                                 <thead>
@@ -50,25 +66,39 @@ export default function AccountOder() {
                                 <tbody>
                                     <tr className='text-black text-[15px] border-[1px] border-[#817f7f] text-left'>
                                         <td className='py-4 w-[308px] pl-[15px] border-r-[1px] border-[#817f7f] text-[#ff3237] hover:text-[#ff7f82] transition duration-200 ease-in '>
-                                            <Link to={path.accountOder}>EXCITER 150 - Bản RC / Trắng Đỏ Đen</Link>
+                                            <Link
+                                                to={path.accountOder.replace(
+                                                    ':nameId',
+                                                    generateNameId({
+                                                        name: productPurcharse?.title as string,
+                                                        id: productPurcharse?.id as string
+                                                    })
+                                                )}
+                                            >
+                                                {productPurcharse?.title}
+                                            </Link>
                                         </td>
                                         <td className='py-4w-[135px] pl-[15px] border-r-[1px] border-[#817f7f]'>
-                                            #100431
+                                            {`#${productPurcharse?.order}`}
                                         </td>
                                         <td className='py-4 w-[125px] pl-[15px] border-r-[1px] border-[#817f7f]'>
-                                            44,000,000₫
+                                            {formatCurrency(productPurcharse?.price as number)}
                                         </td>
                                         <td className='py-4 w-[100px] pl-[15px] border-r-[1px] border-[#817f7f] text-right pr-[15px]'>
-                                            2
+                                            {productPurcharse?.count}
                                         </td>
-                                        <td className='py-4 w-[125px] pr-[15px] text-right'>88,000,000₫</td>
+                                        <td className='py-4 w-[125px] pr-[15px] text-right'>
+                                            {formatCurrency(productPurcharse?.totalPrice as number)}
+                                        </td>
                                     </tr>
 
                                     <tr className='text-black text-[15px] border-[1px] border-[#817f7f] text-left'>
                                         <td colSpan={4} className='py-4 pl-[15px] border-[1px] border-[#817f7f]'>
                                             Tạm tính
                                         </td>
-                                        <td className='py-4 w-[125px] pr-[15px] text-right'>88,000,000₫</td>
+                                        <td className='py-4 w-[125px] pr-[15px] text-right'>
+                                            {formatCurrency(productPurcharse?.totalPrice as number)}
+                                        </td>
                                     </tr>
 
                                     <tr className='text-black text-[15px] border-[1px] border-[#817f7f] text-left'>
@@ -82,7 +112,9 @@ export default function AccountOder() {
                                         <td colSpan={4} className='py-4 pl-[15px] border-[1px] border-[#817f7f] '>
                                             Tổng
                                         </td>
-                                        <td className='py-4 w-[125px] pr-[15px] text-right'>88,000,000₫</td>
+                                        <td className='py-4 w-[125px] pr-[15px] text-right'>
+                                            {formatCurrency(productPurcharse?.totalPrice as number)}
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -100,13 +132,16 @@ export default function AccountOder() {
                                 <span className='text-[14px] font-medium ml-2 text-[#ff3237]'>Chờ thanh toán</span>
                             </p>
                             <p className='text-[#4d4d4d] text-[15px] font-[550]'>
-                                Họ tên: <span className='text-[14px] font-medium ml-1'>minhthe</span>
+                                Họ tên:
+                                <span className='text-[14px] font-medium ml-1'>{productPurcharse?.username}</span>
                             </p>
                             <p className='text-[#4d4d4d] text-[15px] font-[550]'>
-                                Số điện thoại: <span className='text-[14px] font-medium ml-1'>0383395765</span>
+                                Số điện thoại:
+                                <span className='text-[14px] font-medium ml-1'>{productPurcharse?.phone}</span>
                             </p>
                             <p className='text-[#4d4d4d] text-[15px] font-[550]'>
-                                Địa chỉ: <span className='text-[14px] font-medium ml-1'>Hòa Bình</span>
+                                Địa chỉ:
+                                <span className='text-[14px] font-medium ml-1'>{productPurcharse?.address}</span>
                             </p>
                         </div>
                     </div>
