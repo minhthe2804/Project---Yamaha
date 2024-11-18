@@ -59,6 +59,7 @@ export default function Search() {
                                     { 'search-input': true }
                                 )}
                                 placeholder='Tìm kiếm ...'
+                                autoComplete='off'
                                 {...register('search')}
                                 onChange={(event) => handleSearch(event)}
                             />
@@ -89,7 +90,7 @@ export default function Search() {
                             {productSearch && searchProduct?.length === 0 && (
                                 <div className='flex w-full items-center ease-in'>
                                     <div className='flex items-center ml-1 hover:bg-gradient-to-r from-[#f9f9f9] to-[#e7e2e2d8] transition duration-200 justify-between text-sm w-full h-[40px] cursor-pointer pr-2'>
-                                        <p className=''>Không tìm thấy sản phẩm phù hợp</p>
+                                        <p className='ml-[10px]'>Không tìm thấy sản phẩm phù hợp</p>
                                     </div>
                                 </div>
                             )}
