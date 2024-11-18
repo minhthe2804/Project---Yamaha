@@ -20,6 +20,7 @@ import { cartApi } from '~/apis/cart.api'
 import { toastNotify } from '~/constants/toastNotify'
 import { toast } from 'react-toastify'
 import { purcharseApi } from '~/apis/purcharse.api'
+import { Helmet } from 'react-helmet-async'
 
 type FormData = UserSchema
 export default function Address() {
@@ -151,6 +152,10 @@ export default function Address() {
 
     return (
         <div>
+            <Helmet>
+                <title>Thông tin vận chuyển – Hệ Thống Xe máy Hoàng Cầu</title>
+                <meta name='description' content='Hệ Thống Xe máy Hoàng Cầu' />
+            </Helmet>
             <p className='text-[18px] mt-[9px] text-[#333333]'>Thông tin thanh toán</p>
             <div className='flex items-center gap-[14px] mt-[16px]'>
                 <div className='w-[50px] h-[50px] bg-slate-400 rounded-[8px] flex justify-center items-center'>

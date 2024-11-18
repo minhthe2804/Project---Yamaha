@@ -2,6 +2,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import classNames from 'classnames'
 import { useContext, useEffect, useState } from 'react'
+import { Helmet } from 'react-helmet-async'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 import { authApi } from '~/apis/auth.api'
@@ -106,6 +107,10 @@ export default function ChangePassword() {
 
     return (
         <div className='bg-[#f5f5f5] pb-16'>
+            <Helmet>
+                <title>Đổi mật khẩu – Hệ Thống Xe máy Hoàng Cầu</title>
+                <meta name='description' content='Hệ Thống Xe máy Hoàng Cầu' />
+            </Helmet>
             <BreadCrumb heading={breadCrumb.ChangePassword.heading} title={breadCrumb.ChangePassword.title} />
             <div className='max-w-[720px] mx-auto'>
                 <div className='w-full shadow pt-[18px] pb-[20px] pl-[9px] bg-white mt-[5px]'>

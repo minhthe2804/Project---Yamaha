@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import classNames from 'classnames'
 import { useEffect, useState } from 'react'
+import { Helmet } from 'react-helmet-async'
 import productApi from '~/apis/product.api'
 import BreadCrumb from '~/components/BreadCrumb'
 import Product from '~/components/Products/components/Product'
@@ -173,6 +174,10 @@ export default function ProductList() {
 
     return (
         <div>
+             <Helmet>
+                <title>Tất cả sản phẩm – Hệ Thống Xe máy Hoàng Cầu</title>
+                <meta name='description' content='Hệ Thống Xe máy Hoàng Cầu' />
+            </Helmet>
             <BreadCrumb heading={breadCrumb.productList.heading} title={breadCrumb.productList.title} />
             <div className='max-w-[1198px] mx-auto'>
                 <div className='grid grid-cols-12 gap-[33px] pb-[50px]'>

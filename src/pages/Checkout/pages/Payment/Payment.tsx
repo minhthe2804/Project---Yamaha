@@ -1,6 +1,7 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
 import classNames from 'classnames'
 import { useContext } from 'react'
+import { Helmet } from 'react-helmet-async'
 import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 
@@ -32,7 +33,6 @@ export default function Payment() {
             try {
                 const date = getDateString()
                 const time = getTimeString()
-                const order = generateOrderId()
 
                 const res = await Promise.all(
                     checkoutProduct.map((checkout) =>
@@ -44,7 +44,7 @@ export default function Payment() {
                             phone: profile.phone as string,
                             date,
                             time,
-                            order
+                            order: generateOrderId()
                         })
                     )
                 )
@@ -61,6 +61,10 @@ export default function Payment() {
 
     return (
         <div className=''>
+             <Helmet>
+                <title>Phương thức thanh toán – Hệ Thống Xe máy Hoàng Cầu</title>
+                <meta name='description' content='Hệ Thống Xe máy Hoàng Cầu' />
+            </Helmet>
             <p className='text-[18px] mt-[8px] text-[#333333]'>Phương thức vận chuyển</p>
             <div className='w-full border-[1px] border-[#e6e6e6] rounded-[4px] py-[17px] px-[20px] flex items-center justify-between mt-[16px]'>
                 <div className='flex items-center gap-[13px]'>

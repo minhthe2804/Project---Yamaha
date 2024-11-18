@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { useContext } from 'react'
+import { Helmet } from 'react-helmet-async'
 import { Link, Outlet, useMatch } from 'react-router-dom'
 import { purcharseApi } from '~/apis/purcharse.api'
 import BreadCrumb from '~/components/BreadCrumb'
@@ -22,6 +23,10 @@ export default function Account() {
 
     return (
         <div>
+            <Helmet>
+                <title>Tài khoản – Hệ Thống Xe máy Hoàng Cầu</title>
+                <meta name='description' content='Hệ Thống Xe máy Hoàng Cầu' />
+            </Helmet>
             {isAccount && (
                 <>
                     <BreadCrumb heading={breadCrumb.login.heading} title={breadCrumb.login.title} />

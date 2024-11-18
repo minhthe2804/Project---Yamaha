@@ -13,6 +13,7 @@ import { authApi } from '~/apis/auth.api'
 import { toast } from 'react-toastify'
 import { toastNotify } from '~/constants/toastNotify'
 import Button from '~/components/Button'
+import { Helmet } from 'react-helmet-async'
 
 type FormData = Schema
 export default function Register() {
@@ -80,6 +81,10 @@ export default function Register() {
 
     return (
         <div>
+             <Helmet>
+                <title>Đăng Kí – Hệ Thống Xe máy Hoàng Cầu</title>
+                <meta name='description' content='Hệ Thống Xe máy Hoàng Cầu' />
+            </Helmet>
             <BreadCrumb heading={breadCrumb.register.heading} title={breadCrumb.register.title} />
             <div className='flex justify-center pb-[78px]'>
                 <div className='w-[382px] flex flex-col'>

@@ -23,6 +23,7 @@ import { toastNotify } from '~/constants/toastNotify'
 import { AppContext } from '~/contexts/app.context'
 import { checkoutApi } from '~/apis/checkout.api'
 import { setCheckoutFromLS } from '~/utils/auth'
+import { Helmet } from 'react-helmet-async'
 
 const cx = classNames.bind(styles)
 
@@ -295,6 +296,10 @@ export default function ProductDetail() {
 
     return (
         <div className='pb-[152px]'>
+            <Helmet>
+                <title>{`${productData?.title}`} – Hệ Thống Xe máy Hoàng Cầu</title>
+                <meta name='description' content='Hệ Thống Xe máy Hoàng Cầu' />
+            </Helmet>
             <BreadCrumb heading={breadCrumb.productDetail.heading} title={breadCrumb.productDetail.title} />
             <div className='max-w-[1198px] mx-auto'>
                 <div className='grid grid-cols-12'>

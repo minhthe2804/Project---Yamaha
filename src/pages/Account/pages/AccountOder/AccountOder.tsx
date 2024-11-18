@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
+import { Helmet } from 'react-helmet-async'
 import { Link, useParams } from 'react-router-dom'
 import { purcharseApi } from '~/apis/purcharse.api'
 import BreadCrumb from '~/components/BreadCrumb'
@@ -18,6 +19,10 @@ export default function AccountOder() {
     const productPurcharse = productToPurcharse?.data
     return (
         <div>
+            <Helmet>
+                <title>{`#${productPurcharse?.order}`} – Hệ Thống Xe máy Hoàng Cầu</title>
+                <meta name='description' content='Hệ Thống Xe máy Hoàng Cầu' />
+            </Helmet>
             <BreadCrumb heading={breadCrumb.login.heading} title={breadCrumb.login.title} />
 
             <div className='max-w-[1198px] mx-auto'>

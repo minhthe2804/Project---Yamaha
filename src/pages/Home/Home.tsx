@@ -5,10 +5,15 @@ import Aboutus from '~/pages/Home/components/Aboutus'
 import Articles from './components/Articles'
 import Service from './components/Service'
 import Newsletters from './components/Newsletters'
+import { Helmet } from 'react-helmet-async'
 
 export default function Home() {
     return (
         <div>
+            <Helmet>
+                <title>Trang chủ – Hệ Thống Xe máy Hoàng Cầu</title>
+                <meta name='description' content='Hệ Thống Xe máy Hoàng Cầu' />
+            </Helmet>
             <Banner />
             <Products />
             <Policy />

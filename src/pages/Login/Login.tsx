@@ -1,6 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useQuery } from '@tanstack/react-query'
 import { useContext, useState } from 'react'
+import { Helmet } from 'react-helmet-async'
 import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
@@ -67,6 +68,10 @@ export default function Login() {
 
     return (
         <div>
+            <Helmet>
+                <title>Đăng Nhập – Hệ Thống Xe máy Hoàng Cầu</title>
+                <meta name='description' content='Hệ Thống Xe máy Hoàng Cầu' />
+            </Helmet>
             <BreadCrumb heading={breadCrumb.login.heading} title={breadCrumb.login.title} />
             <div className='flex justify-center pb-[78px]'>
                 <div className='w-[382px] flex flex-col'>

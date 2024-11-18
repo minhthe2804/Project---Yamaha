@@ -6,7 +6,7 @@ import { formatCurrency, getLastPart } from '~/utils/utils'
 import { useQuery } from '@tanstack/react-query'
 import { checkoutApi } from '~/apis/checkout.api'
 import { path } from '~/constants/path'
-
+import { Helmet } from 'react-helmet-async'
 
 export default function Checkout() {
     const addressMatch = useMatch(path.checkoutAddress)
@@ -32,11 +32,15 @@ export default function Checkout() {
 
     useEffect(() => {
         refetch()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     return (
         <div>
+            <Helmet>
+                <title>Thanh toán đơn hàng – Hệ Thống Xe máy Hoàng Cầu</title>
+                <meta name='description' content='Hệ Thống Xe máy Hoàng Cầu' />
+            </Helmet>
             <div className='pl-[132px]'>
                 <div className='grid grid-cols-12 gap-[67px]'>
                     <div className='col-span-6'>

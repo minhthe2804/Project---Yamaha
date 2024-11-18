@@ -17,6 +17,7 @@ import { AppContext } from '~/contexts/app.context'
 import { CartType } from '~/types/cart.type'
 import { formatCurrency, generateCartId, generateNameId, getLastPart } from '~/utils/utils'
 import { setCheckoutFromLS } from '~/utils/auth'
+import { Helmet } from 'react-helmet-async'
 
 export default function Cart() {
     const { extendedCart, setExtendedCart, setIsCheckout } = useContext(AppContext)
@@ -213,6 +214,10 @@ export default function Cart() {
 
     return (
         <div className='pb-[70px]'>
+            <Helmet>
+                <title>Giỏ hàng của bạn – Hệ Thống Xe máy Hoàng Cầu</title>
+                <meta name='description' content='Hệ Thống Xe máy Hoàng Cầu' />
+            </Helmet>
             <BreadCrumb heading={breadCrumb.cart.heading} title={breadCrumb.cart.title} />
             <div className='max-w-[1198px] mx-auto'>
                 <div className='w-full border-[2px] border-[#817f7f] uppercase text-[18px] text-[#000bff] font-[600] py-[20px] pl-[11px]'>

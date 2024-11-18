@@ -9,6 +9,7 @@ import { useContext } from 'react'
 import { AppContext } from '~/contexts/app.context'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { checkoutApi } from '~/apis/checkout.api'
+import { Helmet } from 'react-helmet-async'
 
 export default function ThankYou() {
     const { productInThankyou, setProductInThankyou, setIsThankyou, setIsAddress, setIsCheckout } =
@@ -44,6 +45,10 @@ export default function ThankYou() {
 
     return (
         <div>
+            <Helmet>
+                <title>Đặt hàng thành công – Hệ Thống Xe máy Hoàng Cầu</title>
+                <meta name='description' content='Hệ Thống Xe máy Hoàng Cầu' />
+            </Helmet>
             <div className='mt-[3px] text-[14px] relative'>
                 <p className='text-[20px]'>Đặt hàng thành công</p>
                 <p className='text-[#737373] mt-[-4px]'>{`Mã đơn hàng #${productInThankyou[0].order}`}</p>

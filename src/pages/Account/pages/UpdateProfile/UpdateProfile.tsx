@@ -2,6 +2,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { useMutation } from '@tanstack/react-query'
 import classNames from 'classnames'
 import { useContext, useEffect } from 'react'
+import { Helmet } from 'react-helmet-async'
 import { Controller, useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 
@@ -87,6 +88,10 @@ export default function UpdateProfile() {
 
     return (
         <div className='bg-[#f5f5f5] pb-16'>
+            <Helmet>
+                <title>Cập nhật thông tin – Hệ Thống Xe máy Hoàng Cầu</title>
+                <meta name='description' content='Hệ Thống Xe máy Hoàng Cầu' />
+            </Helmet>
             <BreadCrumb heading={breadCrumb.updateProfile.heading} title={breadCrumb.updateProfile.title} />
             <div className='max-w-[720px] mx-auto'>
                 <div className='w-full shadow pt-[18px] pb-[20px] pl-[9px] bg-white mt-[5px]'>

@@ -1,3 +1,4 @@
+import { Helmet } from 'react-helmet-async'
 import BreadCrumb from '~/components/BreadCrumb'
 import { breadCrumb } from '~/constants/BreadCrumb'
 import { contactinfo } from '~/constants/Contactinfo'
@@ -5,6 +6,10 @@ import { contactinfo } from '~/constants/Contactinfo'
 export default function Contact() {
     return (
         <div>
+            <Helmet>
+                <title>Liên hệ – Hệ Thống Xe máy Hoàng Cầu</title>
+                <meta name='description' content='Hệ Thống Xe máy Hoàng Cầu' />
+            </Helmet>
             <BreadCrumb heading={breadCrumb.contact.heading} title={breadCrumb.contact.title} />
             <div className='container mx-auto p w-[1198px]'>
                 <div className='border-2 border-gray-400 p-5'>
@@ -98,9 +103,8 @@ export default function Contact() {
                 </div>
                 <div className='pcontact-shoplist-wrapper pt-5 pb-28'>
                     <div className='grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-3 gap-4'>
-
                         {contactinfo.map((item, index) => (
-                            <div key={index } className='pcontact-shop-item'>
+                            <div key={index} className='pcontact-shop-item'>
                                 <div className='pcontact-shop-img overflow-hidden'>
                                     <img
                                         src={item.image}

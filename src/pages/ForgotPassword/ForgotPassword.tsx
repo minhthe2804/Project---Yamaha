@@ -1,6 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
+import { Helmet } from 'react-helmet-async'
 import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
@@ -87,6 +88,10 @@ export default function ForgotPassword() {
 
     return (
         <div>
+             <Helmet>
+                <title>Quên mật khẩu – Hệ Thống Xe máy Hoàng Cầu</title>
+                <meta name='description' content='Hệ Thống Xe máy Hoàng Cầu' />
+            </Helmet>
             <BreadCrumb heading={breadCrumb.forgotPassword.heading} title={breadCrumb.forgotPassword.title} />
             <div className='flex justify-center pb-[78px]'>
                 <div className='w-[382px] flex flex-col'>

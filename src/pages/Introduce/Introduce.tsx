@@ -1,9 +1,14 @@
+import { Helmet } from 'react-helmet-async'
 import BreadCrumb from '~/components/BreadCrumb'
 import { breadCrumb } from '~/constants/BreadCrumb'
 
 export default function Introduce() {
     return (
         <div>
+             <Helmet>
+                <title>Giới thiệu – Hệ Thống Xe máy Hoàng Cầu</title>
+                <meta name='description' content='Hệ Thống Xe máy Hoàng Cầu' />
+            </Helmet>
             <BreadCrumb heading={breadCrumb.introduce.heading} title={breadCrumb.introduce.title} />
 
             <section id='page-wrapper'>
