@@ -13,7 +13,8 @@ export const schema = yup.object({
         .string()
         .required('Mật khẩu là bắt buộc')
         .min(6, 'Độ dài từ 6 - 160 ký tự')
-        .max(160, 'Độ dài từ 6 - 160 ký tự')
+        .max(160, 'Độ dài từ 6 - 160 ký tự'),
+    search: yup.string().trim().required('Tên sản phẩm là bắt buộc')
 })
 
 export const userSchema = yup.object({

@@ -1,14 +1,13 @@
 import { path } from '~/constants/path'
 import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faMagnifyingGlass, faUser, faCartShopping } from '@fortawesome/free-solid-svg-icons'
+import { faUser, faCartShopping } from '@fortawesome/free-solid-svg-icons'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import classNames from 'classnames/bind'
+
 import { useContext } from 'react'
 import { generateNameId, getLastPart } from '~/utils/utils'
 import Popover from '../Popover'
 import { navHeader } from '~/constants/navHeader'
-import styles from './Header.module.css'
 import { AppContext } from '~/contexts/app.context'
 import { clearLS } from '~/utils/auth'
 import { toast } from 'react-toastify'
@@ -17,8 +16,8 @@ import { cartApi } from '~/apis/cart.api'
 import { formatCurrency } from '~/utils/utils'
 import { checkoutApi } from '~/apis/checkout.api'
 import { purcharseApi } from '~/apis/purcharse.api'
+import Search from '../Search'
 
-const cx = classNames.bind(styles)
 const MAX_CART = 3
 export default function Header() {
     const {
@@ -127,50 +126,7 @@ export default function Header() {
                     </nav>
                     <div className='col-span-2'>
                         <div className='mt-[17px] ml-[95px] flex text-white '>
-                            <Popover
-                                className='relative cursor-pointer hover:text-[#b80319] transition duration-300 ease-in-out pb-5 px-3'
-                                renderPopover={
-                                    <div className='rounded-md w-[500px] h-[40px] bg-[#b80319]'>
-                                        <form className='flex flex-shrink-0 w-full h-full items-center'>
-                                            <input
-                                                type='text'
-                                                className={cx(
-                                                    'text-sm font-[400] rounded-md w-full h-full bg-transparent outline-none border-none text-white pl-[15px]',
-                                                    { 'search-input': true }
-                                                )}
-                                                placeholder='Tìm kiếm ...'
-                                            />
-                                            <div className='w-[30px] text-center cursor-pointer text-white'>
-                                                <FontAwesomeIcon className='text-[15px]' icon={faMagnifyingGlass} />
-                                            </div>
-                                        </form>
-                                        <div className='bg-white w-full shadow-md'>
-                                            {[0, 0, 0].map((_, index) => (
-                                                <div className='flex w-full items-center ease-in' key={index}>
-                                                    <img
-                                                        src='https://product.hstatic.net/200000281285/product/r15_-_den_nham_a2c029016f4d4fa2a27994fc2fd09110_icon.png'
-                                                        alt=''
-                                                        className='w-[50px] hover:bg-slate-300 transition duration-200 ease-in cursor-pointer'
-                                                    />
-                                                    <div className='flex items-center ml-1 hover:bg-gradient-to-r from-[#f9f9f9] to-[#e7e2e2d8] transition duration-200 justify-between text-sm w-full h-[40px] cursor-pointer pr-2'>
-                                                        <p className=''>Yamaha</p>
-                                                        <p className=''>10.000.000đ</p>
-                                                    </div>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
-                                }
-                                placement='bottom-end'
-                                as='div'
-                                blogTop={75}
-                                blogRight={135}
-                                arrowRight={15}
-                                arrowTop={0}
-                                transformOrigin='410'
-                            >
-                                <FontAwesomeIcon className='text-[17px] ' icon={faMagnifyingGlass} />
-                            </Popover>
+                            <Search />
                             <Popover
                                 className='cursor-pointer hover:text-[#b80319] transition duration-300 ease-in-out pb-5 px-3'
                                 renderPopover={

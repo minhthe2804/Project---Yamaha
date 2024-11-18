@@ -1,7 +1,10 @@
 import { useRef, useState, useId, type ElementType } from 'react'
 import { FloatingPortal, arrow, offset, shift, useFloating, type Placement } from '@floating-ui/react-dom-interactions'
 import { motion, AnimatePresence } from 'framer-motion'
+import { UseFormReset } from 'react-hook-form'
+import { Schema } from '~/utils/rules'
 
+type FormData = Pick<Schema, 'search'>
 interface Props {
     children: React.ReactNode
     renderPopover: React.ReactNode
@@ -14,6 +17,8 @@ interface Props {
     arrowRight?: number
     arrowTop?: number
     transformOrigin?: string
+    setProductSearch?: React.Dispatch<React.SetStateAction<string>>
+    reset?: UseFormReset<FormData>
 }
 
 export default function Popover({
@@ -27,7 +32,9 @@ export default function Popover({
     blogRight,
     arrowRight,
     arrowTop,
-    transformOrigin
+    transformOrigin,
+    setProductSearch,
+    reset
 }: Props) {
     const [open, setOpen] = useState(initialOpen || false)
     const arrowRef = useRef<HTMLElement>(null)
@@ -44,6 +51,10 @@ export default function Popover({
 
     const hidePopover = () => {
         setOpen(false)
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+        setProductSearch && setProductSearch('')
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+        reset && reset()
     }
 
     return (
