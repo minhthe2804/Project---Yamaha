@@ -143,9 +143,10 @@ export default function ProductList() {
                     setProductData(sortedProducts)
                     return
                 }
-                const filteredProducts = productListData.data.filter(
-                    (product) =>
-                        product.price >= Number(minPrice || 0) && product.price <= Number(maxPrice || 128000000)
+                const filteredProducts = productListData.data.filter((product) =>
+                    implement < 100000000
+                        ? product.price >= Number(minPrice || 0) && product.price <= Number(maxPrice || 100000000)
+                        : product.price >= Number(maxPrice || 100000000)
                 )
                 const sortedProducts = filteredProducts.sort((a, b) => {
                     return a.price - b.price
@@ -164,8 +165,10 @@ export default function ProductList() {
                 setProductData(sortedProducts)
                 return
             }
-            const filteredProducts = productListData.data.filter(
-                (product) => product.price >= Number(minPrice || 0) && product.price <= Number(maxPrice || 128000000)
+            const filteredProducts = productListData.data.filter((product) =>
+                implement < 100000000
+                    ? product.price >= Number(minPrice || 0) && product.price <= Number(maxPrice || 100000000)
+                    : product.price >= Number(maxPrice || 100000000)
             )
             const sortedProducts = filteredProducts.sort((a, b) => b.price - a.price)
             setProductData(sortedProducts)
@@ -174,7 +177,7 @@ export default function ProductList() {
 
     return (
         <div>
-             <Helmet>
+            <Helmet>
                 <title>Tất cả sản phẩm – Hệ Thống Xe máy Hoàng Cầu</title>
                 <meta name='description' content='Hệ Thống Xe máy Hoàng Cầu' />
             </Helmet>
