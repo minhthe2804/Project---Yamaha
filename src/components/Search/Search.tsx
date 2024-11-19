@@ -33,7 +33,7 @@ export default function Search() {
 
     const productsData = productListData?.data
     const searchProduct = useMemo(() => {
-        return productsData?.filter((product) => product.title.slice(0, 2) === productSearch.toUpperCase())
+        return productsData?.filter((product) => product.title.slice(0, 2) === productSearch.slice(0, 2).toUpperCase())
     }, [productSearch, productsData])
 
     const onSubmitSearch = handleSubmit((data) => {
@@ -43,6 +43,11 @@ export default function Search() {
 
     const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
         setProductSearch(event.target.value)
+    }
+
+    const handleResetSearch = () => {
+        setProductSearch('')
+        reset()
     }
 
     return (
@@ -63,8 +68,20 @@ export default function Search() {
                                 {...register('search')}
                                 onChange={(event) => handleSearch(event)}
                             />
-                            <div className='w-[30px] text-center cursor-pointer text-white'>
-                                <FontAwesomeIcon className='text-[15px]' icon={faMagnifyingGlass} />
+                            <svg
+                                xmlns='http://www.w3.org/2000/svg'
+                                fill='none'
+                                viewBox='0 0 24 24'
+                                strokeWidth={1.5}
+                                stroke='currentColor'
+                                className='w-6 cursor-pointer mr-[5px]'
+                                onClick={handleResetSearch}
+                            >
+                                <path strokeLinecap='round' strokeLinejoin='round' d='M6 18 18 6M6 6l12 12' />
+                            </svg>
+
+                            <div className='w-[40px] text-center cursor-pointer text-white border-l-[1px] border-white h-[30px] flex items-center justify-center'>
+                                <FontAwesomeIcon className='text-[16px]' icon={faMagnifyingGlass} />
                             </div>
                         </form>
                         <div className='bg-white w-full shadow-md'>
