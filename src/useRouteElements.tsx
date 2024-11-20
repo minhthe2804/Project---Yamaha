@@ -1,17 +1,18 @@
+/* eslint-disable react-refresh/only-export-components */
 import { Navigate, Outlet, useRoutes } from 'react-router-dom'
 import { useContext } from 'react'
 
 import MainLayout from './Layouts/MainLayout'
-import Home from './pages/Home'
 import { path } from './constants/path'
+import { AppContext } from './contexts/app.context'
+import Home from './pages/Home'
 import ProductList from './pages/ProductList'
 import Register from './pages/Register'
 import Login from './pages/Login'
-import ProductDetail from './pages/ProductDetail'
 import ForgotPassword from './pages/ForgotPassword'
+import ProductDetail from './pages/ProductDetail'
 import Cart from './pages/Cart'
 import Account from './pages/Account'
-import { AppContext } from './contexts/app.context'
 import Checkout from './pages/Checkout'
 import Introduce from './pages/Introduce'
 import Contact from './pages/Contact'
@@ -22,31 +23,26 @@ import AccountOder from './pages/Account/pages/AccountOder'
 import ChangePassword from './pages/Account/pages/ChangePassword'
 import UpdateProfile from './pages/Account/pages/UpdateProfile'
 
-// eslint-disable-next-line react-refresh/only-export-components
 function ProtectedRoute() {
     const { isAuthenticated } = useContext(AppContext)
     return isAuthenticated ? <Outlet /> : <Navigate to={path.login} />
 }
 
-// eslint-disable-next-line react-refresh/only-export-components
 function RejectedRoute() {
     const { isAuthenticated } = useContext(AppContext)
     return !isAuthenticated ? <Outlet /> : <Navigate to={path.home} />
 }
 
-// eslint-disable-next-line react-refresh/only-export-components
 function CheckoutRoute() {
     const { isCheckout } = useContext(AppContext)
     return isCheckout ? <Outlet /> : <Navigate to={path.cart} />
 }
 
-// eslint-disable-next-line react-refresh/only-export-components
 function AddressRoute() {
     const { isAddress } = useContext(AppContext)
     return isAddress ? <Outlet /> : <Navigate to={path.checkoutAddress} />
 }
 
-// eslint-disable-next-line react-refresh/only-export-components
 function ThankyouRoute() {
     const { isThankyou } = useContext(AppContext)
     return isThankyou ? <Outlet /> : <Navigate to={path.checkoutPayment} />

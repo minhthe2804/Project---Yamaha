@@ -61,7 +61,7 @@ export default function Payment() {
 
     return (
         <div className=''>
-             <Helmet>
+            <Helmet>
                 <title>Phương thức thanh toán – Hệ Thống Xe máy Hoàng Cầu</title>
                 <meta name='description' content='Hệ Thống Xe máy Hoàng Cầu' />
             </Helmet>

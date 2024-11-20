@@ -60,7 +60,6 @@ export default function Input({
         return rest.type
     }
 
-    console.log(changepasswordMatch)
     return (
         <div className={className}>
             <input
