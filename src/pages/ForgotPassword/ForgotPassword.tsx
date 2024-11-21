@@ -80,7 +80,7 @@ export default function ForgotPassword() {
                 reset()
                 navigate(path.login)
                 toast.success(toastNotify.forgotPassword.changePasswordSuccess, {
-                    autoClose: 3000
+                    autoClose: 2000
                 })
             }
         })

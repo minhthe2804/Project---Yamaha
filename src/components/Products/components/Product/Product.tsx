@@ -88,7 +88,7 @@ export default function Product({ product, border = '[#f0efef]' }: Props) {
                         },
                         {
                             onSuccess: () => {
-                                toast.success(toastNotify.productDetail.addtoCartSuccess, { autoClose: 3000 })
+                                toast.success(toastNotify.productDetail.addtoCartSuccess, { autoClose: 2000 })
                                 queryClient.invalidateQueries({ queryKey: ['cart'] })
                             }
                         }
@@ -109,7 +109,7 @@ export default function Product({ product, border = '[#f0efef]' }: Props) {
                     },
                     {
                         onSuccess: () => {
-                            toast.success(toastNotify.productDetail.addtoCartSuccess, { autoClose: 3000 })
+                            toast.success(toastNotify.productDetail.addtoCartSuccess, { autoClose: 2000 })
                             refetch()
                         }
                     }

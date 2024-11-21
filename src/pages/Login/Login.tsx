@@ -63,7 +63,7 @@ export default function Login() {
         setProfile(findUser)
         reset()
         navigate(path.home)
-        toast.success(toastNotify.login.loginSuccess, { autoClose: 3000 })
+        toast.success(toastNotify.login.loginSuccess, { autoClose: 2000 })
     })
 
     return (

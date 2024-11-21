@@ -85,7 +85,7 @@ export default function Header() {
         productToCart?.map((cart) => deleteCartMutation.mutate(cart.id))
         checkoutProduct?.map((checkout) => deleteProductToCheckoutMutation.mutate(checkout.id))
         productPurcharse?.map((purcharse) => deletePurcharseMutation.mutate(purcharse.id))
-        toast.success(toastNotify.logOut.logOutSuccess, { autoClose: 3000 })
+        toast.success(toastNotify.logOut.logOutSuccess, { autoClose: 2000 })
     }
 
     return (
