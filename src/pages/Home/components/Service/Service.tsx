@@ -1,11 +1,11 @@
-import { useState } from 'react';
-import ProductTitle from '~/components/ProductTitle/ProductTitle';
-import { productTitle } from '~/constants/productTitle';
-import { serviceinfo } from '~/constants/serviceinfo';
-import 'animate.css';
+import { useState } from 'react'
+import ProductTitle from '~/components/ProductTitle/ProductTitle'
+import { productTitle } from '~/constants/productTitle'
+import { serviceinfo } from '~/constants/serviceinfo'
+import 'animate.css'
 
 function Service() {
-    const [activeIndex, setActiveIndex] = useState<number | null>(null);
+    const [activeIndex, setActiveIndex] = useState<number | null>(null)
 
     return (
         <div id='service' className='text-white bg-[#181b23] relative max-h-[500px] py-[100px]'>
@@ -51,14 +51,9 @@ function Service() {
                                         >
                                             <div className='service-img relative mt-4'>
                                                 <img
-                                                    src={service.img}
+                                                    src={(activeIndex === index && service.hoverImg) || service.img}
                                                     alt={service.title}
                                                     className='w-[64px] h-[64px] mx-auto mb-[30px] transition-opacity duration-300 absolute inset-0'
-                                                />
-                                                <img
-                                                    src={service.hoverImg}
-                                                    alt={service.title}
-                                                    className='w-[64px] h-[64px] mx-auto mb-[30px] transition-opacity duration-300 opacity-0 group-hover:opacity-100 absolute inset-0'
                                                 />
                                             </div>
                                             <div className='service-content mt-28 text-center'>
@@ -76,6 +71,7 @@ function Service() {
                                                             : 'opacity-0'
                                                     }`}
                                                     style={{ display: activeIndex === index ? 'block' : 'none' }}
+                                                    onClick={(event) => event.preventDefault()}
                                                 >
                                                     Xem thêm
                                                 </a>
@@ -92,4 +88,4 @@ function Service() {
     )
 }
 
-export default Service;
+export default Service

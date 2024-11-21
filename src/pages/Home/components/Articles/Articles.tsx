@@ -117,6 +117,7 @@ function Articles() {
                                                 <a
                                                     href=''
                                                     className='bg-[#315aa6] rounded-[30px] text-center hover:bg-[#ff3237] hover:shadow-[0_0_20px_10px_rgba(255,50,55,0.3)] text-white font-bold py-[10px] px-[50px] transition duration-200 ease-in'
+                                                    onClick={(event) => event.preventDefault()}
                                                 >
                                                     Xem thêm
                                                 </a>
