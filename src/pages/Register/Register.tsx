@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useState } from 'react'
 
-import { breadCrumb } from '~/constants/BreadCrumb'
+import { breadCrumb } from '~/constants/breadCrumb'
 import BreadCrumb from '~/components/BreadCrumb'
 import { path } from '~/constants/path'
 import { Schema, schema as registerSchema } from '~/utils/rules'
@@ -81,7 +81,7 @@ export default function Register() {
 
     return (
         <div>
-             <Helmet>
+            <Helmet>
                 <title>Đăng Kí – Hệ Thống Xe máy Hoàng Cầu</title>
                 <meta name='description' content='Hệ Thống Xe máy Hoàng Cầu' />
             </Helmet>

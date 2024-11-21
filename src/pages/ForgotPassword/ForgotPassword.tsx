@@ -10,7 +10,7 @@ import { authApi } from '~/apis/auth.api'
 import BreadCrumb from '~/components/BreadCrumb'
 import Button from '~/components/Button'
 import Input from '~/components/Input'
-import { breadCrumb } from '~/constants/BreadCrumb'
+import { breadCrumb } from '~/constants/breadCrumb'
 import { path } from '~/constants/path'
 import { toastNotify } from '~/constants/toastNotify'
 import { Schema, schema } from '~/utils/rules'
@@ -88,7 +88,7 @@ export default function ForgotPassword() {
 
     return (
         <div>
-             <Helmet>
+            <Helmet>
                 <title>Quên mật khẩu – Hệ Thống Xe máy Hoàng Cầu</title>
                 <meta name='description' content='Hệ Thống Xe máy Hoàng Cầu' />
             </Helmet>

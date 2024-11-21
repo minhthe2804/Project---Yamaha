@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import ProductTitle from '~/components/ProductTitle/ProductTitle';
 import { productTitle } from '~/constants/productTitle';
-import { serviceinfo } from '~/constants/Serviceinfo';
+import { serviceinfo } from '~/constants/serviceinfo';
 import 'animate.css';
 
 function Service() {

@@ -1,5 +1,5 @@
 import { path } from '~/constants/path'
-import { Link } from 'react-router-dom'
+import { Link, useMatch } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUser, faCartShopping } from '@fortawesome/free-solid-svg-icons'
 import { useMutation, useQuery } from '@tanstack/react-query'
@@ -30,6 +30,8 @@ export default function Header() {
         setIsThankyou,
         setProductInThankyou
     } = useContext(AppContext)
+    const homeMatch = useMatch(path.home)
+    const isHome = Boolean(homeMatch)
 
     const { data: productInCartData, refetch } = useQuery({
         queryKey: ['cart'],
@@ -113,12 +115,21 @@ export default function Header() {
                                     </li>
                                 ) : (
                                     <li className='pl-[20px] flex items-center group' key={index}>
-                                        <a
-                                            href={nav.href}
-                                            className='text-sm font-[550] text-white group-hover:text-[#b80319] transition duration-300 ease-in-out'
-                                        >
-                                            {nav.name}
-                                        </a>
+                                        {isHome ? (
+                                            <a
+                                                href={nav.href}
+                                                className='text-sm font-[550] text-white group-hover:text-[#b80319] transition duration-300 ease-in-out'
+                                            >
+                                                {nav.name}
+                                            </a>
+                                        ) : (
+                                            <Link
+                                                to={path.home}
+                                                className='text-sm font-[550] text-white group-hover:text-[#b80319] transition duration-300 ease-in-out'
+                                            >
+                                                {nav.name}
+                                            </Link>
+                                        )}
                                     </li>
                                 )
                             )}

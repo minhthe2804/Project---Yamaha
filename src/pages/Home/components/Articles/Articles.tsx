@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 import classNames from 'classnames/bind'
 import ProductTitle from '~/components/ProductTitle/ProductTitle'
 import { productTitle } from '~/constants/productTitle'
-import { articlesinfo } from '~/constants/Articlesinfo'
+import { articlesinfo } from '~/constants/articlesinfo'
 import styles from './Articles.module.css'
 
 import { useRef } from 'react'

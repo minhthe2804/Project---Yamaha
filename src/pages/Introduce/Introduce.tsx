@@ -1,11 +1,11 @@
 import { Helmet } from 'react-helmet-async'
 import BreadCrumb from '~/components/BreadCrumb'
-import { breadCrumb } from '~/constants/BreadCrumb'
+import { breadCrumb } from '~/constants/breadCrumb'
 
 export default function Introduce() {
     return (
         <div>
-             <Helmet>
+            <Helmet>
                 <title>Giới thiệu – Hệ Thống Xe máy Hoàng Cầu</title>
                 <meta name='description' content='Hệ Thống Xe máy Hoàng Cầu' />
             </Helmet>

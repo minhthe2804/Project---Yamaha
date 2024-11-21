@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet-async'
 import { Link, useParams } from 'react-router-dom'
 import { purcharseApi } from '~/apis/purcharse.api'
 import BreadCrumb from '~/components/BreadCrumb'
-import { breadCrumb } from '~/constants/BreadCrumb'
+import { breadCrumb } from '~/constants/breadCrumb'
 import { path } from '~/constants/path'
 import { formatCurrency, generateNameId, getIdFromNameId } from '~/utils/utils'
 

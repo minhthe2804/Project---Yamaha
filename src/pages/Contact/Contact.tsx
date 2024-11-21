@@ -1,7 +1,7 @@
 import { Helmet } from 'react-helmet-async'
 import BreadCrumb from '~/components/BreadCrumb'
-import { breadCrumb } from '~/constants/BreadCrumb'
-import { contactinfo } from '~/constants/Contactinfo'
+import { breadCrumb } from '~/constants/breadCrumb'
+import { contactinfo } from '~/constants/contactinfo'
 
 export default function Contact() {
     return (

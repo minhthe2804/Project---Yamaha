@@ -6,7 +6,7 @@ import productApi from '~/apis/product.api'
 import BreadCrumb from '~/components/BreadCrumb'
 import Product from '~/components/Products/components/Product'
 import { arrange, priceRanges, ranges, types } from '~/constants/asideFilter'
-import { breadCrumb } from '~/constants/BreadCrumb'
+import { breadCrumb } from '~/constants/breadCrumb'
 import { Product as ProductType } from '~/types/products.type'
 
 const initialPage = [0, 12]
