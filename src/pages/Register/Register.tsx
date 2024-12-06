@@ -6,7 +6,7 @@ import { useState } from 'react'
 import { breadCrumb } from '~/constants/breadCrumb'
 import BreadCrumb from '~/components/BreadCrumb'
 import { path } from '~/constants/path'
-import { Schema, schema as registerSchema } from '~/utils/rules'
+import { Schema, schema} from '~/utils/rules'
 import Input from '~/components/Input'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { authApi } from '~/apis/auth.api'
@@ -15,7 +15,8 @@ import { toastNotify } from '~/constants/toastNotify'
 import Button from '~/components/Button'
 import { Helmet } from 'react-helmet-async'
 
-type FormData = Schema
+type FormData = Pick<Schema, 'lastname' | 'name' | 'email' | 'password'>
+const registerSchema = schema.pick(['lastname', 'name', 'email', 'password'])
 export default function Register() {
     const [errorEmail, setErrorEmail] = useState<string>('')
     const {
