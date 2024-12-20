@@ -81,7 +81,7 @@ export default function UpdateProfile() {
     useEffect(() => {
         if (profile) {
             setValue('username', profile.username)
-            setValue('phone', profile.phone)
+            setValue('phone', profile.phone as string)
             setValue('address', profile.address as string)
         }
     }, [profile, setValue])
