@@ -1,9 +1,41 @@
 import { Helmet } from 'react-helmet-async'
+import { useForm } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
+import * as yup from 'yup'
 import BreadCrumb from '~/components/BreadCrumb'
 import { breadCrumb } from '~/constants/breadCrumb'
-import { contactinfo } from '~/constants/contactinfo'
+import { contactinfo } from '~/constants/Contactinfo'
+import { toast } from 'react-toastify'
+import { toastNotify } from '~/constants/toastNotify'
+
+const contactSchema = yup.object({
+    name: yup.string().required('Vui lòng nhập họ tên.'),
+    email: yup.string().email('Địa chỉ email không hợp lệ.').required('Vui lòng nhập địa chỉ email.'),
+    phone: yup
+        .string()
+        .matches(/^[0-9\\-]+$/, 'Số điện thoại không hợp lệ.')
+        .required('Vui lòng nhập số điện thoại.'),
+    body: yup.string().required('Vui lòng nhập nội dung.')
+})
+
+type ContactFormData = yup.InferType<typeof contactSchema>
 
 export default function Contact() {
+    const {
+        register,
+        handleSubmit,
+        reset,
+        formState: { errors }
+    } = useForm<ContactFormData>({
+        resolver: yupResolver(contactSchema)
+    })
+
+    const onSubmit = (data: ContactFormData) => {
+        toast.success(toastNotify.contactSuccess.sendSuccess)
+        console.log('Form Data:', data)
+        reset()
+    }
+
     return (
         <div>
             <Helmet>
@@ -15,22 +47,21 @@ export default function Contact() {
                 <div className='border-2 border-gray-400 p-5'>
                     <h1 className='text-blue-600 uppercase font-semibold text-lg'>Hệ thống cửa hàng</h1>
                 </div>
+
                 <div className='grid grid-cols-1 lg:grid-cols-3 gap-8 py-5'>
                     {/* Địa chỉ, Số điện thoại và Email */}
                     <div className='space-y-6'>
-                        <div className='p-4 rounded-lg text-center'>
+                        <div className='p-4 text-center bg-slate-100'>
                             <h4 className='text-lg font-semibold uppercase'>Địa chỉ trụ sở:</h4>
                             <p className='text-black'>Số 189, Đường Nguyễn Trãi, P.Dĩ An, TP.Dĩ An, tỉnh Bình Dương</p>
                         </div>
-
-                        <div className='p-4 rounded-lg text-center'>
+                        <div className='p-4 text-center bg-slate-100'>
                             <h4 className='text-lg font-semibold uppercase'>Số điện thoại:</h4>
                             <a href='tel:1900 63 66 67' className='text-black'>
                                 1900 63 66 67
                             </a>
                         </div>
-
-                        <div className='p-4 rounded-lg text-center'>
+                        <div className='p-4 text-center bg-slate-100'>
                             <h4 className='text-lg font-semibold uppercase'>Email:</h4>
                             <a href='mailto:xemayhoangcau@gmail.com' className='text-black'>
                                 xemayhoangcau@gmail.com
@@ -51,53 +82,66 @@ export default function Contact() {
                     {/* Form liên hệ */}
                     <div className='col-span-1 lg:col-span-1'>
                         <h4 className='text-lg font-semibold'>Form liên hệ:</h4>
-                        <form action='/contact' method='post' className='space-y-4'>
-                            <input name='form_type' type='hidden' value='contact' />
-                            <input name='utf8' type='hidden' value='✓' />
+                        <form className='space-y-4' onSubmit={handleSubmit(onSubmit)}>
+                            <div>
+                                <input
+                                    type='text'
+                                    placeholder='Họ tên của bạn'
+                                    className={`text-black w-full border p-2 focus:ring ${
+                                        errors.name ? 'border-red-500' : 'border-gray-300'
+                                    }`}
+                                    {...register('name')}
+                                />
+                                {errors.name && <p className='text-red-500 text-sm'>{errors.name.message}</p>}
+                            </div>
 
-                            <input
-                                type='text'
-                                name='contact[name]'
-                                placeholder='Họ tên của bạn'
-                                className='w-full border border-gray-500 p-2 rounded focus:ring focus:ring-blue-200'
-                                autoCapitalize='words'
-                            />
+                            <div>
+                                <input
+                                    type='email'
+                                    placeholder='Địa chỉ email của bạn'
+                                    className={`text-black w-full border p-2 focus:ring ${
+                                        errors.email ? 'border-red-500' : 'border-gray-300'
+                                    }`}
+                                    {...register('email')}
+                                />
+                                {errors.email && <p className='text-red-500 text-sm'>{errors.email.message}</p>}
+                            </div>
 
-                            <input
-                                type='email'
-                                name='contact[email]'
-                                placeholder='Địa chỉ email của bạn'
-                                className='w-full border border-gray-500 p-2 rounded focus:ring focus:ring-blue-200'
-                                autoCorrect='off'
-                                autoCapitalize='off'
-                            />
+                            <div>
+                                <input
+                                    type='tel'
+                                    placeholder='Số điện thoại của bạn'
+                                    className={`text-black w-full border p-2 focus:ring ${
+                                        errors.phone ? 'border-red-500' : 'border-gray-300'
+                                    }`}
+                                    {...register('phone')}
+                                />
+                                {errors.phone && <p className='text-red-500 text-sm'>{errors.phone.message}</p>}
+                            </div>
 
-                            <input
-                                type='tel'
-                                name='contact[phone]'
-                                placeholder='Số điện thoại của bạn'
-                                className='w-full border border-gray-500 p-2 rounded focus:ring focus:ring-blue-200'
-                                pattern='[0-9\-]*'
-                            />
-
-                            <textarea
-                                name='contact[body]'
-                                placeholder='Nội dung'
-                                className='w-full border border-gray-500 p-2 rounded focus:ring focus:ring-blue-200 h-[160px]'
-                            ></textarea>
+                            <div>
+                                <textarea
+                                    placeholder='Nội dung'
+                                    className={`text-black w-full border p-2 focus:ring ${
+                                        errors.body ? 'border-red-500' : 'border-gray-300'
+                                    } h-[160px]`}
+                                    {...register('body')}
+                                ></textarea>
+                                {errors.body && <p className='text-red-500 text-sm'>{errors.body.message}</p>}
+                            </div>
 
                             <div className='flex justify-end'>
                                 <button
                                     type='submit'
-                                    className='bg-red-500 text-white font-semibold px-4 py-2 rounded hover:bg-red-600 focus:ring focus:ring-red-300 '
+                                    className='bg-red-500 text-white font-semibold px-4 py-2 rounded hover:bg-red-600 focus:ring focus:ring-red-300'
                                 >
                                     Gửi
                                 </button>
                             </div>
+
                         </form>
                     </div>
                 </div>
-
                 <div className='border-2 border-gray-400 p-5'>
                     <h1 className='text-blue-600 uppercase font-semibold text-lg'>Hệ thống cửa hàng</h1>
                 </div>

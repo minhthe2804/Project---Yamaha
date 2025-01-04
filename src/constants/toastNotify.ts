@@ -28,5 +28,8 @@ export const toastNotify = {
     },
     updateProfile: {
         updateSuccess: 'Bạn đã cập nhật thông tin thành công'
+    },
+    contactSuccess: {
+        sendSuccess: 'Gửi liên hệ thành công'
     }
 }
