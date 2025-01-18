@@ -4,6 +4,7 @@ import classNames from 'classnames'
 import { useContext, useEffect } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { Controller, useForm } from 'react-hook-form'
+import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 
 import { authApi } from '~/apis/auth.api'
@@ -12,6 +13,7 @@ import Button from '~/components/Button'
 import Input from '~/components/Input'
 import InputNumber from '~/components/InputNumber'
 import { breadCrumb } from '~/constants/breadCrumb'
+import { path } from '~/constants/path'
 import { toastNotify } from '~/constants/toastNotify'
 import { AppContext } from '~/contexts/app.context'
 import { setProfileFromLS } from '~/utils/auth'
@@ -35,6 +37,7 @@ export default function UpdateProfile() {
         resolver: yupResolver(userSchema)
     })
 
+    const navigate = useNavigate()
     const updateProfileMutation = useMutation({
         mutationFn: (bodyData: {
             id: string
@@ -85,6 +88,10 @@ export default function UpdateProfile() {
             setValue('address', profile.address as string)
         }
     }, [profile, setValue])
+
+    const handleBackAccount = () => {
+        navigate(path.account)
+    }
 
     return (
         <div className='bg-[#f5f5f5] pb-16'>
@@ -156,19 +163,29 @@ export default function UpdateProfile() {
                                 errorMessage={errors.address?.message}
                             />
                         </div>
-                        <Button
-                            className={classNames(
-                                'w-[80px] py-[8px] bg-[#2b78a0] rounded-[2px] text-[14px] font-[600] text-white hover:bg-[#42ade7] transition duration-200 ease-in flex items-center justify-center mt-[6px] ml-[107px]',
-                                {
-                                    'w-[80px] py-[17px] bg-[#2b78a0] opacity-[0.6] rounded-[4px] text-[14px] font-[600] text-white flex items-center justify-center':
-                                        updateProfileMutation.isPending
-                                }
-                            )}
-                            isLoading={updateProfileMutation.isPending}
-                            disabled={updateProfileMutation.isPending}
-                        >
-                            Lưu
-                        </Button>
+                        <div className='flex items-center gap-2'>
+                            <Button
+                                className={classNames(
+                                    'w-[80px] py-[8px] bg-[#2b78a0] rounded-[2px] text-[14px] font-[600] text-white hover:bg-[#42ade7] transition duration-200 ease-in flex items-center justify-center mt-[6px] ml-[107px]',
+                                    {
+                                        'w-[80px] py-[17px] bg-[#2b78a0] opacity-[0.6] rounded-[4px] text-[14px] font-[600] text-white flex items-center justify-center':
+                                            updateProfileMutation.isPending
+                                    }
+                                )}
+                                isLoading={updateProfileMutation.isPending}
+                                disabled={updateProfileMutation.isPending}
+                            >
+                                Lưu
+                            </Button>
+                            <Button
+                                className={classNames(
+                                    'w-[80px] py-[8px] bg-[#2b78a0] rounded-[2px] text-[14px] font-[600] text-white hover:bg-[#42ade7] transition duration-200 ease-in flex items-center justify-center mt-[6px]'
+                                )}
+                                onClick={handleBackAccount}
+                            >
+                                Quay lại
+                            </Button>
+                        </div>
                     </form>
                 </div>
             </div>

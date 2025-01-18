@@ -4,12 +4,14 @@ import classNames from 'classnames'
 import { useContext, useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { useForm } from 'react-hook-form'
+import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { authApi } from '~/apis/auth.api'
 import BreadCrumb from '~/components/BreadCrumb'
 import Button from '~/components/Button'
 import Input from '~/components/Input'
 import { breadCrumb } from '~/constants/breadCrumb'
+import { path } from '~/constants/path'
 import { toastNotify } from '~/constants/toastNotify'
 import { AppContext } from '~/contexts/app.context'
 import { setProfileFromLS } from '~/utils/auth'
@@ -33,6 +35,7 @@ export default function ChangePassword() {
         resolver: yupResolver(changePasswordSchema)
     })
 
+    const navigate = useNavigate()
     const { data: dataUser, refetch } = useQuery({
         queryKey: ['user'],
         queryFn: () => authApi.login()
@@ -105,6 +108,10 @@ export default function ChangePassword() {
         }
     }, [profile, setValue])
 
+    const handleBackAccount = () => {
+        navigate(path.account)
+    }
+
     return (
         <div className='bg-[#f5f5f5] pb-16'>
             <Helmet>
@@ -169,19 +176,29 @@ export default function ChangePassword() {
                                 errorMessage={errors.confirm_password?.message}
                             />
                         </div>
-                        <Button
-                            className={classNames(
-                                'w-[80px] py-[8px] bg-[#2b78a0] rounded-[2px] text-[14px] font-[600] text-white hover:bg-[#42ade7] transition duration-200 ease-in flex items-center justify-center mt-[6px] ml-[127px]',
-                                {
-                                    'w-[80px] py-[17px] bg-[#2b78a0] opacity-[0.6] rounded-[4px] text-[14px] font-[600] text-white flex items-center justify-center':
-                                        changePasswordMutation.isPending
-                                }
-                            )}
-                            isLoading={changePasswordMutation.isPending}
-                            disabled={changePasswordMutation.isPending}
-                        >
-                            Lưu
-                        </Button>
+                        <div className='flex items-center gap-2'>
+                            <Button
+                                className={classNames(
+                                    'w-[80px] py-[8px] bg-[#2b78a0] rounded-[2px] text-[14px] font-[600] text-white hover:bg-[#42ade7] transition duration-200 ease-in flex items-center justify-center mt-[6px] ml-[127px]',
+                                    {
+                                        'w-[80px] py-[17px] bg-[#2b78a0] opacity-[0.6] rounded-[4px] text-[14px] font-[600] text-white flex items-center justify-center':
+                                            changePasswordMutation.isPending
+                                    }
+                                )}
+                                isLoading={changePasswordMutation.isPending}
+                                disabled={changePasswordMutation.isPending}
+                            >
+                                Lưu
+                            </Button>
+                            <Button
+                                className={classNames(
+                                    'w-[80px] py-[8px] bg-[#2b78a0] rounded-[2px] text-[14px] font-[600] text-white hover:bg-[#42ade7] transition duration-200 ease-in flex items-center justify-center mt-[6px]'
+                                )}
+                                onClick={handleBackAccount}
+                            >
+                                Quay lại
+                            </Button>
+                        </div>
                     </form>
                 </div>
             </div>

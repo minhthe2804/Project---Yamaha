@@ -43,7 +43,7 @@ export default function Product({ product, border = '[#f0efef]' }: Props) {
     )
 
     const handleFeature = () => {
-        setFeatureImage(product.media[1].preview_image.src as string)
+        setFeatureImage(product.media[1].src as string)
         setAnimationClass('animate__fadeIn')
         setTimeout(() => {
             setAnimationClass('')
@@ -134,9 +134,11 @@ export default function Product({ product, border = '[#f0efef]' }: Props) {
                 />
             </Link>
             <div className='w-full px-[14px] pt-[21px] mt-[200px]'>
-                <p className='text-[14px] text-[#181b23] font-[600] opacity-[0.9] hover:text-[#ff3237] transition duration-300 ease-in cursor-pointer'>
-                    {product.title}
-                </p>
+                <Link to={`${path.home}${generateNameId({ name: product.title, id: product.id })}`}>
+                    <p className='text-[14px] text-[#181b23] font-[600] opacity-[0.9] hover:text-[#ff3237] transition duration-300 ease-in cursor-pointer'>
+                        {product.title}
+                    </p>
+                </Link>
                 <div className='w-full h-[1px] bg-[#ededed] mt-[22px]'></div>
                 <p className='text-lg font-[600] text-[#ff3237] mt-[28px]'>{formatCurrency(Number(product.price))}</p>
                 <Button

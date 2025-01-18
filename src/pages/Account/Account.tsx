@@ -21,6 +21,12 @@ export default function Account() {
 
     const productPurcharse = productInPurcharseData?.data
 
+    const productSortedTime = productPurcharse?.sort((a, b) => {
+        const dateTimeA = new Date(`${a.date} ${a.time}`)
+        const dateTimeB = new Date(`${b.date} ${b.time}`)
+        return dateTimeB.getTime() - dateTimeA.getTime()
+    })
+
     return (
         <div>
             <Helmet>
@@ -65,7 +71,7 @@ export default function Account() {
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {productPurcharse.map((purcharse) => (
+                                                {productSortedTime && productSortedTime.map((purcharse) => (
                                                     <tr
                                                         className='text-black text-[15px] border-[1px] border-[#817f7f] text-left'
                                                         key={purcharse.id}

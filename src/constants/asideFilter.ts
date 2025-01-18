@@ -1,4 +1,4 @@
-export const types = ['XE TAY GA', 'XE CÔN TAY', 'XE SỐ']
+export const types = ['XE TAY GA', 'XE CÔN TAY', 'XE SỐ', "XE ĐIỆN"]
 
 export const priceRanges = [
     { title: 'Từ 15,000,000₫ - 30,000,000₫', priceMin: 15000000, priceMax: 30000000, enabled: true },

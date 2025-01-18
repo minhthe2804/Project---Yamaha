@@ -6,7 +6,6 @@ import DOMPurify from 'dompurify'
 import { toast } from 'react-toastify'
 
 import BreadCrumb from '~/components/BreadCrumb'
-import { breadCrumb } from '~/constants/breadCrumb'
 import styles from './Product.module.css'
 import Button from '~/components/Button'
 import ProductTitle from '~/components/ProductTitle'
@@ -300,7 +299,7 @@ export default function ProductDetail() {
                 <title>{`${productData?.title}`} – Hệ Thống Xe máy Hoàng Cầu</title>
                 <meta name='description' content='Hệ Thống Xe máy Hoàng Cầu' />
             </Helmet>
-            <BreadCrumb heading={breadCrumb.productDetail.heading} title={breadCrumb.productDetail.title} />
+            <BreadCrumb heading={productData?.title} title={`Trang chủ / YAMAHA /${productData?.title}`} />
             <div className='max-w-[1198px] mx-auto'>
                 <div className='grid grid-cols-12'>
                     <div className='col-span-5'>

@@ -53,12 +53,23 @@ export function getTimeString() {
     return `${hours}:${minutes}:${seconds}` // Kết quả: HHMMSS
 }
 
-export function getLastPart(str: string) {
-    if (str.includes('/')) {
-        return str.split('/').pop()
+export function getLastPart(value: string | undefined | null): string {
+    if (!value) {
+        console.warn("getLastPart received an undefined or null value.");
+        return ""; // Or some default value
     }
-    return str
+
+    // Safeguard to ensure value is a string
+    if (typeof value !== "string") {
+        console.error("getLastPart expects a string but got:", typeof value);
+        return "";
+    }
+
+    // Original logic
+    const parts = value.split("/");
+    return parts.includes("") ? parts[parts.length - 2] : parts[parts.length - 1];
 }
+
 
 export const generateCartId = () => {
     return `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`
