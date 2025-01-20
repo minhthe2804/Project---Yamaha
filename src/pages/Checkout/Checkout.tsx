@@ -1,12 +1,13 @@
 import { Link, Outlet, useMatch } from 'react-router-dom'
 import classNames from 'classnames'
 
-import { useEffect, useMemo } from 'react'
+import { useContext, useEffect, useMemo } from 'react'
 import { formatCurrency, getLastPart } from '~/utils/utils'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { checkoutApi } from '~/apis/checkout.api'
 import { path } from '~/constants/path'
 import { Helmet } from 'react-helmet-async'
+import { AppContext } from '~/contexts/app.context'
 
 export default function Checkout() {
     const addressMatch = useMatch(path.checkoutAddress)
@@ -15,10 +16,18 @@ export default function Checkout() {
     const isAddress = Boolean(addressMatch)
     const isPayment = Boolean(paymentMatch)
     const isThankyou = Boolean(thankyouMatch)
+    const { setIsCheckout } = useContext(AppContext)
 
     const { data: checkoutProductData, refetch } = useQuery({
         queryKey: ['checkout'],
         queryFn: () => checkoutApi.getCheckout()
+    })
+
+    const deleteProductToCheckoutMutation = useMutation({
+        mutationFn: (id: string) => checkoutApi.deleteCheckout(id),
+        onSuccess: () => {
+            refetch()
+        }
     })
 
     const checkoutProduct = checkoutProductData?.data
@@ -34,6 +43,14 @@ export default function Checkout() {
         refetch()
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
+
+    const handleDeleteProductToCheckout = (id: string) => {
+        if (checkoutProduct?.length === 1) {
+            localStorage.removeItem('checkout')
+            setIsCheckout(false)
+        }
+        deleteProductToCheckoutMutation.mutate(id)
+    }
 
     return (
         <div>
@@ -131,6 +148,14 @@ export default function Checkout() {
                                                 <p className='text-[12px] text-[#969696]'>
                                                     Phiên bản: {getLastPart(checkout.version)}
                                                 </p>
+                                                <div className=''>
+                                                    <button
+                                                        className='text-[#2b78a0] text-[12px] hover:text-[#285b77] transtion duration-200 ease-in'
+                                                        onClick={() => handleDeleteProductToCheckout(checkout.id)}
+                                                    >
+                                                        hủy đơn
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                         <p className='text-[13px] text-[#4b4b4b] '>

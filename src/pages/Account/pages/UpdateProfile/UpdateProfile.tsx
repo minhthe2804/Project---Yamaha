@@ -115,7 +115,7 @@ export default function UpdateProfile() {
                     <form className='px-[48px] flex flex-col mt-[40px] ' onSubmit={onSubmit}>
                         <div className='flex items-center gap-[23px] text-[14px] text-[#374151]'>
                             <label className='w-[84px] text-right text-[#4b5563]'>Email</label>
-                            <p className=''>minhthe2804@gmail.com</p>
+                            <p className=''>{profile?.email}</p>
                         </div>
                         <div className='flex gap-[23px] text-[14px] text-[#4b5563] mt-[18px]'>
                             <label className='w-[84px] text-right mt-2'>Họ Tên</label>
